@@ -1,0 +1,15 @@
+# أسرار — لا تُرفع أبداً
+*.key
+*.pem
+*.env
+.env
+secrets/
+*.db
+*.sqlite3
+__pycache__/
+*.pyc
+*.pyo
+target/
+node_modules/
+*.log
+.DS_Store
