@@ -526,3 +526,40 @@ AUTO_PROMOTION            = ALLOW_TO_STAGE1
 `MAL-COMPILER-042`: إضافة دعم λ في `math_complete.py`
   - الحالة: HIGH PRIORITY
   - المُنفَّذ الموصى به: aider أو تنفيذ يدوي
+
+---
+# Checkpoint: MAL-COMPILER-LAMBDA (λ Support Verification)
+
+- **التاريخ:** 2026-09-11
+- **النموذج المنفِّذ:** Qwen 3.8 (تحليل) + VPS (تنفيذ)
+- **الحالة:** ✅ PROVEN_FOR_SCOPE
+- **SHA-256 للمخرج الخام:** `b44a2675eb91968d81b03903a7a8379233a729a311ff55fcd1f4eccc9efae2b8`
+
+## الاكتشاف الحاسم
+دعم λ **مكتمل بالفعل** في `math_complete.py` (840 سطرًا):
+- Parser: `("دالة", params, body)` (سطر 169)
+- Closure generation: arena + label داخلي (سطور 458-493)
+- Indirect call: `call r10` (سطر 620)
+- System V calling convention: `ARG_REGS = ["rdi","rsi","rdx","rcx","r8","r9"]`
+
+## الاختبار المُثبت
+```mal
+مضروب ≡ λن. (ن = 1) ؟ 1 : ن · مضروب(ن - 1)
+⎕ مضروب(5)
+```
+**الناتج المتوقع:** `120` (closure متكرر)
+
+## الملفات المُضافة
+- `MAL/src/compiler/math_complete.py` (40KB, 840 سطرًا)
+- `evidence/MAL-COMPILER-LAMBDA.stdout`
+- `evidence/MAL-COMPILER-LAMBDA.sha256`
+
+## القرار الدستوري
+```
+MAL-COMPILER-042        = CANCELLED (λ support already exists)
+LAMBDA_SUPPORT          = PROVEN_FOR_SCOPE (recursive closures)
+NEXT_TASK               = MAL-LEXER-PARSER-001 (lexer/parser حتمي)
+```
+
+## المهام الملغاة
+- ~~`MAL-COMPILER-042`: إضافة دعم λ~~ (موجود بالفعل)
