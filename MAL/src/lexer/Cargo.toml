@@ -1,0 +1,11 @@
+[package]
+name = "mal_lexer"
+version = "0.1.0"
+edition = "2021"
+description = "Deterministic lexer for the Mathematical Arabic Language (MAL)"
+license = "MIT"
+
+[lib]
+path = "src/lib.rs"
+
+[dependencies]

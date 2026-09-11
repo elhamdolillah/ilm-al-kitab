@@ -563,3 +563,55 @@ NEXT_TASK               = MAL-LEXER-PARSER-001 (lexer/parser حتمي)
 
 ## المهام الملغاة
 - ~~`MAL-COMPILER-042`: إضافة دعم λ~~ (موجود بالفعل)
+
+---
+# Checkpoint: MAL-LEXER-001 (Deterministic Lexer)
+
+- **التاريخ:** 2026-09-11
+- **النموذج المنفِّذ:** Qwen 3.8 (تصميم كود) + VPS (تنفيذ حتمي)
+- **الحالة:** ✅ PROVEN_FOR_SCOPE
+- **SHA-256 للمخرج الخام:** `762a5a3a3d7c8c95ceb705a46ea56285f844631ea2ffd205ad719414df21e3e3`
+- **Exit code:** 0
+- **الاختبارات الناجحة:** 9/9 (0.00s)
+
+## نطاق الادعاء (Declared Scope)
+**ما يُثبته الـ Lexer:**
+- تقسيم رموز حتمي لمجموعة MAL (أرقام ASCII، نصوص ، معرفات Unicode، جدول رموز ثابت)
+- Fail-Closed: أي محرف خارج اللغة → `LexerError` (ليس panic)
+- تتبع أسطر/أعمدة دقيق للرسائل التشخيصية
+- نطاقات بايت (لا تخصيص نص لكل رمز)
+
+**ما لا يُثبته (خارج النطاق):**
+- لا Parser بعد (المرحلة التالية)
+- لا دلالات ولا أنواع
+- لا أرقام عربية-هندية (٠١٢٣) — ASCII فقط مطابقةً للمرجع
+
+## الاختبارات الدستورية
+1. `test_tokenize_assignment` — تقسيم أساسي
+2. `test_tokenize_lambda_define` — رموز λ و ≡ و ·
+3. `test_tokenize_print_call` — ⎕ واستدعاء دالة
+4. `test_tokenize_block_and_list` — ﴿ ﴾ و ⋄ و ⟨ ⟩ و ،
+5. `test_ident_and_str_ranges` — نطاقات بايت صحيحة
+6. `test_line_col_tracking` — تتبع متعدد الأسطر
+7. `test_unterminated_string_abstain` — Fail-Closed للنص غير المغلق
+8. `test_unexpected_char_abstain` — Fail-Closed للمحرف المرفوض
+9. `test_number_overflow_abstain` — Fail-Closed لفيضان i64
+
+## التغييرات الدستورية
+- ✅ `#![forbid(unsafe_code)]`
+- ✅ لا تخصيص heap لكل رمز (نطاقات بايت فقط)
+- ✅ لا زمن، لا عشوائية، لا شبكة
+- ✅ Fail-Closed: جميع الأخطاء `LexerError`، لا panic
+
+## الملفات المُضافة
+- `MAL/src/lexer/Cargo.toml` (202 bytes)
+- `MAL/src/lexer/src/lib.rs` (357 سطرًا، 10418 bytes)
+- `evidence/MAL-LEXER-001.stdout`
+- `evidence/MAL-LEXER-001.sha256`
+
+## القرار الدستوري
+```
+MAL-LEXER-001           = PROVEN_FOR_SCOPE
+LEXER_FAIL_CLOSED       = VERIFIED (3/3 abstain tests passed)
+NEXT_TASK               = MAL-PARSER-001 (parser عودي نزولي يبني AST في Arena)
+```

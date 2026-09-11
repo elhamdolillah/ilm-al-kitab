@@ -1,0 +1,23 @@
+   Compiling mal_lexer v0.1.0 (/root/ilm-al-kitab/MAL/src/lexer)
+    Finished `release` profile [optimized] target(s) in 0.70s
+     Running unittests src/lib.rs (target/release/deps/mal_lexer-0e18c87778ceb09d)
+
+running 9 tests
+test tests::test_ident_and_str_ranges ... ok
+test tests::test_line_col_tracking ... ok
+test tests::test_number_overflow_abstain ... ok
+test tests::test_tokenize_assignment ... ok
+test tests::test_tokenize_block_and_list ... ok
+test tests::test_tokenize_lambda_define ... ok
+test tests::test_tokenize_print_call ... ok
+test tests::test_unexpected_char_abstain ... ok
+test tests::test_unterminated_string_abstain ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests mal_lexer
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
