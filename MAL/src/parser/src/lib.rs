@@ -136,9 +136,54 @@ impl<'a> Parser<'a> {
         Ok(left)
     }
 
+
+    fn parse_lambda(&mut self, arena: &mut Arena) -> Result<NodeID, ParserError> {
+        self.bump(); // consume λ
+        let mut params = Vec::new();
+        while self.peek().map_or(false, |t| t.kind == TokenKind::Ident) {
+            let tok = self.bump().unwrap();
+            let ident = arena.allocate(ASTNode::Ident(tok.start))?;
+            params.push(ident);
+        }
+        if params.is_empty() {
+            return Err(ParserError::Expected {
+                expected: "parameter after λ",
+                found: "none".to_string(),
+                line: 0,
+                col: 0,
+            });
+        }
+        self.expect(TokenKind::Dot)?;
+        let body = self.parse_expr(arena)?;
+        // بناء قائمة المعاملات
+        let params_list = if params.len() == 1 {
+            params[0]
+        } else {
+            let mut list = arena.allocate(ASTNode::List {
+                head: params[params.len() - 1],
+                tail: NodeID::INVALID,
+            })?;
+            for i in (0..params.len() - 1).rev() {
+                list = arena.allocate(ASTNode::List {
+                    head: params[i],
+                    tail: list,
+                })?;
+            }
+            list
+        };
+        Ok(arena.allocate(ASTNode::Lambda {
+            params: params_list,
+            body,
+        })?)
+    }
+
     fn parse_primary(&mut self, arena: &mut Arena) -> Result<NodeID, ParserError> {
         let tok = self.bump().ok_or(ParserError::UnexpectedEof)?;
         match tok.kind {
+            TokenKind::Lambda => {
+                self.pos -= 1; // backtrack λ consumed above
+                self.parse_lambda(arena)
+            }
             TokenKind::Num => {
                 Ok(arena.allocate(ASTNode::Int(tok.num))?)
             }
@@ -396,5 +441,42 @@ mod tests {
         let mut arena = Arena::new(100);
         let err = parse("(1 + 2", &mut arena).unwrap_err();
         assert!(matches!(err, ParserError::Expected { .. }));
+    }
+
+    #[test]
+    fn test_parse_lambda_simple() {
+        let mut arena = Arena::new(100);
+        let root = parse("λس. س", &mut arena).unwrap();
+        assert!(matches!(arena.get(root).unwrap(), ASTNode::Lambda { .. }));
+    }
+
+    #[test]
+    fn test_parse_lambda_with_binop() {
+        let mut arena = Arena::new(100);
+        let root = parse("λس. س · 2", &mut arena).unwrap();
+        if let ASTNode::Lambda { body, .. } = arena.get(root).unwrap() {
+            assert!(matches!(arena.get(*body).unwrap(), ASTNode::BinOp { .. }));
+        } else {
+            panic!("expected Lambda");
+        }
+    }
+
+    #[test]
+    fn test_parse_lambda_two_params() {
+        let mut arena = Arena::new(100);
+        let root = parse("λس ص. س + ص", &mut arena).unwrap();
+        if let ASTNode::Lambda { params, .. } = arena.get(root).unwrap() {
+            assert!(matches!(arena.get(*params).unwrap(), ASTNode::List { .. }));
+        } else {
+            panic!("expected Lambda");
+        }
+    }
+
+    #[test]
+    fn test_parse_lambda_apply() {
+        let mut arena = Arena::new(100);
+        let root = parse("(λس. س · 2)(5)", &mut arena).unwrap();
+        // يجب أن يُبنى كـ Call مع func = Lambda
+        assert!(matches!(arena.get(root).unwrap(), ASTNode::Call { .. }));
     }
 }

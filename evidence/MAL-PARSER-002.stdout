@@ -1,0 +1,43 @@
+   Compiling mal_parser v0.1.0 (/root/ilm-al-kitab/MAL/src/parser)
+warning: unused variable: `right`
+   --> src/lib.rs:402:43
+    |
+402 | ... { op, left, right } = arena.get(roo...
+    |                 ^^^^^ help: try ignoring the field: `right: _`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `mal_parser` (lib test) generated 1 warning (run `cargo fix --lib -p mal_parser --tests` to apply 1 suggestion)
+    Finished `release` profile [optimized] target(s) in 0.94s
+     Running unittests src/lib.rs (target/release/deps/mal_parser-e96432f7d30f5de2)
+
+running 13 tests
+test tests::test_parse_binary_add ... ok
+test tests::test_parse_assignment ... ok
+test tests::test_parse_binary_mul ... ok
+test tests::test_parse_block ... ok
+test tests::test_parse_error_expected_paren ... ok
+test tests::test_parse_error_unexpected_eof ... ok
+test tests::test_parse_lambda_simple ... ok
+test tests::test_parse_lambda_apply ... FAILED
+test tests::test_parse_lambda_two_params ... ok
+test tests::test_parse_lambda_with_binop ... ok
+test tests::test_parse_number ... ok
+test tests::test_parse_parens ... ok
+test tests::test_parse_precedence ... ok
+
+failures:
+
+---- tests::test_parse_lambda_apply stdout ----
+
+thread 'tests::test_parse_lambda_apply' (3051286) panicked at src/lib.rs:480:9:
+assertion failed: matches!(arena.get(root).unwrap(), ASTNode::Call { .. })
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    tests::test_parse_lambda_apply
+
+test result: FAILED. 12 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--lib`

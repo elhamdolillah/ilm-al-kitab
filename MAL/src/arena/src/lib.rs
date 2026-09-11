@@ -49,6 +49,8 @@ pub enum TypeTag {
     Call,
     /// Linked list node.
     List,
+    /// Lambda: λ(params). body.
+    Lambda,
 }
 
 /// AST node with inline payload (no heap allocation per node).
@@ -87,7 +89,15 @@ pub enum ASTNode {
         /// Tail (rest of list) node.
         tail: NodeID,
     },
+    /// Lambda: λ(params). body.
+    Lambda {
+        /// Parameters (as List of Ident nodes).
+        params: NodeID,
+        /// Body expression.
+        body: NodeID,
+    },
 }
+
 
 impl ASTNode {
     /// Returns the type tag of this node.
@@ -101,6 +111,7 @@ impl ASTNode {
             ASTNode::BinOp { .. } => TypeTag::BinOp,
             ASTNode::Call { .. } => TypeTag::Call,
             ASTNode::List { .. } => TypeTag::List,
+            ASTNode::Lambda { .. } => TypeTag::Lambda,
         }
     }
 }
@@ -267,5 +278,18 @@ mod tests {
             arena.allocate(ASTNode::Int(99999)).unwrap_err(),
             ArenaError::CapacityExceeded
         );
+    }
+
+    #[test]
+    fn test_lambda_variant() {
+        let mut arena = Arena::new(10);
+        let param = arena.allocate(ASTNode::Ident(0)).unwrap();
+        let body = arena.allocate(ASTNode::Int(42)).unwrap();
+        let lambda = arena.allocate(ASTNode::Lambda {
+            params: param,
+            body,
+        }).unwrap();
+        assert!(matches!(arena.get(lambda).unwrap(), ASTNode::Lambda { .. }));
+        assert_eq!(arena.get(lambda).unwrap().type_tag(), TypeTag::Lambda);
     }
 }

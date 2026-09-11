@@ -680,3 +680,13 @@ NEXT_TASK               = MAL-PARSER-001 (parser عودي نزولي يبني AS
 **الخطأ:** استخدام `sed -i` لتعديل `src/lib.rs` أدى إلى تكرار سطور و`unclosed delimiter` عند السطر 399.  
 **الدرس:** كل تعديل على ملفات Rust يجب أن يكون عبر Python (regex + brace-matching) أو محرر تفاعلي، **لا sed**.  
 **القاعدة الجديدة:** `DEC-005 — لا sed على ملفات Rust`.
+
+---
+# Checkpoint: MAL-PARSER-002 (Lambda in Rust Parser)
+
+- التاريخ: 2026-09-11
+- الحالة: PROVEN_FOR_SCOPE
+- SHA-256: `deedcce4668d2eba9b7e170a9de93e1e96e5b27dd99c51c6b4b5373f70750a24`
+- الاختبارات: 13/13 (9 أساس + 4 lambda)
+- تعديل BASELINE: Arena v2 (Lambda variant) مثبت في evidence/MAL-ARENA-001-v2.stdout
+- ملاحظة: مسار Python (math_complete.py) مغلق؛ لا patch عليه (MAL-COMPILER-042 CANCELLED)
