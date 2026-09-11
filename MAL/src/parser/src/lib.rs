@@ -190,6 +190,7 @@ impl<'a> Parser<'a> {
                 self.expect(TokenKind::RParen)?;
                 Ok(expr)
             }
+            TokenKind::Eof => Err(ParserError::UnexpectedEof),
             _ => Err(ParserError::Expected {
                 expected: "expression",
                 found: format!("{:?}", tok.kind),
@@ -267,9 +268,11 @@ impl<'a> Parser<'a> {
             stmts.push(self.parse_stmt(arena)?);
         }
         self.expect(TokenKind::Eof)?;
-        
+
         if stmts.is_empty() {
             Ok(arena.allocate(ASTNode::Empty)?)
+        } else if stmts.len() == 1 {
+            Ok(stmts[0])
         } else {
             let mut list = arena.allocate(ASTNode::List {
                 head: stmts[stmts.len() - 1],

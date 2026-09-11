@@ -23,3 +23,9 @@ MAL/src/compiler/t_*
 MAL/src/compiler/calc
 !MAL/src/compiler/math_complete.py
 !MAL/src/compiler/*.md
+# Local backups
+*.bak
+*.bak2
+*.bak_before_fix
+*.bak_*
+target/
