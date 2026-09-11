@@ -615,3 +615,30 @@ MAL-LEXER-001           = PROVEN_FOR_SCOPE
 LEXER_FAIL_CLOSED       = VERIFIED (3/3 abstain tests passed)
 NEXT_TASK               = MAL-PARSER-001 (parser عودي نزولي يبني AST في Arena)
 ```
+
+---
+
+## ⚠️ تنبيه دستوري — MAL-PARSER-001 (2026-09-11)
+
+**الخطأ:** تم الـ commit `16d2204` بعنوان "✅ MAL-PARSER-001" بينما كانت الاختبارات فاشلة (2/9).
+
+**التصنيف:** FAKE_PROGRESS — مخالفة للدستور.
+
+**الإجراء التصحيحي:**
+1. ✅ commit message صُحّح إلى WIP
+2. ⏳ إصلاح الاختبارات الفاشلة الـ 7
+3. ⏳ إعادة الـ commit بعنوان ✅ فقط بعد نجاح 9/9
+4. ⏳ تسجيل الخطأ في قسم REJECTED APPROACHES لمنع تكراره
+
+**الاختبارات الفاشلة:**
+- test_parse_number
+- test_parse_binary_add
+- test_parse_binary_mul
+- test_parse_precedence
+- test_parse_parens
+- test_parse_assignment
+- test_parse_error_unexpected_eof
+
+**الاختبارات الناجحة (2):**
+- test_parse_block
+- (آخر غير مذكور)
