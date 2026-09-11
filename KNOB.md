@@ -412,3 +412,56 @@ sha256sum evidence/step-NN.stdout > evidence/step-NN.sha256
 `CODE_INTAKE_PROTOCOL = ENFORCED`
 `LLM_AS_EXECUTOR = REJECTED`
 `DETERMINISTIC_PARSER = PRIMARY`
+
+---
+# 18. بروتوكول استلام الأوامر من المحادثات (Code Intake Protocol)
+
+**الحالة:** ✅ VERIFIED (2026-09-11)
+**الدليل:** اختبار Termux النص → 4 كتل مستخرجة، 0 تنفيذ غير مقصود
+
+## المبدأ
+أي نص ملصق من محادثة LLM (Termux، Qwen، Claude، إلخ) يُعتبر **بيانات غير موثوقة** حتى يمر بثلاث طبقات:
+
+### الطبقة 1: الاستخراج الحتمي (إلزامي)
+```bash
+python3 /root/.hermes/extract_termux_code.py \
+  /root/incoming.txt \
+  --output-dir /root/extracted_code \
+  --json /root/extracted_manifest.json
+```
+- لا تنفيذ.
+- لا git.
+- لا curl.
+- فقط فصل الكود عن الشرح.
+
+### الطبقة 2: المراجعة البشرية (إلزامي)
+```bash
+cat /root/extracted_manifest.json | jq '.blocks[] | {step, language, sha256, requires_confirmation}'
+sed -n '1,80p' /root/extracted_code/step-NN.sh
+```
+- كل كتلة تُقرأ قبل تنفيذها.
+- الكتل المعلمة `requires_confirmation: true` تتطلب موافقة صريحة.
+
+### الطبقة 3: التنفيذ المقيد (بعد الموافقة فقط)
+```bash
+bash /root/extracted_code/step-NN.sh 2>&1 | tee evidence/step-NN.stdout
+sha256sum evidence/step-NN.stdout > evidence/step-NN.sha256
+```
+
+## ما يُحظر صراحة
+- ❌ لصق أوامر مباشرة في الطرفية من محادثة LLM.
+- ❌ `curl | sh` أو `wget | bash`.
+- ❌ `git push --force` أو `git reset --hard` من نص مستخرج.
+- ❌ السماح لـ Hermes/Qwen 1.5B باتخاذ قرار تنفيذ نيابة عنك.
+
+## دور Hermes/Qwen في هذا البروتوكول
+- ✅ تحليل الملفات المستخرجة القصيرة.
+- ✅ شرح كود غامض.
+- ✅ اقتراح اختبارات.
+- ❌ **لا** استخراج أوامر من محادثات طويلة.
+- ❌ **لا** تنفيذ أوامر مباشرة.
+
+## القرار الدستوري
+`CODE_INTAKE_PROTOCOL = ENFORCED`
+`LLM_AS_EXECUTOR = REJECTED`
+`DETERMINISTIC_PARSER = PRIMARY`
