@@ -465,3 +465,19 @@ sha256sum evidence/step-NN.stdout > evidence/step-NN.sha256
 `CODE_INTAKE_PROTOCOL = ENFORCED`
 `LLM_AS_EXECUTOR = REJECTED`
 `DETERMINISTIC_PARSER = PRIMARY`
+
+---
+# Checkpoint: VPS-REMOTE-SYNC
+
+- **التاريخ:** 2026-09-11
+- **النموذج:** Qwen (تخطيط) + VPS (تنفيذ)
+- **الحالة:** ✅ VERIFIED
+- **SHA-256 HEAD:** `1db8cc5d710776fb105d2e1b4e68e5b11105dd21`
+- **التغييرات:**
+  - إصلاح SSH alias: `github-kitab` → `id_ed25519_kitab`
+  - فصل مفتاح الحساب السيادي عن المفاتيح الأخرى
+  - rebase آمن بدون `--force` (احترام DEC-004)
+  - Git تجاوز commit مكرر تلقائياً (6b35ad8)
+- **الدليل:** مزامنة VPS ↔ GitHub (SHA-256 متطابق)
+- **القرار:** `VPS_REMOTE_SYNC = PASSED`
+- **البروتوكول المُحترم:** لا `--force`، لا `reset --hard`، حفظ backup branch
