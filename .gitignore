@@ -14,3 +14,12 @@ node_modules/
 *.log
 .DS_Store
 .aider*
+
+# Compiled artifacts (should not be in git)
+*.o
+*.asm
+*.out
+MAL/src/compiler/t_*
+MAL/src/compiler/calc
+!MAL/src/compiler/math_complete.py
+!MAL/src/compiler/*.md
