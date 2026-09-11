@@ -690,3 +690,25 @@ NEXT_TASK               = MAL-PARSER-001 (parser عودي نزولي يبني AS
 - الاختبارات: 13/13 (9 أساس + 4 lambda)
 - تعديل BASELINE: Arena v2 (Lambda variant) مثبت في evidence/MAL-ARENA-001-v2.stdout
 - ملاحظة: مسار Python (math_complete.py) مغلق؛ لا patch عليه (MAL-COMPILER-042 CANCELLED)
+
+---
+# 17. تكامل MAL وUORI/UORI+ وتوجيه LLM
+
+## الحالة الحالية
+
+- `arabic-math-lang` هو المرجع الخارجي لـMAL، وليس مصدراً للنسخ الأعمى.
+- `MAL` داخل هذا المستودع هو مساحة التكامل والاختبار.
+- `UORI` و`UORI_PLUS` ما زالا في نطاق التخطيط ما لم توجد أدلة تنفيذ مستقلة.
+- مهمة التتبع: `TASKS/ACTIVE/KNOB-MAL-INTEROP-001.md`.
+- سياسة التكامل: `KNOWLEDGE/PROJECT_INTEROPERABILITY.md`.
+- توجيه Hermes/Qwen: `KNOWLEDGE/LLM_GUIDANCE.md`.
+
+## نتائج فحص البيئة
+
+- remote مستودع `arabic-math-lang` يستخدم `github-kitab` بعد إزالة رمز وصول كان مكشوفاً.
+- فحص الأدلة أظهر تطابق معظم بصمات stdout، مع ملف Parser قديم غير مطابق للملف الحالي؛ لا يُستخدم كدليل جديد.
+- فحص Rust في جلسة التوثيق كان `ENVIRONMENT_BLOCKED` لأن `cargo` غير موجود في PATH.
+
+## قاعدة الإثبات
+
+لا تُرفع حالة أي تكامل إلى `PROVEN_FOR_SCOPE` إلا بعد stdout خام، SHA-256 مطابق، اختبار مستقل، نطاق معلن، وcommit قابل للتتبع. لا يعتمد النموذج اللغوي الحالة الدستورية ولا يعلن نجاحاً لم يُفحص.
