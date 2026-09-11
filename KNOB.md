@@ -642,3 +642,41 @@ NEXT_TASK               = MAL-PARSER-001 (parser عودي نزولي يبني AS
 **الاختبارات الناجحة (2):**
 - test_parse_block
 - (آخر غير مذكور)
+
+---
+
+## ✅ MAL-PARSER-001 — PROVEN_FOR_SCOPE (2026-09-11)
+
+**الحالة:** VERIFIED  
+**النطاق:** Parser عودي نزولي يبني AST في Arena (بدون print/λ في هذه المرحلة)  
+**الدليل:** `evidence/MAL-PARSER-001.stdout`  
+**الاختبارات:** 9/9 نجحت  
+**`lib.rs` SHA-256:** يُملأ من `evidence/MAL-PARSER-001.lib.sha256`  
+**`stdout` SHA-256:** يُملأ من `evidence/MAL-PARSER-001.sha256`  
+**commit:** التالي بعد هذا الـ commit  
+
+**الإصلاحات المُثبتة:**
+1. `parse_program` يُعيد آخر stmt مباشرةً عند وجود stmt واحد (بدل تغليفه في List).
+2. `parse_primary` يعالج `TokenKind::Eof` بـ `UnexpectedEof` بدل `Expected`.
+
+**الاختبارات الفاشلة سابقاً — الآن ناجحة:**
+- test_parse_number ✅
+- test_parse_binary_add ✅
+- test_parse_binary_mul ✅
+- test_parse_precedence ✅
+- test_parse_parens ✅
+- test_parse_assignment ✅
+- test_parse_error_unexpected_eof ✅
+- test_parse_block ✅ (كان ناجحاً)
+- test_parse_error_expected_paren ✅ (كان ناجحاً)
+
+**ملاحظة:** الطباعة (⎕) واللامدا (λ) لم تُختبَرا في هذه المرحلة. ستُعالَجا في MAL-PARSER-002.
+
+---
+
+## ❌ REJECTED APPROACH — تعديل Parser بالـ sed
+
+**التاريخ:** 2026-09-11  
+**الخطأ:** استخدام `sed -i` لتعديل `src/lib.rs` أدى إلى تكرار سطور و`unclosed delimiter` عند السطر 399.  
+**الدرس:** كل تعديل على ملفات Rust يجب أن يكون عبر Python (regex + brace-matching) أو محرر تفاعلي، **لا sed**.  
+**القاعدة الجديدة:** `DEC-005 — لا sed على ملفات Rust`.
