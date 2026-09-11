@@ -1,0 +1,13 @@
+[package]
+name = "mal_parser"
+version = "0.1.0"
+edition = "2021"
+description = "Recursive descent parser for MAL that builds AST in Arena"
+license = "MIT"
+
+[lib]
+path = "src/lib.rs"
+
+[dependencies]
+mal_lexer = { path = "../lexer" }
+mal_arena = { path = "../arena" }
