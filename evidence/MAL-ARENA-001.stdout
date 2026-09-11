@@ -1,0 +1,20 @@
+   Compiling mal_arena v0.1.0 (/root/ilm-al-kitab/MAL/src/arena)
+    Finished `release` profile [optimized] target(s) in 0.79s
+     Running unittests src/lib.rs (target/release/deps/mal_arena-b311fbd1e011fd81)
+
+running 6 tests
+test tests::test_10k_nodes_stress ... ok
+test tests::test_basic_allocation ... ok
+test tests::test_capacity_exceeded_abstain ... ok
+test tests::test_invalid_id_rejected ... ok
+test tests::test_stale_handle_rejected ... ok
+test tests::test_type_mismatch_abstain ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests mal_arena
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

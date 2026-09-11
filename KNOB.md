@@ -481,3 +481,48 @@ sha256sum evidence/step-NN.stdout > evidence/step-NN.sha256
 - **الدليل:** مزامنة VPS ↔ GitHub (SHA-256 متطابق)
 - **القرار:** `VPS_REMOTE_SYNC = PASSED`
 - **البروتوكول المُحترم:** لا `--force`، لا `reset --hard`، حفظ backup branch
+
+---
+# Checkpoint: MAL-ARENA-001 (STAGE0_ARENA_GATE)
+
+- **التاريخ:** 2026-09-11
+- **النموذج المنفِّذ:** Qwen 3.8 (تصميم كود) + VPS (تنفيذ حتمي)
+- **الحالة:** ✅ VERIFIED
+- **SHA-256 للمخرج الخام:** `dae49e181117cf0d61218f8629c9f5679a101040eb4c76c4c4adbee42f1db9e5`
+- **Exit code:** 0
+- **الاختبارات الناجحة:** 6/6
+  1. `test_basic_allocation`
+  2. `test_invalid_id_rejected`
+  3. `test_capacity_exceeded_abstain`
+  4. `test_type_mismatch_abstain`
+  5. `test_stale_handle_rejected`
+  6. `test_10k_nodes_stress` (10,000 عقدة متتالية في 0.00s)
+
+## التغييرات الدستورية
+- ✅ `#![forbid(unsafe_code)]`
+- ✅ `NodeID(u32)` كـ newtype (استبدال `Handle` القديم)
+- ✅ `Box<[ASTNode]>` بدلاً من `Vec` (تخصيص ثابت لمرة واحدة)
+- ✅ `ArenaError`: `CapacityExceeded`, `InvalidNodeID`, `TypeMismatch`
+- ✅ Fail-Closed: جميع حالات الفشل تُرجع `Err`، لا panic
+
+## الملفات المُضافة
+- `MAL/src/arena/Cargo.toml` (80 bytes)
+- `MAL/src/arena/src/lib.rs` (271 سطرًا، 8208 bytes)
+- `evidence/MAL-ARENA-001.stdout` (727 bytes)
+- `evidence/MAL-ARENA-001.sha256` (96 bytes)
+- `evidence/MAL-ARENA-001-CHECK.stdout`
+- `evidence/MAL-ARENA-001-CHECK.sha256`
+
+## القرار الدستوري
+```
+STAGE0_ARENA_GATE         = PASSED
+STAGE0_LOCAL_ARENA_RESULT = PASS
+MAL_AR_RUNTIME            = RESEARCH (يحتاج lexer/parser)
+BASELINE_MODIFIED         = YES (Arena جديد مُثبت)
+AUTO_PROMOTION            = ALLOW_TO_STAGE1
+```
+
+## الانتقال للمهمة التالية
+`MAL-COMPILER-042`: إضافة دعم λ في `math_complete.py`
+  - الحالة: HIGH PRIORITY
+  - المُنفَّذ الموصى به: aider أو تنفيذ يدوي

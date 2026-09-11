@@ -1,0 +1,12 @@
+[package]
+name = "mal_arena"
+version = "0.1.0"
+edition = "2021"
+description = "MAL Arena: deterministic, index-based, fail-closed ownership arena"
+license = "MIT"
+
+[lib]
+path = "src/lib.rs"
+crate-type = ["lib"]
+
+[dependencies]
