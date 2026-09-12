@@ -29,3 +29,6 @@ MAL/src/compiler/calc
 *.bak_before_fix
 *.bak_*
 target/
+
+# Qwen runner generated logs
+.qwen_runner/
