@@ -263,8 +263,14 @@ impl<'a> Parser<'a> {
             TokenKind::Forall => {
                 self.parse_forall(arena)
             }
+            TokenKind::Exists => {
+                self.parse_exists(arena)
+            }
             TokenKind::Mu => {
                 self.parse_mu(arena)
+            }
+            TokenKind::LAngle => {
+                self.parse_set_literal(arena)
             }
             TokenKind::Eof => Err(ParserError::UnexpectedEof),
             _ => Err(ParserError::Expected {
@@ -293,6 +299,45 @@ impl<'a> Parser<'a> {
         self.expect(TokenKind::Colon)?;
         let body = self.parse_expr(arena)?;
         Ok(arena.allocate(ASTNode::ForAll { var, set, body })?)
+    }
+    fn parse_exists(&mut self, arena: &mut Arena) -> Result<NodeID, ParserError> {
+        // ∃ already consumed by parse_primary
+        let var_tok = self.bump().ok_or(ParserError::UnexpectedEof)?;
+        if var_tok.kind != TokenKind::Ident {
+            return Err(ParserError::Expected {
+                expected: "identifier after ∃",
+                found: format!("{:?}", var_tok.kind),
+                line: var_tok.line,
+                col: var_tok.col,
+            });
+        }
+        let var = arena.allocate(ASTNode::Ident(var_tok.start))?;
+        self.expect(TokenKind::In)?;
+        let set = self.parse_expr(arena)?;
+        self.expect(TokenKind::Colon)?;
+        let body = self.parse_expr(arena)?;
+        Ok(arena.allocate(ASTNode::Exists { var, set, body })?)
+    }
+    fn parse_set_literal(&mut self, arena: &mut Arena) -> Result<NodeID, ParserError> {
+        // ⟨ already consumed by parse_primary
+        if self.peek().map_or(false, |t| t.kind == TokenKind::RAngle) {
+            self.bump(); // consume ⟩
+            return Ok(arena.allocate(ASTNode::Set { elems: NodeID::INVALID })?);
+        }
+        // Collect all elements first
+        let mut elements = vec![];
+        elements.push(self.parse_expr(arena)?);
+        while self.peek().map_or(false, |t| t.kind == TokenKind::Comma) {
+            self.bump(); // consume ,
+            elements.push(self.parse_expr(arena)?);
+        }
+        self.expect(TokenKind::RAngle)?;
+        // Build list from right to left (bottom-up)
+        let mut list = NodeID::INVALID;
+        for elem in elements.into_iter().rev() {
+            list = arena.allocate(ASTNode::List { head: elem, tail: list })?;
+        }
+        Ok(arena.allocate(ASTNode::Set { elems: list })?)
     }
     fn parse_mu(&mut self, arena: &mut Arena) -> Result<NodeID, ParserError> {
         // μ already consumed by parse_primary
@@ -581,6 +626,53 @@ mod tests {
         let mut arena = Arena::new(100);
         let root = parse("μ ن . ن · 2", &mut arena).unwrap();
         assert!(matches!(arena.get(root).unwrap(), ASTNode::Mu { .. }));
+    }
+    #[test]
+    fn test_parse_exists_basic() {
+        let mut arena = Arena::new(100);
+        let root = parse("∃ س ∈ ص : س", &mut arena).unwrap();
+        assert!(matches!(arena.get(root).unwrap(), ASTNode::Exists { .. }));
+    }
+    #[test]
+    fn test_parse_exists_with_body() {
+        let mut arena = Arena::new(100);
+        let root = parse("∃ س ∈ ص : س + 1", &mut arena).unwrap();
+        if let ASTNode::Exists { body, .. } = arena.get(root).unwrap() {
+            assert!(matches!(arena.get(*body).unwrap(), ASTNode::BinOp { .. }));
+        } else {
+            panic!("Expected Exists node");
+        }
+    }
+    #[test]
+    fn test_parse_set_literal_empty() {
+        let mut arena = Arena::new(100);
+        let root = parse("⟨⟩", &mut arena).unwrap();
+        if let ASTNode::Set { elems } = arena.get(root).unwrap() {
+            assert_eq!(*elems, NodeID::INVALID);
+        } else {
+            panic!("Expected Set node");
+        }
+    }
+    #[test]
+    fn test_parse_set_literal_one_elem() {
+        let mut arena = Arena::new(100);
+        let root = parse("⟨1⟩", &mut arena).unwrap();
+        if let ASTNode::Set { elems } = arena.get(root).unwrap() {
+            assert!(!(*elems == NodeID::INVALID));
+        } else {
+            panic!("Expected Set node");
+        }
+    }
+    #[test]
+    fn test_parse_set_literal_multi_elem() {
+        let mut arena = Arena::new(100);
+        let root = parse("⟨1,2,3⟩", &mut arena).unwrap();
+        assert!(matches!(arena.get(root).unwrap(), ASTNode::Set { .. }));
+    }
+    #[test]
+    fn test_set_type_tag() {
+        let node = ASTNode::Set { elems: NodeID::INVALID };
+        assert_eq!(node.type_tag(), TypeTag::Set);
     }
     #[test]
     fn test_set_membership_api() {

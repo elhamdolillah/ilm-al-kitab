@@ -59,6 +59,10 @@ pub enum TypeTag {
     SetMembership,
     /// Mu: μx. body (least fixed-point).
     Mu,
+    /// Existential quantification: ∃x ∈ S : body.
+    Exists,
+    /// Set literal: ⟨...⟩.
+    Set,
 }
 
 /// AST node with inline payload (no heap allocation per node).
@@ -136,6 +140,20 @@ pub enum ASTNode {
         /// Body expression.
         body: NodeID,
     },
+    /// Existential quantification: ∃x ∈ S : body.
+    Exists {
+        /// Variable.
+        var: NodeID,
+        /// Set.
+        set: NodeID,
+        /// Body expression.
+        body: NodeID,
+    },
+    /// Set literal: ⟨e1, e2, ...⟩. elems is a List chain, or INVALID if empty.
+    Set {
+        /// Elements as List chain (NodeID::INVALID if empty).
+        elems: NodeID,
+    },
 }
 
 
@@ -156,6 +174,8 @@ impl ASTNode {
             ASTNode::ForAll { .. } => TypeTag::ForAll,
             ASTNode::SetMembership { .. } => TypeTag::SetMembership,
             ASTNode::Mu { .. } => TypeTag::Mu,
+            ASTNode::Exists { .. } => TypeTag::Exists,
+            ASTNode::Set { .. } => TypeTag::Set,
         }
     }
 }

@@ -63,6 +63,8 @@ pub enum TokenKind {
     Question,
     /// `∀`
     Forall,
+    /// `∃`
+    Exists,
     /// `∈`
     In,
     /// `μ`
@@ -151,6 +153,7 @@ fn symbol_kind(c: char) -> Option<TokenKind> {
         '≠' => TokenKind::Neq,
         '؟' => TokenKind::Question,
         '∀' => TokenKind::Forall,
+        '∃' => TokenKind::Exists,
         '∈' => TokenKind::In,
         'μ' => TokenKind::Mu,
         'λ' => TokenKind::Lambda,

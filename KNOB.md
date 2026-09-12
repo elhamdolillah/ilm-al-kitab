@@ -869,3 +869,44 @@ NEXT_TASK               = MAL-PARSER-001 (parser عودي نزولي يبني AS
 ---------- EXIT CODE ----------
 0
 =========== QWEN RUN END ===========
+
+---
+# ✅ Checkpoint: MAL-INTEROP-001-C1.1B (Quantifiers Complete — PROVEN_FOR_SCOPE)
+- **التاريخ:** 2026-09-13
+- **الحالة:** ✅ PROVEN_FOR_SCOPE
+- **SHA-256:** `c9d582be6db9ab03aaabcc42720c1e56b1003cea9bed029b745af2ec23a6a1ef`
+- **الاختبارات:** 29/29 (23 قديم + 6 جديد)
+- **Exit code:** 0
+
+## النطاق المُثبت
+
+### Existential Quantifier (∃)
+- إضافة token `Exists` إلى Lexer + ربط `∃`
+- إضافة variant `Exists` إلى ASTNode
+- إضافة `parse_exists()` لصيغة `∃x ∈ S : body`
+- اختباران: basic + with body
+
+### Set Literals (⟨⟩)
+- إضافة variant `Set` إلى ASTNode
+- إضافة `parse_set_literal()` لصيغة `⟨e1, e2, ...⟩`
+- دعم المجموعة الفارغة `⟨⟩`
+- بناء القائمة bottom-up (من اليمين لليسار)
+- 3 اختبارات: empty + one_elem + multi_elem
+- اختبار `test_set_type_tag`
+
+## ما لا يُثبته هذا الـ checkpoint
+⚠️ عمليات Set Theory (∪, ∩, \) لم تُنفَّذ بعد (C1.2)
+⚠️ `Exists` و `Set` غير مدمجين في expression grammar الكامل
+⚠️ لم يُجرَ differential testing ضد `math_complete.py` بعد
+
+## القرار الدستوري
+```
+MAL-INTEROP-001-C1.1B   = PROVEN_FOR_SCOPE
+QUANTIFIERS_COMPLETE    = PROVEN (∀ + ∃ + ⟨⟩)
+SET_LITERAL_PARSING     = PROVEN (empty + multi-element)
+BASELINE_MODIFIED       = YES (1 token + 2 variants + 2 parsers + 6 tests)
+NO_REGRESSION           = VERIFIED (23/23 اختبار قديم نجح)
+```
+
+## الانتقال للمهمة التالية
+الخطوة التالية: `MAL-INTEROP-001-C1.2` (Set Theory: ∪, ∩, \, Δ, ×, ⊆, ⊇)
