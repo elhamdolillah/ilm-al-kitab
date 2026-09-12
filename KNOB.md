@@ -920,3 +920,16 @@ NO_REGRESSION           = VERIFIED (23/23 اختبار قديم نجح)
 - الدليل: `evidence/MAL-PARSER-READ-FIX.stdout` و`evidence/MAL-PARSER-READ-FIX.sha256`.
 - الحالة: `PROVEN_FOR_SCOPE` ضمن نطاق اختبارات Rust المذكورة فقط.
 - القيد: يوجد تحذير غير مانع لمتغير `right` غير مستخدم في اختبار قائم؛ خارج نطاق الإصلاح.
+
+---
+# 19. MAL-C2-NEXT-STEPS
+
+- Parser: 35/35، Read: 3/3، Lexer: 9/9، Arena: 7/7 مع 10K — `PROVEN_FOR_SCOPE`.
+- مجموعة `math_complete.py` الخارجية: 10/24، مع 14 فشلاً؛ الحالة `FAILED` كاختبار شامل.
+- الاختبار الخارجي أعاد exit code صفراً رغم الفشل، لذلك لا يعتمد exit code وحده.
+- Differential testing الكامل: `PLANNED`، لأن adapter وcorpus المشترك لم يُنشآ بعد.
+- C1.2 Set Theory: `ABSTAIN` لغياب tokens/AST/parser.
+- C1.3 Type Theory: `ABSTAIN` لغياب العقد الدلالي وtokens/AST/parser.
+- Runtime: `PLANNED`؛ لا يوجد evaluator متكامل في البنية الحالية.
+- التقرير: `KNOWLEDGE/MAL_C2_NEXT_STEPS_REPORT.md`.
+- الأدلة الخارجية: `evidence/MAL-DIFF-EXTERNAL-20260913.stdout` و`.sha256`.
