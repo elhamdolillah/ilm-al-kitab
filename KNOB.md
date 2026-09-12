@@ -712,3 +712,29 @@ NEXT_TASK               = MAL-PARSER-001 (parser عودي نزولي يبني AS
 ## قاعدة الإثبات
 
 لا تُرفع حالة أي تكامل إلى `PROVEN_FOR_SCOPE` إلا بعد stdout خام، SHA-256 مطابق، اختبار مستقل، نطاق معلن، وcommit قابل للتتبع. لا يعتمد النموذج اللغوي الحالة الدستورية ولا يعلن نجاحاً لم يُفحص.
+---
+# ✅ Checkpoint: MAL-PARSER-002 (Function Application — PROVEN_FOR_SCOPE)
+- **التاريخ:** 2026-09-12
+- **الحالة:** ✅ PROVEN_FOR_SCOPE
+- **SHA-256:** `b766ec356178f3cc703ee4e18510d533624916977b70f6522ae66f04c1eee482`
+- **الاختبارات:** 13/13 (9 أساس + 4 lambda)
+- **Exit code:** 0
+- **التصحيح الدستوري:** هذا الـ checkpoint يصحح الادعاء الكاذب من `ea7979d` الذي سجّل `13/13` بينما الحقيقة كانت `12/13` مع فشل `test_parse_lambda_apply`
+## النطاق المُثبت
+- دعم `(expr)(args)` في ذراع `TokenKind::LParen` بـ `parse_primary`
+- بناء `ASTNode::Call { func: expr, args: args_node }` عند وجود أقواس متعددة
+- معالجة الوسائط: `NodeID::INVALID` (فارغ)، `args[0]` (وسيط واحد)، `List` (متعدد)
+- لا تراجع في الـ 12 اختباراً الأخرى
+## التغييرات
+- `MAL/src/parser/src/lib.rs`: إضافة حلقة `while peek == LParen` في ذراع LParen (25 سطراً مضافاً)
+- `evidence/MAL-PARSER-002-r2.stdout`: الدليل الخام
+- `evidence/MAL-PARSER-002-r2.sha256`: البصمة
+- نسخة احتياطية: `lib.rs.bak_<timestamp>`
+## القرار الدستوري
+القرار الدستوري:
+- MAL-PARSER-002         = PROVEN_FOR_SCOPE
+- FUNCTION_APPLICATION   = PROVEN (صيغة (expr)(args))
+- BASELINE_MODIFIED      = YES (ذراع واحد في parse_primary)
+- NO_REGRESSION          = VERIFIED (12/12 اختبار سابق نجح)
+## الانتقال للمهمة التالية
+الخطوة التالية: `MAL-INTEROP-001` المرحلة B (عقد واجهة) أو `MAL-PARSER-003` (دعم `expr(args)` بدون أقواس)

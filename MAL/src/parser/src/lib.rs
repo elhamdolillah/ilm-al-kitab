@@ -231,8 +231,33 @@ impl<'a> Parser<'a> {
                 }
             }
             TokenKind::LParen => {
-                let expr = self.parse_expr(arena)?;
+                let mut expr = self.parse_expr(arena)?;
                 self.expect(TokenKind::RParen)?;
+                while self.peek().map_or(false, |t| t.kind == TokenKind::LParen) {
+                    self.bump();
+                    let mut args = Vec::new();
+                    while !self.peek().map_or(false, |t| t.kind == TokenKind::RParen) {
+                        args.push(self.parse_expr(arena)?);
+                        if self.peek().map_or(false, |t| t.kind == TokenKind::Comma) {
+                            self.bump();
+                        } else {
+                            break;
+                        }
+                    }
+                    self.expect(TokenKind::RParen)?;
+                    let args_node = if args.is_empty() {
+                        NodeID::INVALID
+                    } else if args.len() == 1 {
+                        args[0]
+                    } else {
+                        let mut list = arena.allocate(ASTNode::List { head: args[args.len() - 1], tail: NodeID::INVALID })?;
+                        for i in (0..args.len() - 1).rev() {
+                            list = arena.allocate(ASTNode::List { head: args[i], tail: list })?;
+                        }
+                        list
+                    };
+                    expr = arena.allocate(ASTNode::Call { func: expr, args: args_node })?;
+                }
                 Ok(expr)
             }
             TokenKind::Eof => Err(ParserError::UnexpectedEof),
