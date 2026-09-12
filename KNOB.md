@@ -738,3 +738,134 @@ NEXT_TASK               = MAL-PARSER-001 (parser عودي نزولي يبني AS
 - NO_REGRESSION          = VERIFIED (12/12 اختبار سابق نجح)
 ## الانتقال للمهمة التالية
 الخطوة التالية: `MAL-INTEROP-001` المرحلة B (عقد واجهة) أو `MAL-PARSER-003` (دعم `expr(args)` بدون أقواس)
+---
+# ✅ Checkpoint: MAL-INTEROP-001-C1.1 (Linear Logic + Quantifiers — PROVEN_FOR_SCOPE)
+- **التاريخ:** 2026-09-13
+- **الحالة:** ✅ PROVEN_FOR_SCOPE
+- **SHA-256:** `5543720812b0ae9e7398a9b224f6e70e2dd3a0550655a621ff080e2e9324f6f9`
+- **الاختبارات:** 23/23 (13 قديم + 10 جديد)
+- **Exit code:** 0
+## النطاق المُثبت
+### Linear Logic (Priority 1 — Critical)
+- إضافة token `LinearImplication` (⊸) إلى Lexer
+- إصلاح ربط `⊸`: أصبح يشير إلى `LinearImplication` بدلاً من `Move`
+- إضافة variant `LinearLet` إلى ASTNode
+- اختباران API لـ LinearLet (بنية + TypeTag)
+### Quantifiers (Priority 2 — High)
+- إضافة variant `ForAll` إلى ASTNode
+- إضافة `parse_forall()` لصيغة `∀x ∈ S : body`
+- إصلاح خطأ double-bump في `parse_forall()`
+- 3 اختبارات: basic, nested, with body
+### Fixed-Point (Priority 3 — High)
+- إضافة variant `Mu` إلى ASTNode
+- إضافة `parse_mu()` لصيغة `μx. body`
+- إصلاح خطأ double-bump في `parse_mu()`
+- 3 اختبارات: basic, with body, with condition
+### Set Membership (Priority 2 — High)
+- إضافة variant `SetMembership` إلى ASTNode
+- اختبار API واحد لـ SetMembership
+### TypeTag System
+- إضافة 4 TypeTag variants جديدة
+- تحديث `type_tag()` لمعالجة الـ variants الجديدة
+## ما لا يُثبته هذا الـ checkpoint
+⚠️ Set literals (⟨1,2,3⟩) غير مدعومة بعد في Parser (الاختبارات تستخدم identifiers)
+⚠️ `LinearLet` غير مدمج بعد في expression grammar الكامل
+⚠️ `SetMembership` غير مدمج بعد في expression grammar الكامل
+⚠️ لم يُجرَ differential testing ضد `math_complete.py` بعد
+⚠️ `Exists` (∃) معلن في العقد لكن لم يُنفَّذ بعد
+## التغييرات
+- `MAL/src/lexer/src/lib.rs`: إضافة `LinearImplication` token + إصلاح ربط `⊸`
+- `MAL/src/arena/src/lib.rs`: إضافة 4 variants إلى `ASTNode` + 4 variants إلى `TypeTag`
+- `MAL/src/parser/src/lib.rs`: إضافة `parse_forall()` و `parse_mu()` + إصلاح double-bump + 10 اختبارات جديدة
+- `evidence/MAL-PARSER-C1-1.stdout`: الدليل الخام (23 اختبار ناجح)
+- `evidence/MAL-PARSER-C1-1.sha256`: البصمة
+## القرار الدستوري
+---
+# ✅ Checkpoint: MAL-INTEROP-001-C1.1 (Linear Logic + Quantifiers — PROVEN_FOR_SCOPE)
+- **التاريخ:** 2026-09-13
+- **الحالة:** ✅ PROVEN_FOR_SCOPE
+- **SHA-256:** `5543720812b0ae9e7398a9b224f6e70e2dd3a0550655a621ff080e2e9324f6f9`
+- **الاختبارات:** 23/23 (13 قديم + 10 جديد)
+- **Exit code:** 0
+## النطاق المُثبت
+### Linear Logic (Priority 1 — Critical)
+- إضافة token `LinearImplication` (⊸) إلى Lexer
+- إصلاح ربط `⊸`: أصبح يشير إلى `LinearImplication` بدلاً من `Move`
+- إضافة variant `LinearLet` إلى ASTNode
+- اختباران API لـ LinearLet (بنية + TypeTag)
+### Quantifiers (Priority 2 — High)
+- إضافة variant `ForAll` إلى ASTNode
+- إضافة `parse_forall()` لصيغة `∀x ∈ S : body`
+- إصلاح خطأ double-bump في `parse_forall()`
+- 3 اختبارات: basic, nested, with body
+### Fixed-Point (Priority 3 — High)
+- إضافة variant `Mu` إلى ASTNode
+- إضافة `parse_mu()` لصيغة `μx. body`
+- إصلاح خطأ double-bump في `parse_mu()`
+- 3 اختبارات: basic, with body, with condition
+### Set Membership (Priority 2 — High)
+- إضافة variant `SetMembership` إلى ASTNode
+- اختبار API واحد لـ SetMembership
+### TypeTag System
+- إضافة 4 TypeTag variants جديدة
+- تحديث `type_tag()` لمعالجة الـ variants الجديدة
+## ما لا يُثبته هذا الـ checkpoint
+⚠️ Set literals (⟨1,2,3⟩) غير مدعومة بعد في Parser (الاختبارات تستخدم identifiers)
+⚠️ `LinearLet` غير مدمج بعد في expression grammar الكامل
+⚠️ `SetMembership` غير مدمج بعد في expression grammar الكامل
+⚠️ لم يُجرَ differential testing ضد `math_complete.py` بعد
+⚠️ `Exists` (∃) معلن في العقد لكن لم يُنفَّذ بعد
+## التغييرات
+- `MAL/src/lexer/src/lib.rs`: إضافة `LinearImplication` token + إصلاح ربط `⊸`
+- `MAL/src/arena/src/lib.rs`: إضافة 4 variants إلى `ASTNode` + 4 variants إلى `TypeTag`
+- `MAL/src/parser/src/lib.rs`: إضافة `parse_forall()` و `parse_mu()` + إصلاح double-bump + 10 اختبارات جديدة
+- `evidence/MAL-PARSER-C1-1.stdout`: الدليل الخام (23 اختبار ناجح)
+- `evidence/MAL-PARSER-C1-1.sha256`: البصمة
+## القرار الدستوري
+---
+# ✅ Checkpoint: MAL-INTEROP-001-C1.1 (Linear Logic + Quantifiers — PROVEN_FOR_SCOPE)
+- **التاريخ:** 2026-09-13
+- **الحالة:** ✅ PROVEN_FOR_SCOPE
+- **SHA-256:** `5543720812b0ae9e7398a9b224f6e70e2dd3a0550655a621ff080e2e9324f6f9`
+- **الاختبارات:** 23/23 (13 قديم + 10 جديد)
+- **Exit code:** 0
+## النطاق المُثبت
+### Linear Logic (Priority 1 — Critical)
+- إضافة token `LinearImplication` (⊸) إلى Lexer
+- إصلاح ربط `⊸`: أصبح يشير إلى `LinearImplication` بدلاً من `Move`
+- إضافة variant `LinearLet` إلى ASTNode
+- اختباران API لـ LinearLet (بنية + TypeTag)
+### Quantifiers (Priority 2 — High)
+- إضافة variant `ForAll` إلى ASTNode
+- إضافة `parse_forall()` لصيغة `∀x ∈ S : body`
+- إصلاح خطأ double-bump في `parse_forall()`
+- 3 اختبارات: basic, nested, with body
+### Fixed-Point (Priority 3 — High)
+- إضافة variant `Mu` إلى ASTNode
+- إضافة `parse_mu()` لصيغة `μx. body`
+- إصلاح خطأ double-bump في `parse_mu()`
+- 3 اختبارات: basic, with body, with condition
+### Set Membership (Priority 2 — High)
+- إضافة variant `SetMembership` إلى ASTNode
+- اختبار API واحد لـ SetMembership
+### TypeTag System
+- إضافة 4 TypeTag variants جديدة
+- تحديث `type_tag()` لمعالجة الـ variants الجديدة
+## ما لا يُثبته هذا الـ checkpoint
+⚠️ Set literals (⟨1,2,3⟩) غير مدعومة بعد في Parser (الاختبارات تستخدم identifiers)
+⚠️ `LinearLet` غير مدمج بعد في expression grammar الكامل
+⚠️ `SetMembership` غير مدمج بعد في expression grammar الكامل
+⚠️ لم يُجرَ differential testing ضد `math_complete.py` بعد
+⚠️ `Exists` (∃) معلن في العقد لكن لم يُنفَّذ بعد
+## التغييرات
+- `MAL/src/lexer/src/lib.rs`: إضافة `LinearImplication` token + إصلاح ربط `⊸`
+- `MAL/src/arena/src/lib.rs`: إضافة 4 variants إلى `ASTNode` + 4 variants إلى `TypeTag`
+- `MAL/src/parser/src/lib.rs`: إضافة `parse_forall()` و `parse_mu()` + إصلاح double-bump + 10 اختبارات جديدة
+- `evidence/MAL-PARSER-C1-1.stdout`: الدليل الخام (23 اختبار ناجح)
+- `evidence/MAL-PARSER-C1-1.sha256`: البصمة
+## القرار الدستوري
+---------- OUTPUT ----------
+/root/ilm-al-kitab/.qwen_runner/commands_20260912_234402.sh: line 45: warning: here-document at line 3 delimited by end-of-file (wanted `EOF')
+---------- EXIT CODE ----------
+0
+=========== QWEN RUN END ===========

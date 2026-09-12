@@ -260,6 +260,12 @@ impl<'a> Parser<'a> {
                 }
                 Ok(expr)
             }
+            TokenKind::Forall => {
+                self.parse_forall(arena)
+            }
+            TokenKind::Mu => {
+                self.parse_mu(arena)
+            }
             TokenKind::Eof => Err(ParserError::UnexpectedEof),
             _ => Err(ParserError::Expected {
                 expected: "expression",
@@ -270,6 +276,40 @@ impl<'a> Parser<'a> {
         }
     }
 
+    fn parse_forall(&mut self, arena: &mut Arena) -> Result<NodeID, ParserError> {
+        // ∀ already consumed by parse_primary
+        let var_tok = self.bump().ok_or(ParserError::UnexpectedEof)?;
+        if var_tok.kind != TokenKind::Ident {
+            return Err(ParserError::Expected {
+                expected: "identifier after ∀",
+                found: format!("{:?}", var_tok.kind),
+                line: var_tok.line,
+                col: var_tok.col,
+            });
+        }
+        let var = arena.allocate(ASTNode::Ident(var_tok.start))?;
+        self.expect(TokenKind::In)?;
+        let set = self.parse_expr(arena)?;
+        self.expect(TokenKind::Colon)?;
+        let body = self.parse_expr(arena)?;
+        Ok(arena.allocate(ASTNode::ForAll { var, set, body })?)
+    }
+    fn parse_mu(&mut self, arena: &mut Arena) -> Result<NodeID, ParserError> {
+        // μ already consumed by parse_primary
+        let var_tok = self.bump().ok_or(ParserError::UnexpectedEof)?;
+        if var_tok.kind != TokenKind::Ident {
+            return Err(ParserError::Expected {
+                expected: "identifier after μ",
+                found: format!("{:?}", var_tok.kind),
+                line: var_tok.line,
+                col: var_tok.col,
+            });
+        }
+        let var = arena.allocate(ASTNode::Ident(var_tok.start))?;
+        self.expect(TokenKind::Dot)?;
+        let body = self.parse_expr(arena)?;
+        Ok(arena.allocate(ASTNode::Mu { var, body })?)
+    }
     fn parse_stmt(&mut self, arena: &mut Arena) -> Result<NodeID, ParserError> {
         let tok = self.peek().ok_or(ParserError::UnexpectedEof)?;
         match tok.kind {
@@ -368,6 +408,7 @@ pub fn parse(src: &str, arena: &mut Arena) -> Result<NodeID, ParserError> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use mal_arena::TypeTag;
 
     #[test]
     fn test_parse_number() {
@@ -497,6 +538,89 @@ mod tests {
         }
     }
 
+    #[test]
+    fn test_parse_forall_basic() {
+        let mut arena = Arena::new(100);
+        let root = parse("∀ س ∈ ص : س", &mut arena).unwrap();
+        assert!(matches!(arena.get(root).unwrap(), ASTNode::ForAll { .. }));
+    }
+    #[test]
+    fn test_parse_forall_with_body() {
+        let mut arena = Arena::new(100);
+        let root = parse("∀ س ∈ ص : س + 1", &mut arena).unwrap();
+        if let ASTNode::ForAll { body, .. } = arena.get(root).unwrap() {
+            assert!(matches!(arena.get(*body).unwrap(), ASTNode::BinOp { .. }));
+        } else {
+            panic!("Expected ForAll node");
+        }
+    }
+    #[test]
+    fn test_parse_forall_nested() {
+        let mut arena = Arena::new(200);
+        let root = parse("∀ س ∈ ص : ∀ ع ∈ د : س + ع", &mut arena).unwrap();
+        assert!(matches!(arena.get(root).unwrap(), ASTNode::ForAll { .. }));
+    }
+    #[test]
+    fn test_parse_mu_basic() {
+        let mut arena = Arena::new(100);
+        let root = parse("μ ن . ن", &mut arena).unwrap();
+        assert!(matches!(arena.get(root).unwrap(), ASTNode::Mu { .. }));
+    }
+    #[test]
+    fn test_parse_mu_with_body() {
+        let mut arena = Arena::new(100);
+        let root = parse("μ ن . ن + 1", &mut arena).unwrap();
+        if let ASTNode::Mu { body, .. } = arena.get(root).unwrap() {
+            assert!(matches!(arena.get(*body).unwrap(), ASTNode::BinOp { .. }));
+        } else {
+            panic!("Expected Mu node");
+        }
+    }
+    #[test]
+    fn test_parse_mu_with_condition() {
+        let mut arena = Arena::new(100);
+        let root = parse("μ ن . ن · 2", &mut arena).unwrap();
+        assert!(matches!(arena.get(root).unwrap(), ASTNode::Mu { .. }));
+    }
+    #[test]
+    fn test_set_membership_api() {
+        let mut arena = Arena::new(100);
+        let elem = arena.allocate(ASTNode::Int(5)).unwrap();
+        let set = arena.allocate(ASTNode::Int(0)).unwrap();
+        let _p = Parser::new("test").unwrap();
+        // Direct construction test
+        let node = ASTNode::SetMembership { elem, set };
+        let id = arena.allocate(node).unwrap();
+        assert!(matches!(arena.get(id).unwrap(), ASTNode::SetMembership { .. }));
+    }
+    #[test]
+    fn test_linear_let_api() {
+        let mut arena = Arena::new(100);
+        let name = arena.allocate(ASTNode::Ident(0)).unwrap();
+        let value = arena.allocate(ASTNode::Int(42)).unwrap();
+        let body = arena.allocate(ASTNode::Ident(0)).unwrap();
+        let node = ASTNode::LinearLet { name, value, body };
+        let id = arena.allocate(node).unwrap();
+        assert!(matches!(arena.get(id).unwrap(), ASTNode::LinearLet { .. }));
+    }
+    #[test]
+    fn test_linear_let_type_tag() {
+        let node = ASTNode::LinearLet {
+            name: NodeID(0),
+            value: NodeID(1),
+            body: NodeID(2),
+        };
+        assert_eq!(node.type_tag(), TypeTag::LinearLet);
+    }
+    #[test]
+    fn test_forall_type_tag() {
+        let node = ASTNode::ForAll {
+            var: NodeID(0),
+            set: NodeID(1),
+            body: NodeID(2),
+        };
+        assert_eq!(node.type_tag(), TypeTag::ForAll);
+    }
     #[test]
     fn test_parse_lambda_apply() {
         let mut arena = Arena::new(100);

@@ -69,6 +69,8 @@ pub enum TokenKind {
     Mu,
     /// `λ`
     Lambda,
+    /// `⊸` linear implication (ownership transfer)
+    LinearImplication,
     /// `﴿`
     LBlock,
     /// `﴾`
@@ -155,7 +157,7 @@ fn symbol_kind(c: char) -> Option<TokenKind> {
         '﴿' => TokenKind::LBlock,
         '﴾' => TokenKind::RBlock,
         '⋄' => TokenKind::Diamond,
-        '⊸' => TokenKind::Move,
+        '⊸' => TokenKind::LinearImplication,
         '⊙' => TokenKind::Read,
         '⎕' => TokenKind::Print,
         _ => return None,

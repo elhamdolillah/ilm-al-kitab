@@ -51,6 +51,14 @@ pub enum TypeTag {
     List,
     /// Lambda: λ(params). body.
     Lambda,
+    /// Linear let: x ⊸ expr.
+    LinearLet,
+    /// Universal quantification: ∀x ∈ S : body.
+    ForAll,
+    /// Set membership: x ∈ S.
+    SetMembership,
+    /// Mu: μx. body (least fixed-point).
+    Mu,
 }
 
 /// AST node with inline payload (no heap allocation per node).
@@ -96,6 +104,38 @@ pub enum ASTNode {
         /// Body expression.
         body: NodeID,
     },
+    /// Linear let: x ⊸ expr (ownership transfer).
+    LinearLet {
+        /// Variable being bound.
+        name: NodeID,
+        /// Value being transferred.
+        value: NodeID,
+        /// Body expression.
+        body: NodeID,
+    },
+    /// Universal quantification: ∀x ∈ S : body.
+    ForAll {
+        /// Variable.
+        var: NodeID,
+        /// Set.
+        set: NodeID,
+        /// Body expression.
+        body: NodeID,
+    },
+    /// Set membership: x ∈ S.
+    SetMembership {
+        /// Element.
+        elem: NodeID,
+        /// Set.
+        set: NodeID,
+    },
+    /// Mu: μx. body (least fixed-point).
+    Mu {
+        /// Variable.
+        var: NodeID,
+        /// Body expression.
+        body: NodeID,
+    },
 }
 
 
@@ -112,6 +152,10 @@ impl ASTNode {
             ASTNode::Call { .. } => TypeTag::Call,
             ASTNode::List { .. } => TypeTag::List,
             ASTNode::Lambda { .. } => TypeTag::Lambda,
+            ASTNode::LinearLet { .. } => TypeTag::LinearLet,
+            ASTNode::ForAll { .. } => TypeTag::ForAll,
+            ASTNode::SetMembership { .. } => TypeTag::SetMembership,
+            ASTNode::Mu { .. } => TypeTag::Mu,
         }
     }
 }
