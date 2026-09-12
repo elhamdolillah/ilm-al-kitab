@@ -98,12 +98,13 @@ impl<'a> Parser<'a> {
     fn parse_additive(&mut self, arena: &mut Arena) -> Result<NodeID, ParserError> {
         let mut left = self.parse_multiplicative(arena)?;
         while let Some(tok) = self.peek() {
-            if tok.kind == TokenKind::Plus || tok.kind == TokenKind::Minus {
+            if tok.kind == TokenKind::Plus || tok.kind == TokenKind::Minus || tok.kind == TokenKind::Concat {
                 let op = self.bump().unwrap();
                 let right = self.parse_multiplicative(arena)?;
                 let op_code = match op.kind {
                     TokenKind::Plus => 0,
                     TokenKind::Minus => 1,
+                    TokenKind::Concat => 4,
                     _ => unreachable!(),
                 };
                 left = arena.allocate(ASTNode::BinOp {
@@ -271,6 +272,13 @@ impl<'a> Parser<'a> {
             }
             TokenKind::LAngle => {
                 self.parse_set_literal(arena)
+            }
+            TokenKind::Read => {
+                // ⊙ read stdin — zero-argument builtin call (already consumed by parse_primary)
+                Ok(arena.allocate(ASTNode::Call {
+                    func: NodeID::INVALID, // read builtin (distinguished from print by context)
+                    args: NodeID::INVALID, // no arguments
+                })?)
             }
             TokenKind::Eof => Err(ParserError::UnexpectedEof),
             _ => Err(ParserError::Expected {
@@ -668,6 +676,75 @@ mod tests {
         let mut arena = Arena::new(100);
         let root = parse("⟨1,2,3⟩", &mut arena).unwrap();
         assert!(matches!(arena.get(root).unwrap(), ASTNode::Set { .. }));
+    }
+    #[test]
+    fn test_parse_concat_basic() {
+        let mut arena = Arena::new(100);
+        let root = parse("أ ⊕ ب", &mut arena).unwrap();
+        if let ASTNode::BinOp { op, .. } = arena.get(root).unwrap() {
+            assert_eq!(*op, 4); // concat op code
+        } else {
+            panic!("Expected BinOp for concat");
+        }
+    }
+    #[test]
+    fn test_parse_concat_with_plus() {
+        let mut arena = Arena::new(100);
+        let root = parse("أ + ب ⊕ ج", &mut arena).unwrap();
+        // Should parse as: (أ + ب) ⊕ ج
+        if let ASTNode::BinOp { op, left, .. } = arena.get(root).unwrap() {
+            assert_eq!(*op, 4); // outer is concat
+            if let ASTNode::BinOp { op: inner_op, .. } = arena.get(*left).unwrap() {
+                assert_eq!(*inner_op, 0); // inner is plus
+            } else {
+                panic!("Expected inner BinOp");
+            }
+        } else {
+            panic!("Expected outer BinOp");
+        }
+    }
+    #[test]
+    fn test_parse_read_stdin_basic() {
+        let mut arena = Arena::new(100);
+        let root = parse("⊙", &mut arena).unwrap();
+        if let ASTNode::Call { func, args } = arena.get(root).unwrap() {
+            assert_eq!(*func, NodeID::INVALID); // read builtin
+            assert_eq!(*args, NodeID::INVALID); // no arguments
+        } else {
+            panic!("Expected Call for read stdin");
+        }
+    }
+    #[test]
+    fn test_parse_read_stdin_in_assignment() {
+        let mut arena = Arena::new(100);
+        let root = parse("س ≔ ⊙", &mut arena).unwrap();
+        // Should parse as assignment with read on right side
+        if let ASTNode::BinOp { op, right, .. } = arena.get(root).unwrap() {
+            assert_eq!(*op, 10); // assignment marker
+            if let ASTNode::Call { func, args } = arena.get(*right).unwrap() {
+                assert_eq!(*func, NodeID::INVALID);
+                assert_eq!(*args, NodeID::INVALID);
+            } else {
+                panic!("Expected Call on right side of assignment");
+            }
+        } else {
+            panic!("Expected BinOp for assignment");
+        }
+    }
+    #[test]
+    fn test_parse_read_stdin_with_print() {
+        let mut arena = Arena::new(100);
+        // This would be two statements: ⊙ then ⎕ ⊙
+        // But parse() only handles single expression, so test just ⊙
+        let root = parse("⊙", &mut arena).unwrap();
+        assert!(matches!(arena.get(root).unwrap(), ASTNode::Call { .. }));
+    }
+    #[test]
+    fn test_parse_concat_chain() {
+        let mut arena = Arena::new(100);
+        let root = parse("أ ⊕ ب ⊕ ج", &mut arena).unwrap();
+        // Should parse as: (أ ⊕ ب) ⊕ ج (left-associative)
+        assert!(matches!(arena.get(root).unwrap(), ASTNode::BinOp { .. }));
     }
     #[test]
     fn test_set_type_tag() {

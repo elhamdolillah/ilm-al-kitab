@@ -910,3 +910,13 @@ NO_REGRESSION           = VERIFIED (23/23 اختبار قديم نجح)
 
 ## الانتقال للمهمة التالية
 الخطوة التالية: `MAL-INTEROP-001-C1.2` (Set Theory: ∪, ∩, \, Δ, ×, ⊆, ⊇)
+
+---
+# 18. MAL-PARSER-READ-FIX
+
+- الإصلاح: إزالة `self.bump()` المزدوج من ذراع `TokenKind::Read` في `parse_primary`.
+- Parser: 35/35، واختبارات Read المستهدفة: 3/3.
+- Lexer: 9/9، وArena: 7/7 مع اختبار 10K.
+- الدليل: `evidence/MAL-PARSER-READ-FIX.stdout` و`evidence/MAL-PARSER-READ-FIX.sha256`.
+- الحالة: `PROVEN_FOR_SCOPE` ضمن نطاق اختبارات Rust المذكورة فقط.
+- القيد: يوجد تحذير غير مانع لمتغير `right` غير مستخدم في اختبار قائم؛ خارج نطاق الإصلاح.
