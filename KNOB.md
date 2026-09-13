@@ -953,3 +953,12 @@ NO_REGRESSION           = VERIFIED (23/23 اختبار قديم نجح)
 - لا تعلن هذه المواد دعم MAL لتعليمات x86 ولا codegen أو syscall runtime.
 - المرحلة التالية المقترحة: عقد IR صغير ثم model checker offline واختبارات push/pop وmov/add/sub/cmp/test.
 - كل تعليمات SIMD وfloating point وfork/exec/epoll تبقى خارج النطاق حتى تنفيذ واختبار مستقل.
+
+---
+# 22. ASM-SEM-001
+
+- المهمة: عقد حالة ودلالات `mov/add/sub/push/pop/cmp/test`.
+- الحالة: `PLANNED`.
+- corpus: `KNOWLEDGE/ASM-SEM-001-CORPUS.md`.
+- القرار: نموذج دلالي offline مستقل قبل تعديل Parser أو AOT compiler.
+- لا يوجد إثبات تنفيذي جديد حتى الآن.
