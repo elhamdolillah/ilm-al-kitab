@@ -86,3 +86,26 @@ raw stdout + exit code + SHA-256 + independent test + declared scope
 ```
 
 أي نقص يعيد الحالة إلى `RESEARCH` أو `PLANNED` أو `FAILED` أو `ABSTAIN`.
+---
+## Formal Protocol Specification
+### Message Format
+∀ message M between Qwen and MAL:
+M = (type: MessageType, payload: Payload, timestamp: ℤ)
+where MessageType ∈ {request, response, error, ack}
+### State Machine
+States: {IDLE, PARSING, EVALUATING, COMPILING, DONE, ERROR}
+Transitions:
+- IDLE → PARSING: on request received
+- PARSING → EVALUATING: on parse success
+- PARSING → ERROR: on parse failure
+- EVALUATING → COMPILING: on eval success
+- EVALUATING → ERROR: on eval failure
+- COMPILING → DONE: on compile success
+- COMPILING → ERROR: on compile failure
+### Invariants
+- ∀ state s: s ∈ valid_states
+- ∀ transition t: t preserves protocol integrity
+- ERROR is absorbing: ∀ s: ERROR → ERROR
+### Equivalence
+∀ programs P₁, P₂:
+P₁ ≡ P₂ ⟺ ∀ inputs: run(P₁, input) = run(P₂, input)

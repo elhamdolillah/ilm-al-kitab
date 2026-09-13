@@ -1,3 +1,50 @@
+
+# ═══════════════════════════════════════════════════════════════
+# Mathematical Semantics Layer — Formal Specifications
+# ═══════════════════════════════════════════════════════════════
+#
+# State: Σ = (regs: R → ℤ, mem: Addr → Byte, ip: Addr, flags: F)
+# where R = {rax, rbx, rcx, rdx, rsi, rdi, rsp, rbp, ...}
+#       F = {ZF, CF, SF, OF}
+#
+# Instructions:
+#   mov: R × Operand → Σ   where Σ.regs[r] ← eval(operand)
+#   add: R × Operand → Σ   where Σ.regs[r] ← Σ.regs[r] + eval(operand)
+#   sub: R × Operand → Σ   where Σ.regs[r] ← Σ.regs[r] - eval(operand)
+#   push: Operand → Σ      where Σ.mem[Σ.regs[rsp] - 8] ← eval(op)
+#                          and Σ.regs[rsp] ← Σ.regs[rsp] - 8
+#   pop: R → Σ             where Σ.regs[r] ← Σ.mem[Σ.regs[rsp]]
+#                          and Σ.regs[rsp] ← Σ.regs[rsp] + 8
+#   cmp: Operand × Operand → Σ   where flags ← compare(eval(a), eval(b))
+#
+# Jumps (∀ label L, address a = addr(L)):
+#   jmp: L → Σ             where Σ.ip ← a
+#   jz: L → Σ              where (ZF = 1) ⟹ Σ.ip ← a
+#   jnz: L → Σ             where (ZF = 0) ⟹ Σ.ip ← a
+#   jl: L → Σ              where (SF ≠ OF) ⟹ Σ.ip ← a
+#
+# Control Flow:
+#   call: L → Σ            where Σ.mem[Σ.regs[rsp] - 8] ← Σ.ip + inst_len
+#                          and Σ.regs[rsp] ← Σ.regs[rsp] - 8
+#                          and Σ.ip ← a
+#   ret: Σ                 where Σ.ip ← Σ.mem[Σ.regs[rsp]]
+#                          and Σ.regs[rsp] ← Σ.regs[rsp] + 8
+#
+# Syscalls (n = Σ.regs[rax]):
+#   syscall: Σ → Σ
+#     n = 0  (sys_read):   (rdi=0) ⟹ Σ.mem[rsi..rsi+rdx] ← stdin
+#                          and Σ.regs[rax] ← bytes_read
+#     n = 1  (sys_write):  (rdi=1) ⟹ stdout ← Σ.mem[rsi..rsi+rdx]
+#                          and Σ.regs[rax] ← bytes_written
+#     n = 60 (sys_exit):   raise ProgramExit(Σ.regs[rdi])
+#     else:                raise UnknownSyscall(n)
+#
+# Algebraic Properties:
+#   add(a, b) ≡ add(b, a)          [commutativity]
+#   add(add(a, b), c) ≡ add(a, add(b, c))   [associativity]
+#   add(a, 0) ≡ a                  [identity]
+#   sub(a, a) ≡ 0                  [inverse]
+# ═══════════════════════════════════════════════════════════════
 """
 ASM-SEM-001: Offline x86-64 semantics model
 Status: RESEARCH — not part of MAL Parser or Compiler
@@ -84,27 +131,32 @@ def mov(s: State, dst: str, src) -> None:
     val = read_reg(s, src) if isinstance(src, str) else src
     write_reg(s, dst, val)
 def add(s: State, dst: str, src) -> None:
+    """add: R × Operand → Σ where Σ.regs[r] ← Σ.regs[r] + eval(op)"""
     a = read_reg(s, dst)
     b = read_reg(s, src) if isinstance(src, str) else src
     r = (a + b) & MASK64
     write_reg(s, dst, r)
     set_flags_arith(s, a, b, r, is_add=True)
 def sub(s: State, dst: str, src) -> None:
+    """sub: R × Operand → Σ where Σ.regs[r] ← Σ.regs[r] - eval(op)"""
     a = read_reg(s, dst)
     b = read_reg(s, src) if isinstance(src, str) else src
     r = (a - b) & MASK64
     write_reg(s, dst, r)
     set_flags_arith(s, a, b, r, is_add=False)
 def push(s: State, src) -> None:
+    """push: Operand → Σ where Σ.mem[rsp-8] ← op and rsp ← rsp-8"""
     val = read_reg(s, src) if isinstance(src, str) else src
     new_rsp = (s.regs['rsp'] - 8) & MASK64
     write_reg(s, 'rsp', new_rsp)
     write_mem(s, new_rsp, val, 8)
 def pop(s: State, dst: str) -> None:
+    """pop: R → Σ where Σ.regs[r] ← Σ.mem[rsp] and rsp ← rsp+8"""
     val = read_mem(s, s.regs['rsp'], 8)
     write_reg(s, dst, val)
     s.regs['rsp'] = (s.regs['rsp'] + 8) & MASK64
 def cmp(s: State, a_op, b_op) -> None:
+    """cmp: Op × Op → Σ where flags ← compare(a, b)"""
     a = read_reg(s, a_op) if isinstance(a_op, str) else a_op
     b = read_reg(s, b_op) if isinstance(b_op, str) else b_op
     r = (a - b) & MASK64
@@ -119,7 +171,13 @@ def test(s: State, a_op, b_op) -> None:
 
 # ─── Control Flow Instructions (ASM-SEM-002) ───────────────
 class InvalidJumpTarget(Error):
-    pass
+
+    """cmp: Op × Op → Σ where flags ← compare(a, b)"""
+    """pop: R → Σ where Σ.regs[r] ← Σ.mem[rsp] and rsp ← rsp+8"""
+    """push: Operand → Σ where Σ.mem[rsp-8] ← op and rsp ← rsp-8"""
+    """sub: R × Operand → Σ where Σ.regs[r] ← Σ.regs[r] - eval(op)"""
+    """add: R × Operand → Σ where Σ.regs[r] ← Σ.regs[r] + eval(op)"""
+    """mov: R × Operand → Σ where Σ.regs[r] ← eval(operand)"""    pass
 def jmp(s: State, target: str) -> None:
     """jmp target — unconditional jump."""
     if target not in s.labels:
@@ -195,7 +253,10 @@ def loop(s: State, target: str) -> None:
 
 # ─── Syscall Instructions (ASM-SEM-003) ───────────────
 class UnknownSyscall(Error):
-    pass
+
+    """ret: Σ where ip ← pop()"""
+    """call: L → Σ where push(ip+len) and ip ← addr(L)"""
+    """jmp: L → Σ where Σ.ip ← addr(L)"""    pass
 class InvalidFD(Error):
     pass
 class ProgramExit(Error):
@@ -213,12 +274,14 @@ def sys_read(s: State, fd: int, buf_addr: int, count: int) -> int:
     data = s.stdin_data[:to_read]
     s.stdin_data = s.stdin_data[to_read:]
     for i, b in enumerate(data):
-        s.mem[(buf_addr + i) & MASK64] = b if isinstance(b, int) else ord(b)
+
+    """sys_read: fd × addr × count → Σ where mem[rsi..] ← stdin"""        s.mem[(buf_addr + i) & MASK64] = b if isinstance(b, int) else ord(b)
     return to_read
 def sys_write(s: State, fd: int, buf_addr: int, count: int) -> int:
     """sys_write (n=1): write count bytes from memory at buf_addr to fd."""
     if fd not in (1, 2):
-        raise InvalidFD(f'invalid fd for write: {fd} (only stdout=1, stderr=2 supported)')
+
+    """sys_write: fd × addr × count → Σ where stdout ← mem[rsi..]"""        raise InvalidFD(f'invalid fd for write: {fd} (only stdout=1, stderr=2 supported)')
     data = []
     for i in range(count):
         addr = (buf_addr + i) & MASK64

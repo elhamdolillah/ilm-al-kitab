@@ -559,4 +559,33 @@ $$\sigma' = \text{Instruction}(\sigma)$$
 والبرنامح الكامل هو تركيب لهذه الدوال:
 $$\text{Program} = I_n \circ I_{n-1} \circ \cdots \circ I_1$$
 
-هذا التمثيل يوفر أساساً رياضياً متيناً لفهم وتحليل وإثبات خصائص البرامج المكتوبة بلغة التجميع.
+هذا التمثيل يوفر أساساً رياضياً متيناً لفهم وتحليل وإثبات خصائص البرامج المكتوبة بلغة التجميع.---
+## Mathematical Semantics — Formal State Transition
+### Axiomatic State Definition
+Σ = (regs: R → ℤ₆₄, mem: Addr → Byte, ip: Addr, flags: F)
+where:
+- R = {rax, rbx, rcx, rdx, rsi, rdi, rsp, rbp}
+- F = {ZF, CF, SF, OF}
+- ℤ₆₄ = ℤ mod 2⁶⁴ (64-bit integers)
+### Instruction Semantics
+∀ instruction I, state Σ:
+| Instruction | Type Signature | Formal Definition |
+|---|---|---|
+| mov | R × Operand → Σ | Σ'.regs[r] ← eval(operand, Σ) |
+| add | R × Operand → Σ | Σ'.regs[r] ← Σ.regs[r] + eval(op, Σ), flags ← compute |
+| sub | R × Operand → Σ | Σ'.regs[r] ← Σ.regs[r] - eval(op, Σ), flags ← compute |
+| push | Operand → Σ | Σ'.mem[Σ.regs[rsp]-8] ← eval(op), Σ'.regs[rsp] ← Σ.regs[rsp]-8 |
+| pop | R → Σ | Σ'.regs[r] ← Σ.mem[Σ.regs[rsp]], Σ'.regs[rsp] ← Σ.regs[rsp]+8 |
+| cmp | Op × Op → Σ | flags ← compare(eval(a), eval(b)) |
+### Algebraic Properties
+- **Commutativity**: add(a, b) ≡ add(b, a)
+- **Associativity**: add(add(a, b), c) ≡ add(a, add(b, c))
+- **Identity**: add(a, 0) ≡ a
+- **Inverse**: sub(a, a) ≡ 0
+- **Stack invariant**: ∀ n: pop(push(x)) ≡ x
+### Memory Model
+mem: Addr → Byte where Addr = ℤ₆₄, Byte = {0, 1, ..., 255}
+∀ address a ∈ Addr:
+- Read: read(a) = mem[a]
+- Write: write(a, v) ⟹ mem[a] ← v
+- Bounds: a < 2⁶⁴ (64-bit address space)

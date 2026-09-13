@@ -46,3 +46,12 @@
 4. بعد ذلك بناء evaluator محدود بحدود واضحة.
 
 لا تُعدّل C1.2 أو C1.3 أو Runtime قبل اعتماد عقد النطاق والاختبارات.
+---
+## Mathematical Next Steps
+∀ next step S ∈ C2 roadmap:
+- S.prerequisites ⊆ completed_steps
+- S.specification: formal_spec(S) → {type_signatures, invariants}
+- S.tests: corpus(S) with ≥ 10 cases
+- S.evidence: SHA-256 + stdout + exit_code
+- S.status ∈ {PLANNED, IN_PROGRESS, PROVEN_FOR_SCOPE}
+∀ S₁, S₂: S₁.prerequisites ∩ S₂.prerequisites may overlap (shared deps)

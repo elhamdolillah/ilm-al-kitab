@@ -336,4 +336,30 @@ $$\text{sys\_write}(\sigma_4) = \text{write\_to\_fd}(1, \text{read\_mem}(\text{a
 - `mul`, `div` (الضرب والقسمة)
 - `ret` (العودة من دالة)
 - `int` (القطع البرمجي)
-- `nop` (لا عملية)
+- `nop` (لا عملية)---
+## Extended Instruction Set — Mathematical Semantics
+### Jump Instructions
+∀ label L, address a = addr(L):
+| Instruction | Condition | Formal Definition |
+|---|---|---|
+| jmp | always | Σ'.ip ← a |
+| jz | ZF = 1 | Σ'.ip ← a if ZF = 1, else Σ'.ip ← Σ.ip + inst_len |
+| jnz | ZF = 0 | Σ'.ip ← a if ZF = 0, else Σ'.ip ← Σ.ip + inst_len |
+| jl | SF ≠ OF | Σ'.ip ← a if SF ≠ OF (signed less) |
+| jle | SF ≠ OF ∨ ZF = 1 | Σ'.ip ← a if SF ≠ OF ∨ ZF = 1 |
+| jg | SF = OF ∧ ZF = 0 | Σ'.ip ← a if SF = OF ∧ ZF = 0 |
+| jge | SF = OF | Σ'.ip ← a if SF = OF |
+### Call/Return
+call: L → Σ where:
+- Σ'.mem[Σ.regs[rsp]-8] ← Σ.ip + inst_len
+- Σ'.regs[rsp] ← Σ.regs[rsp] - 8
+- Σ'.ip ← addr(L)
+ret: Σ → Σ where:
+- Σ'.ip ← Σ.mem[Σ.regs[rsp]]
+- Σ'.regs[rsp] ← Σ.regs[rsp] + 8
+**Invariant**: ∀ call/ret pair: ret(call(Σ)) restores Σ.ip
+### Loop Instructions
+loop: L × R → Σ where:
+- Σ'.regs[rcx] ← Σ.regs[rcx] - 1
+- Σ'.ip ← addr(L) if Σ'.regs[rcx] ≠ 0, else Σ.ip + inst_len
+**Invariant**: ∀ n: loop executes exactly n times where n = initial rcx

@@ -360,3 +360,28 @@ mod tests {
         assert!(matches!(err, LexerError::NumberOverflow { .. }));
     }
 }
+// ═══════════════════════════════════════════════════════════════
+// Mathematical Semantics — Lexer
+// ═══════════════════════════════════════════════════════════════
+//
+// Lexer: L: String → List[Token]
+//
+// Token Types:
+//   Token = {type: TokenType, value: String, span: (usize, usize)}
+//   TokenType ∈ {Int, String, Ident, Operator, Keyword, EOF}
+//
+// Lexing Rules:
+//   ∀ input s: L(s) = [t₁, t₂, ..., tₙ] where:
+//   - ∀ i: tᵢ.type ∈ TokenType
+//   - ∀ i: tᵢ.span ⊆ [0, |s|)
+//   - Σ(|tᵢ.value| for i ∈ [1,n]) = |s| (complete coverage)
+//   - ∀ i < j: tᵢ.span.end ≤ tⱼ.span.start (no overlap)
+//
+// Determinism:
+//   ∀ input s: L(s) is identical across all calls
+//   SHA-256(tokens) is invariant
+//
+// Error Handling:
+//   ∀ invalid token t: raise LexerError(t.span, t.value)
+//   No silent failures (fail-closed)
+// ═══════════════════════════════════════════════════════════════

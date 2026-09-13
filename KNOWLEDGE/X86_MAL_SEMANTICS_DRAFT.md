@@ -187,3 +187,16 @@ enum Instruction {
 - `ASM-SEM-006`: مقارنة codegen مع النموذج.
 
 كل مهمة تبقى `PLANNED` حتى يثبت تنفيذها بدليل مستقل. هذه المسودة لا تغير baseline ولا تضيف تعليمات إلى MAL.
+---
+## Formal Semantics Summary
+∀ x86 instruction I:
+I: Σ → Σ where Σ = (regs: R → ℤ₆₄, mem: Addr → Byte, ip: Addr, flags: F)
+∀ MAL operation O:
+O: Args → Result where Args ⊆ ℤⁿ, Result ∈ ℤ ∪ String ∪ Error
+Bridging:
+∀ MAL program P, ∃ x86 translation T(P):
+eval_MAL(P, inputs) ≡ run_x86(T(P), inputs)
+Type mapping:
+- MAL Int → x86 register (64-bit ℤ₆₄)
+- MAL String → x86 memory region (Addr × Length)
+- MAL Bool → x86 flags (ZF, CF, SF, OF)

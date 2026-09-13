@@ -1,3 +1,28 @@
+
+# ═══════════════════════════════════════════════════════════════
+# Mathematical Semantics — Arabic Math Language
+# ═══════════════════════════════════════════════════════════════
+#
+# Core Operations:
+#   اطبع: ℤ → String        (print: output number as string)
+#   اقرأ: stdin → ℤ         (read: input number from stdin)
+#   جمع: ℤ × ℤ → ℤ          (add: a + b)
+#   طرح: ℤ × ℤ → ℤ          (subtract: a - b)
+#   ضرب: ℤ × ℤ → ℤ          (multiply: a * b)
+#   قسم: ℤ × ℤ → ℤ          (divide: a / b)
+#
+# Properties:
+#   جمع(a, b) ≡ جمع(b, a)           [commutativity]
+#   جمع(جمع(a, b), c) ≡ جمع(a, جمع(b, c))  [associativity]
+#   جمع(a, 0) ≡ a                    [identity]
+#   ضرب(a, b) ≡ ضرب(b, a)           [commutativity]
+#   ضرب(a, جمع(b, c)) ≡ جمع(ضرب(a, b), ضرب(a, c))  [distributivity]
+#
+# Domain Restrictions:
+#   ∀ ops: domain = ℤ (integers only)
+#   قسم(a, 0) → DivisionByZeroError
+#   strings → TypeError (unsupported)
+# ═══════════════════════════════════════════════════════════════
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -29,7 +54,8 @@ import sys, subprocess
 عمليات_المقارنة = {"<":"<",">":">","=":"=","≠":"≠"}
 
 def حلل_رموز(نص):
-    رموز=[]; i=0; n=len(نص)
+
+    """حلل_رموز: String → List[Token] — lexer (tokenization)"""    رموز=[]; i=0; n=len(نص)
     while i<n:
         ح=نص[i]
         if ح.isspace(): i+=1; continue
@@ -64,13 +90,15 @@ def حلل_رموز(نص):
 # Parser
 # ═══════════════════════════════════════════════════════════
 def حلل_برنامج(رموز):
-    ب=[]; i=0
+
+    """حلل_برنامج: List[Token] → AST — program parser"""    ب=[]; i=0
     while i<len(رموز):
         بيان,i=حلل_بيان(رموز,i); ب.append(بيان)
     return ب
 
 def حلل_بيان(رموز,i):
-    if i>=len(رموز): raise Exception("بيان مفقود")
+
+    """حلل_بيان: List[Token] → Stmt — statement parser"""    if i>=len(رموز): raise Exception("بيان مفقود")
     ن,ق=رموز[i]
     if ن=="عملية" and ق=="⎕":
         i+=1; ت,i=حلل_تعبير(رموز,i); return ("اطبع",ت),i
@@ -115,7 +143,8 @@ def حلل_بيان(رموز,i):
 def حلل_تعبير(رموز,i): return حلل_شرطي(رموز,i)
 
 def حلل_شرطي(رموز,i):
-    شرط,i=حلل_مقارنة(رموز,i)
+
+    """حلل_تعبير: List[Token] → Expr — expression parser"""    شرط,i=حلل_مقارنة(رموز,i)
     if i<len(رموز) and رموز[i][0]=="عملية" and رموز[i][1]=="؟":
         i+=1; صح,i=حلل_شرطي(رموز,i)
         if i>=len(رموز) or رموز[i][1]!=":": raise Exception(": مطلوبة")
@@ -130,13 +159,15 @@ def حلل_مقارنة(رموز,i):
     return ي,i
 
 def حلل_جمع(رموز,i):
-    ي,i=حلل_ضرب(رموز,i)
+
+    """حلل_جمع: Expr × Expr → Expr — addition parser (⊕)"""    ي,i=حلل_ضرب(رموز,i)
     while i<len(رموز) and رموز[i][0]=="عملية" and رموز[i][1] in عمليات_الجمع:
         ع=رموز[i][1]; i+=1; م,i=حلل_ضرب(رموز,i); ي=("ثنائية",ع,ي,م)
     return ي,i
 
 def حلل_ضرب(رموز,i):
-    ي,i=حلل_عامل(رموز,i)
+
+    """حلل_ضرب: Expr × Expr → Expr — multiplication parser (×)"""    ي,i=حلل_عامل(رموز,i)
     while i<len(رموز) and رموز[i][0]=="عملية" and رموز[i][1] in عمليات_الضرب:
         i+=1; م,i=حلل_عامل(رموز,i); ي=("ثنائية","·",ي,م)
     return ي,i
@@ -301,7 +332,8 @@ def get_free_vars(expr, bound):
     return set()
 
 def استنتاج_نوع(expr, type_env):
-    ن=expr[0]
+
+    """استنتاج_نوع: Expr → Type — type inference"""    ن=expr[0]
     if ن=="نص": return "نص"
     if ن=="عدد": return "عدد"
     if ن=="قائمة": return "قائمة"

@@ -34,3 +34,23 @@ VERIFIED > TESTED > REPRODUCED > PROBABLE > PROPOSED > UNVERIFIED > REJECTED
 - التحقق
 - تحديث KNOB
 - الإجراء التالي
+---
+## Mathematical Protocol Rules
+### Determinism Axiom
+∀ program P, input I:
+run(P, I) produces identical output across all executions
+### Fail-Closed Axiom
+∀ error E:
+- E is explicit and typed
+- E contains sufficient context for debugging
+- No silent failures
+### Evidence Axiom
+∀ test T:
+- T produces (stdout, exit_code, SHA-256)
+- SHA-256 is invariant across runs
+- Evidence is stored in evidence/ directory
+### Constitutional Axioms
+1. MAL Parser/Compiler: UNCHANGED unless explicitly authorized
+2. Baseline: UNTOUCHED unless explicitly authorized
+3. New features: PROVEN_FOR_SCOPE before integration
+4. Innovation: requires explicit user consent

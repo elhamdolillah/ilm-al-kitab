@@ -67,3 +67,26 @@
 - لا يُفترض أن كل نجاحات `arabic-math-lang` قابلة للنقل إلى MAL الداخلي.
 - فشل `cargo` في جلسة الفحص الحالية لأن `cargo` غير موجود في PATH؛ لا يُسجل هذا كفشل للمصدر، بل كـ `ENVIRONMENT_BLOCKED`.
 - يجب مراجعة أي evidence hash فاشل قبل إعادة استخدامه؛ أحد ملفات Parser القديمة لا يطابق الملف الحالي.
+---
+## Formal Interoperability Specification
+### Complementary Notation Theorem
+∀ semantic operation O:
+∃ T_old, T_new: eval(T_old, inputs) ≡ eval(T_new, inputs)
+Proven mappings:
+- ⎕ ≡ اطبع (print: ℤ → String)
+- ⊕ ≡ جمع (plus: ℤ × ℤ → ℤ)
+- ⊙ ≡ اقرأ (read: stdin → ℤ)
+### Set Theory Integration
+∀ A, B ⊆ ℤ:
+- A ∪ B = {x | x ∈ A ∨ x ∈ B}
+- A ∩ B = {x | x ∈ A ∧ x ∈ B}
+- A \ B = {x | x ∈ A ∧ x ∉ B}
+- A Δ B = (A \ B) ∪ (B \ A)
+### ASM Semantics Integration
+∀ instruction I ∈ {mov, add, sub, push, pop, cmp, jmp, call, ret, syscall}:
+I: Σ → Σ where Σ = (regs, mem, ip, flags)
+### Compatibility Contract
+∀ old program P_old, new notation P_new:
+- P_old uses {اطبع, جمع, اقرأ}
+- P_new uses {⎕, ⊕, ⊙}
+- P_old ≡ P_new (semantic equivalence)

@@ -25,3 +25,12 @@ Par {
 OfCourse {
     expr: NodeID,
 },
+---
+## Mathematical Design Principles
+∀ component C ∈ Phase C1:
+- C has formal specification: spec(C) → {axioms, theorems, proofs}
+- C is tested: ∃ corpus(C) with ≥ 10 cases
+- C is deterministic: ∀ inputs I: run(C, I) is invariant
+- C is fail-closed: ∀ errors: explicit ∧ typed ∧ logged
+- C preserves baseline: MAL Parser/Compiler UNCHANGED
+- C evidence: SHA-256 + stdout + exit_code

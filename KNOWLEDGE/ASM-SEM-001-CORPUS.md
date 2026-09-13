@@ -28,3 +28,10 @@ SHA-256(stdout)
 ```
 
 ولا يكفي تطابق قيمة واحدة إذا كانت flags أو الحالة الجانبية غير صحيحة.
+---
+## Mathematical Specification
+∀ test T ∈ corpus:
+- T.instruction ∈ {mov, add, sub, push, pop, cmp, test}
+- T.expected = f(T.initial_state) where f: Σ → Σ
+- ∀ T: run(T) ≡ T.expected (deterministic)
+- Evidence: SHA-256(stdout) is invariant ∀ runs

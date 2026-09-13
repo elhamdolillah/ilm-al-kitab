@@ -336,4 +336,31 @@ $$\text{sys\_write}(\sigma_4) = \text{write\_to\_fd}(1, \text{read\_mem}(\text{a
 - `mul`, `div` (الضرب والقسمة)
 - `ret` (العودة من دالة)
 - `int` (القطع البرمجي)
-- `nop` (لا عملية)
+- `nop` (لا عملية)---
+## Operational Semantics — Mathematical Model
+### Syscall Interface
+∀ syscall number n = Σ.regs[rax]:
+| n | Name | Signature | Formal Definition |
+|---|---|---|---|
+| 0 | sys_read | fd × buf × count → bytes | mem[rsi..rsi+rdx] ← stdin, rax ← bytes_read |
+| 1 | sys_write | fd × buf × count → bytes | stdout ← mem[rsi..rsi+rdx], rax ← bytes_written |
+| 60 | sys_exit | code → ∅ | raise ProgramExit(rdi) |
+### Error Semantics
+∀ syscall n ∉ {0, 1, 60}:
+- raise UnknownSyscall(n)
+∀ fd ∉ {0, 1, 2} for sys_read:
+- raise InvalidFD(fd)
+∀ fd ∉ {1, 2} for sys_write:
+- raise InvalidFD(fd)
+### Determinism
+∀ program P, input I:
+- run(P, I) produces identical output across all executions
+- SHA-256(output) is invariant
+### Fail-Closed Contract
+∀ unexpected error E:
+- STATUS ← FAIL_CLOSED
+- exit_code ← 1
+- No partial results are returned
+### Equivalence Relation
+∀ programs P₁, P₂:
+P₁ ≡ P₂ ⟺ ∀ inputs I: run(P₁, I) = run(P₂, I)

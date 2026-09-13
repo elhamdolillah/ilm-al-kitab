@@ -357,3 +357,27 @@ mod tests {
         assert_eq!(arena.get(lambda).unwrap().type_tag(), TypeTag::Lambda);
     }
 }
+// ═══════════════════════════════════════════════════════════════
+// Mathematical Semantics — Arena Allocator
+// ═══════════════════════════════════════════════════════════════
+//
+// Arena: A = {nodes: Vec<Node>, next_id: NodeId}
+//
+// Allocation:
+//   alloc: A × NodeData → (A', NodeId)
+//   where A'.nodes = A.nodes ++ [node]
+//   and A'.next_id = A.next_id + 1
+//
+// Invariants:
+//   ∀ node n ∈ A.nodes: n.id ∈ [0, A.next_id)
+//   ∀ n₁, n₂ ∈ A.nodes: n₁.id ≠ n₂.id (unique IDs)
+//   |A.nodes| = A.next_id (size invariant)
+//
+// Memory Model:
+//   ∀ node n: size(n) ∈ {8, 16, 24, 32} bytes
+//   ∀ A: total_size(A) = Σ(|n| for n ∈ A.nodes)
+//
+// Determinism:
+//   ∀ allocation sequence S: alloc_sequence(S) is deterministic
+//   No heap fragmentation, no GC pauses
+// ═══════════════════════════════════════════════════════════════

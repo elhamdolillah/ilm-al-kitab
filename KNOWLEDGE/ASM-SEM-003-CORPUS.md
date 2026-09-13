@@ -21,3 +21,11 @@ raw stderr
 exit code
 SHA-256(stdout)
 ```
+---
+## Mathematical Specification
+∀ test T ∈ corpus:
+- T.syscall ∈ {sys_read, sys_write, sys_exit}
+- sys_read: fd × buf × count → Σ where mem[rsi..] ← stdin
+- sys_write: fd × buf × count → Σ where stdout ← mem[rsi..]
+- sys_exit: code → ∅ (raises ProgramExit)
+- ∀ n ∉ {0, 1, 60}: UnknownSyscall(n) raised

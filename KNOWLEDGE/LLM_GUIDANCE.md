@@ -99,3 +99,26 @@ STATUS: NOT RUN
 لا تنفذ ولا تدّعِ نتيجة لم تظهر في stdout.
 استخدم STATUS: NOT RUN قبل التنفيذ.
 ```
+---
+## Mathematical Guidelines for LLM Integration
+### Formal Contract
+∀ LLM request R, response S:
+- R ∈ valid_requests ⟹ S ∈ valid_responses
+- invalid(R) ⟹ S = error_response
+- determinism: ∀ R: response(R) is identical across calls
+### Type Signatures
+| Operation | Signature | Description |
+|---|---|---|
+| parse | String → AST | Convert text to abstract syntax tree |
+| eval | AST → Value | Evaluate AST to produce value |
+| typecheck | AST → Type ∪ Error | Infer type or report error |
+| compile | AST → Code | Generate target code |
+### Invariants
+- ∀ AST node n: type(n) ∈ {Int, String, Bool, Void, Error}
+- ∀ program P: compile(P) preserves semantics of P
+- ∀ error E: E contains (message, location, severity)
+### Fail-Closed Principle
+∀ unexpected input I:
+- reject(I) with explicit error
+- never guess or approximate
+- SHA-256(input) logged for reproducibility

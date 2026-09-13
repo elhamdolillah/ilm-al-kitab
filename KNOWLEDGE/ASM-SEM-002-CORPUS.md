@@ -25,3 +25,10 @@ raw stderr
 exit code
 SHA-256(stdout)
 ```
+---
+## Mathematical Specification
+∀ test T ∈ corpus:
+- T.instruction ∈ {jmp, jz, jnz, jl, jle, jg, jge, call, ret, loop}
+- T.expected = f(T.initial_state, T.flags) where f: Σ × F → Σ
+- ∀ jump J: J(Σ) = Σ' where Σ'.ip = addr(L) if condition(Σ.flags)
+- ∀ call/ret: ret(call(Σ)) restores Σ.ip

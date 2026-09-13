@@ -16,3 +16,12 @@
 **التاريخ:** 2026-09-09
 **المبرر:** غلاف CLI بفحص نصي، لا تنفيذ دلالي
 **الحكم:** ABSTAIN
+---
+## Mathematical Decision Framework
+∀ decision D ∈ decisions:
+- D.rationale: formal_justification(D) → {axioms, theorems, evidence}
+- D.impact: Σ → Σ (state transition)
+- D.reversibility ∈ {reversible, irreversible}
+- D.evidence: SHA-256 + stdout + exit_code
+∀ D₁, D₂: D₁.conflicts_with(D₂) ⟹ ¬(D₁ ∧ D₂) (mutual exclusion)
+∀ D: D.approved ⟹ ∃ user_consent(D) (explicit authorization)

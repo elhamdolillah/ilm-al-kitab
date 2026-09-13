@@ -30,3 +30,11 @@ fork, execve, mmap, epoll, pipe2
 
 ## قرار السلامة
 لا تضاف التعليمات إلى MAL Parser أو AOT compiler في هذه المرحلة.
+---
+## Mathematical Contract
+∀ syscall n = Σ.regs[rax]:
+- n = 0: sys_read(fd, buf, count) → mem[rsi..] ← stdin
+- n = 1: sys_write(fd, buf, count) → stdout ← mem[rsi..]
+- n = 60: sys_exit(code) → ProgramExit(rdi)
+- n ∉ {0, 1, 60}: UnknownSyscall(n)
+Evidence: SHA-256(stdout) invariant ∀ runs

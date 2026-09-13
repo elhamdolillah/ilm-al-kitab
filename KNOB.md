@@ -1140,3 +1140,114 @@ AUTHORIZED_INNOV   = VERIFIED
 MAL_PARSER_UNCHANGED = VERIFIED
 BASELINE_UNTOUCHED = VERIFIED
 ```
+---
+## Mathematical Framework — Formal Summary
+### M.1 Axiomatic State Space
+Σ = (regs: R → ℤ₆₄, mem: Addr → Byte, ip: Addr, flags: F)
+where:
+- R = {rax, rbx, rcx, rdx, rsi, rdi, rsp, rbp}
+- F = {ZF, CF, SF, OF}
+- ℤ₆₄ = ℤ mod 2⁶⁴
+- Addr = ℤ₆₄, Byte = {0, ..., 255}
+### M.2 Instruction Algebra
+∀ instruction I ∈ ISA: I: Σ → Σ
+| Category | Instructions | Count |
+|---|---|---|
+| Data Movement | mov, push, pop | 3 |
+| Arithmetic | add, sub, cmp, test | 4 |
+| Control Flow | jmp, jz, jnz, jl, jle, jg, jge, call, ret, loop | 10 |
+| System | syscall (sys_read, sys_write, sys_exit) | 3 |
+| **Total** | | **20** |
+### M.3 Algebraic Properties
+Arithmetic (∀ a, b, c ∈ ℤ₆₄):
+- Commutativity: add(a, b) ≡ add(b, a)
+- Associativity: add(add(a, b), c) ≡ add(a, add(b, c))
+- Identity: add(a, 0) ≡ a
+- Inverse: sub(a, a) ≡ 0
+- Distributivity: mul(a, add(b, c)) ≡ add(mul(a, b), mul(a, c))
+Stack (∀ x):
+- pop(push(x)) ≡ x (stack invariant)
+Control Flow (∀ call/ret pair):
+- ret(call(Σ)) restores Σ.ip (call/return invariant)
+Loop (∀ n = initial rcx):
+- loop executes exactly n times (loop invariant)
+### M.4 Set Theory Operations
+∀ A, B, C ⊆ ℤ:
+| Operation | Symbol | Definition | Property |
+|---|---|---|---|
+| Union | A ∪ B | {x ∣ x ∈ A ∨ x ∈ B} | Commutative, Associative |
+| Intersection | A ∩ B | {x ∣ x ∈ A ∧ x ∈ B} | Commutative, Associative |
+| Difference | A \ B | {x ∣ x ∈ A ∧ x ∉ B} | Non-commutative |
+| Symmetric Diff | A Δ B | (A \ B) ∪ (B \ A) | Commutative |
+| Cartesian | A × B | {(a,b) ∣ a ∈ A ∧ b ∈ B} | Non-commutative |
+| Subset | A ⊆ B | ∀x ∈ A, x ∈ B | Reflexive, Transitive |
+| Superset | A ⊇ B | B ⊆ A | Reflexive, Transitive |
+Key Identities:
+- A ∪ ∅ ≡ A (identity)
+- A ∩ ∅ ≡ ∅ (annihilation)
+- A ∪ A ≡ A (idempotence)
+- A ∩ A ≡ A (idempotence)
+- (A ∪ B)' ≡ A' ∩ B' (De Morgan 1)
+- (A ∩ B)' ≡ A' ∪ B' (De Morgan 2)
+- A ∪ (A ∩ B) ≡ A (absorption 1)
+- A ∩ (A ∪ B) ≡ A (absorption 2)
+### M.5 Complementary Notation Isomorphism
+φ: {اطبع, جمع, اقرأ} → {⎕, ⊕, ⊙} is an isomorphism:
+- φ(اطبع) = ⎕ (print: ℤ → String)
+- φ(جمع) = ⊕ (plus: ℤ × ℤ → ℤ)
+- φ(اقرأ) = ⊙ (read: stdin → ℤ)
+∀ op, args: eval(op, args) ≡ eval(φ(op), args)
+∀ op: φ⁻¹(φ(op)) ≡ op (bijection)
+### M.6 Syscall Semantics
+∀ syscall n = Σ.regs[rax]:
+| n | Name | Signature | Effect |
+|---|---|---|---|
+| 0 | sys_read | fd × buf × count → bytes | mem[rsi..] ← stdin, rax ← bytes_read |
+| 1 | sys_write | fd × buf × count → bytes | stdout ← mem[rsi..], rax ← bytes_written |
+| 60 | sys_exit | code → ∅ | raise ProgramExit(rdi) |
+Error Semantics:
+- ∀ n ∉ {0, 1, 60}: raise UnknownSyscall(n)
+- ∀ fd ∉ {0} for sys_read: raise InvalidFD(fd)
+- ∀ fd ∉ {1, 2} for sys_write: raise InvalidFD(fd)
+### M.7 Type System
+∀ expressions e₁, e₂:
+- type(جمع(e₁, e₂)) = Int if type(e₁) ⊆ Int ∧ type(e₂) ⊆ Int
+- type(اطبع(e)) = Void ∀ e where type(e) ⊆ Printable
+- type(اقرأ()) = Int
+Type Inference (Γ ⊢ e : τ):
+- Γ ⊢ n : Int where n ∈ ℤ
+- Γ ⊢ جمع(e₁, e₂) : Int if Γ ⊢ e₁ : Int ∧ Γ ⊢ e₂ : Int
+- Γ ⊢ اطبع(e) : Void if Γ ⊢ e : τ ∧ τ ⊆ Printable
+### M.8 Determinism and Evidence
+∀ program P, input I:
+- run(P, I) produces identical output across all executions
+- SHA-256(output) is invariant
+∀ test T:
+- T produces (stdout, exit_code, SHA-256)
+- Evidence stored in evidence/ directory
+∀ unexpected error E:
+- STATUS ← FAIL_CLOSED
+- exit_code ← 1
+- No partial results returned
+### M.9 Constitutional Axioms
+∀ changes to project:
+1. MAL Parser/Compiler: UNCHANGED unless explicitly authorized
+2. Baseline: UNTOUCHED unless explicitly authorized
+3. New features: PROVEN_FOR_SCOPE before integration
+4. Innovation: requires explicit user consent
+∀ claim "X is proven":
+- ∃ corpus with ≥ 10 test cases
+- ∃ SHA-256 evidence
+- ∃ exit code verification
+- ∃ git commit with full message
+### M.10 Program Equivalence
+∀ programs P₁, P₂:
+P₁ ≡ P₂ ⟺ ∀ inputs I: run(P₁, I) = run(P₂, I)
+Properties:
+- Reflexivity: ∀ P: P ≡ P
+- Symmetry: P₁ ≡ P₂ ⟹ P₂ ≡ P₁
+- Transitivity: (P₁ ≡ P₂ ∧ P₂ ≡ P₃) ⟹ P₁ ≡ P₃
+Equivalence Classes:
+- [P] = {Q ∣ Q ≡ P}
+- ∀ P₁, P₂: [P₁] = [P₂] ∨ [P₁] ∩ [P₂] = ∅
+- ∀ P: P ∈ [P]

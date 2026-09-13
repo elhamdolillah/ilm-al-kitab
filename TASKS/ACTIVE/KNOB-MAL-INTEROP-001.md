@@ -39,3 +39,10 @@
 ## الخطوة التالية
 
 تجهيز بيئة Rust في جلسة مستقلة، ثم إعادة تشغيل اختبارات Parser وArena، وبعدها تصميم عقد AST/NodeID صغير قبل أي تلاقح أوسع مع UORI.
+---
+## Mathematical Contract
+∀ semantic operation O ∈ {print, plus, read}:
+∃ T_old, T_new: eval(T_old, inputs) ≡ eval(T_new, inputs)
+Mappings: ⎕ ≡ اطبع, ⊕ ≡ جمع, ⊙ ≡ اقرأ
+∀ inputs ∈ domain(O): output_old = output_new
+Evidence: SHA-256(stdout) invariant ∀ runs

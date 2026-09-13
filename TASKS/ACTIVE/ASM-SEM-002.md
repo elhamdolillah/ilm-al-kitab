@@ -28,3 +28,10 @@ syscall, int, iret, SIMD, floating point
 
 ## قرار السلامة
 لا تضاف التعليمات إلى MAL Parser أو AOT compiler في هذه المرحلة.
+---
+## Mathematical Contract
+∀ instruction I ∈ {jmp, jcc, call, ret, loop}:
+I: Σ → Σ where condition ∈ {ZF, CF, SF, OF} determines branch
+∀ test: run(test) ≡ expected (deterministic)
+∀ call/ret: ret(call(Σ)) restores Σ.ip
+Evidence: SHA-256(stdout) invariant ∀ runs
