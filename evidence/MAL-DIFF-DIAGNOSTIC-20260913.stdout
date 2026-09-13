@@ -1,0 +1,117 @@
+=== MATH_COMPLETE FAILURE DIAGNOSTIC ===
+cases=14
+
+--- t40_sqrt ---
+expected='12'
+tokens=OK count=8
+program=OK
+exception_type=Exception
+exception=دالة غير معرفة: جذر
+classification=COMPILER_BUILTIN_OR_RUNTIME
+
+--- t40_sqrt2 ---
+expected='10'
+tokens=OK count=8
+program=OK
+exception_type=Exception
+exception=دالة غير معرفة: جذر
+classification=COMPILER_BUILTIN_OR_RUNTIME
+
+--- t40_sqrt3 ---
+expected='5'
+tokens=OK count=14
+program=OK
+exception_type=Exception
+exception=دالة غير معرفة: جذر
+classification=COMPILER_BUILTIN_OR_RUNTIME
+
+--- t40_floor ---
+expected='3'
+tokens=OK count=10
+program=OK
+exception_type=Exception
+exception=دالة غير معرفة: أرضية
+classification=COMPILER_BUILTIN_OR_RUNTIME
+
+--- t40_pow ---
+expected='1024'
+tokens=OK count=10
+program=OK
+exception_type=Exception
+exception=دالة غير معرفة: قوة
+classification=COMPILER_BUILTIN_OR_RUNTIME
+
+--- t40_pow2 ---
+expected='243'
+tokens=OK count=10
+program=OK
+exception_type=Exception
+exception=دالة غير معرفة: قوة
+classification=COMPILER_BUILTIN_OR_RUNTIME
+
+--- t40_abs ---
+expected='42'
+tokens=OK count=10
+program=OK
+exception_type=Exception
+exception=دالة غير معرفة: مطلق
+classification=COMPILER_BUILTIN_OR_RUNTIME
+
+--- t40_abs2 ---
+expected='42'
+tokens=OK count=8
+program=OK
+exception_type=Exception
+exception=دالة غير معرفة: مطلق
+classification=COMPILER_BUILTIN_OR_RUNTIME
+
+--- t41_basic ---
+expected='42'
+tokens=OK count=22
+program=OK
+exception_type=Exception
+exception=دالة غير معرفة: قناة
+classification=COMPILER_BUILTIN_OR_RUNTIME
+
+--- t41_multi ---
+expected='60'
+tokens=OK count=44
+program=OK
+exception_type=Exception
+exception=دالة غير معرفة: قناة
+classification=COMPILER_BUILTIN_OR_RUNTIME
+
+--- t42_id_str ---
+expected='مرحبا'
+tokens=OK count=11
+program=OK
+compile=OK asm_bytes=3284
+nasm_exit=0
+ld_exit=0
+run_exit=0
+run_stdout='4209213'
+run_stderr=''
+classification=RUNTIME_OUTPUT_MISMATCH
+
+--- t42_index ---
+expected='30'
+exception_type=Exception
+exception=رمز غير معروف: [
+classification=LEXER_OR_PARSER
+
+--- t42_map ---
+expected='30'
+exception_type=Exception
+exception=رمز غير معروف: ّ
+classification=LEXER_OR_PARSER
+
+--- t42_fold ---
+expected='15'
+exception_type=Exception
+exception=رمز غير معروف: ِ
+classification=LEXER_OR_PARSER
+
+=== SUMMARY ===
+COMPILER_BUILTIN_OR_RUNTIME=10
+LEXER_OR_PARSER=3
+RUNTIME_OUTPUT_MISMATCH=1

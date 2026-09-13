@@ -933,3 +933,14 @@ NO_REGRESSION           = VERIFIED (23/23 اختبار قديم نجح)
 - Runtime: `PLANNED`؛ لا يوجد evaluator متكامل في البنية الحالية.
 - التقرير: `KNOWLEDGE/MAL_C2_NEXT_STEPS_REPORT.md`.
 - الأدلة الخارجية: `evidence/MAL-DIFF-EXTERNAL-20260913.stdout` و`.sha256`.
+
+---
+# 20. MAL-DIFF-DIAGNOSTIC
+
+- تم تشخيص 14 إخفاقاً في `math_complete.py` دون تعديل دلالات اللغة.
+- التصنيف: 10 `COMPILER_BUILTIN_OR_RUNTIME`، 3 `LEXER_OR_PARSER`، 1 `RUNTIME_OUTPUT_MISMATCH`.
+- الإخفاقات العشرة: الدوال `جذر/أرضية/قوة/مطلق/قناة` غير معرفة في compiler الحالي.
+- الإخفاقات الثلاثة: `[` وعلامات تشكيل في اختبارات map/fold غير مدعومة في lexer الحالي.
+- الإخفاق الواحد: تمرير نص أعاد قيمة رقمية (`4209213`) بدل `مرحبا`، وهو خلل runtime/codegen مستقل.
+- تم تصحيح سكربت الاختبار محلياً ليعيد exit code=1 عند وجود فشل، لكن push إلى remote `arabic-math-lang` مرفوض بسبب divergence؛ لم يُستخدم force push.
+- الأدلة: `MAL-DIFF-DIAGNOSTIC-20260913.*` و`MAL-DIFF-EXTERNAL-FAILCLOSED.*`.
