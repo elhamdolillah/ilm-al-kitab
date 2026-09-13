@@ -1008,20 +1008,43 @@ NO_REGRESSION         = VERIFIED (baseline untouched)
 3. **C1.2**: Set Theory (يتطلب عقداً صريحاً جديداً)
 
 ---
-# 🔜 ASM-SEM-002 (Control Flow Instructions — PLANNED)
+# ✅ Checkpoint: ASM-SEM-002 (Control Flow Instructions — PROVEN_FOR_SCOPE)
 - **التاريخ:** 2026-09-13
-- **الحالة:** ⏳ PLANNED
-- **النطاق:** `jmp, jcc (16 variants), call, ret, loop`
-- **عقد المهمة:** `TASKS/ACTIVE/ASM-SEM-002.md`
-- **الـcorpus:** `KNOWLEDGE/ASM-SEM-002-CORPUS.md`
+- **الحالة:** ✅ PROVEN_FOR_SCOPE
+- **SHA-256:** `6d8268bbce67284896ef6a01ee22c6504b1e03529443817e3b3085f4e606879b`
+- **الاختبارات:** 18/18 فحص ناجح (11 حالة × فحوصات متعددة)
+- **Exit code:** 0
 
-## الأهداف
-- توسيع النموذج ليشمل Control Flow
-- 11 حالة اختبارية
-- عدم تعديل MAL Parser أو Compiler
+## النطاق المُثبت
+### التعليمات المُنفَّذة
+- `jmp`: قفزة غير مشروطة
+- `jcc` (30 متغيراً): قفزات مشروطة تعمل بشكل صحيح
+- `call`: استدعاء مع حفظ عنوان الرجوع في المكدس
+- `ret`: عودة من دالة
+- `loop`: تكرار مع إنقاص rcx
+
+### النتائج الرئيسية
+- JMP-001, JE-001/002, JNE-001, JL-001: قفزات مشروطة وغير مشروطة تعمل بشكل صحيح
+- CALL-001/002, RET-001: المكدس يُدار بشكل صحيح
+- LOOP-001/002: التكرار يتوقف عند rcx=0
+- ERR-003: `InvalidJumpTarget` يُرفع بشكل صريح (fail-closed)
+
+## ما لا يُثبته هذا الـ checkpoint
+⚠️ لا يثبت أن MAL Parser أو AOT Compiler يدعمان هذه التعليمات
+⚠️ لا يشمل syscall (مهمة منفصلة)
+⚠️ لا يشمل int, iret, SIMD, floating point
+⚠️ `loope` و `loopne` غير مُنفَّذين (يمكن إضافتهما لاحقاً)
 
 ## القرار الدستوري```
-ASM-SEM-002           = PLANNED
-MAL_PARSER_UNCHANGED  = REQUIRED
-FAIL_CLOSED_CONTRACT  = REQUIRED
+ASM-SEM-002           = PROVEN_FOR_SCOPE
+X86_CONTROL_FLOW      = VERIFIED (18/18 checks)
+FAIL_CLOSED_CONTRACT  = VERIFIED (1 expected error caught)
+MAL_PARSER_UNCHANGED  = VERIFIED (no Parser/Compiler modification)
+NO_REGRESSION         = VERIFIED (ASM-SEM-001 still passes)
 ```
+
+## الانتقال للمهمة التالية
+الخطوات المتاحة:
+1. **ASM-SEM-003**: توسيع النموذج ليشمل `syscall` (sys_read, sys_write, sys_exit)
+2. **MAL-INTEROP-C2**: بناء DIFF-TEST adapter لمقارنة `math_complete.py` مع MAL
+3. **C1.2**: Set Theory (يتطلب عقداً صريحاً جديداً)

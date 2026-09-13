@@ -1,7 +1,7 @@
 # ASM-SEM-002 — Control Flow Instructions
 
 ## الحالة
-`PLANNED`
+`PROVEN_FOR_SCOPE`
 
 ## الهدف
 توسيع نموذج x86 ليشمل تعليمات التحكم في التدفق.

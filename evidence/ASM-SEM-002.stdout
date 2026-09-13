@@ -1,0 +1,36 @@
+=== ASM-SEM-002 CORPUS RUN ===
+
+--- JMP-001: jmp target ---
+  [PASS] rip=target
+  [PASS] rax unchanged
+--- JE-001: mov rax, 5; cmp rax, 5; je target ---
+  [PASS] rip=target
+--- JE-002: mov rax, 5; cmp rax, 6; je target ---
+  [PASS] rip advances (no jump)
+--- JNE-001: mov rax, 5; cmp rax, 6; jne target ---
+  [PASS] rip=target
+--- JL-001: mov rax, -1; cmp rax, 0; jl target ---
+  [PASS] rip=target
+--- CALL-001: call func ---
+  [PASS] rip=func
+  [PASS] rsp decremented
+  [PASS] return_addr pushed
+--- CALL-002: mov rsp, 0x2000; call func ---
+  [PASS] rip=func
+  [PASS] rsp=0x1FF8
+--- RET-001: mov rsp, 0x1FF8; mov [rsp], 0x100; ret ---
+  [PASS] rip=0x100
+  [PASS] rsp=0x2000
+--- LOOP-001: mov rcx, 3; loop target ---
+  [PASS] rcx=2
+  [PASS] rip=target
+--- LOOP-002: mov rcx, 1; loop target ---
+  [PASS] rcx=0
+  [PASS] rip advances (no jump)
+--- ERR-003: jmp invalid_addr ---
+  [PASS] invalid jump target — InvalidJumpTarget: invalid jump target: invalid_addr
+
+=== SUMMARY ===
+RESULTS: 18/18 passed
+ERRORS (expected failures caught): 1
+STATUS=PASS

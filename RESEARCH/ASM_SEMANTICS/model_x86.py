@@ -23,6 +23,8 @@ class State:
         'CF': False, 'ZF': False, 'SF': False,
         'OF': False, 'PF': False, 'AF': False,
     })
+    rip: int = 0  # instruction pointer
+    labels: Dict[str, int] = field(default_factory=dict)  # label -> address
 class Error(Exception):
     """Explicit failure — no silent success."""
     pass
@@ -114,3 +116,79 @@ def test(s: State, a_op, b_op) -> None:
     r = a & b
     set_flags_logic(s, r)
     # Note: result is NOT stored, only flags are set
+
+# ─── Control Flow Instructions (ASM-SEM-002) ───────────────
+class InvalidJumpTarget(Error):
+    pass
+def jmp(s: State, target: str) -> None:
+    """jmp target — unconditional jump."""
+    if target not in s.labels:
+        raise InvalidJumpTarget(f"invalid jump target: {target}")
+    s.rip = s.labels[target]
+def jcc(s: State, cond: str, target: str) -> None:
+    """jcc cond, target — conditional jump.
+    cond is one of: je, jne, jl, jge, jle, jg, jb, jae, jbe, ja, js, jns, jo, jno, jp, jnp
+    """
+    if target not in s.labels:
+        raise InvalidJumpTarget(f"invalid jump target: {target}")
+    f = s.flags
+    conditions = {
+        'je': f['ZF'],
+        'jz': f['ZF'],
+        'jne': not f['ZF'],
+        'jnz': not f['ZF'],
+        'jl': f['SF'] != f['OF'],
+        'jnge': f['SF'] != f['OF'],
+        'jge': f['SF'] == f['OF'],
+        'jnl': f['SF'] == f['OF'],
+        'jle': (f['SF'] != f['OF']) or f['ZF'],
+        'jng': (f['SF'] != f['OF']) or f['ZF'],
+        'jg': (f['SF'] == f['OF']) and not f['ZF'],
+        'jnle': (f['SF'] == f['OF']) and not f['ZF'],
+        'jb': f['CF'],
+        'jc': f['CF'],
+        'jae': not f['CF'],
+        'jnc': not f['CF'],
+        'jbe': f['CF'] or f['ZF'],
+        'jna': f['CF'] or f['ZF'],
+        'ja': not f['CF'] and not f['ZF'],
+        'jnbe': not f['CF'] and not f['ZF'],
+        'js': f['SF'],
+        'jns': not f['SF'],
+        'jo': f['OF'],
+        'jno': not f['OF'],
+        'jp': f['PF'],
+        'jpe': f['PF'],
+        'jnp': not f['PF'],
+        'jpo': not f['PF'],
+    }
+    if cond not in conditions:
+        raise Error(f"unknown condition: {cond}")
+    if conditions[cond]:
+        s.rip = s.labels[target]
+    else:
+        s.rip += 1
+def call(s: State, target: str, return_addr: int = None) -> None:
+    """call target — push return address and jump to target."""
+    if target not in s.labels:
+        raise InvalidJumpTarget(f"invalid call target: {target}")
+    if return_addr is None:
+        return_addr = s.rip + 1
+    new_rsp = (s.regs['rsp'] - 8) & MASK64
+    write_reg(s, 'rsp', new_rsp)
+    write_mem(s, new_rsp, return_addr, 8)
+    s.rip = s.labels[target]
+def ret(s: State) -> None:
+    """ret — pop return address and jump to it."""
+    addr = read_mem(s, s.regs['rsp'], 8)
+    s.regs['rsp'] = (s.regs['rsp'] + 8) & MASK64
+    s.rip = addr
+def loop(s: State, target: str) -> None:
+    """loop target — decrement rcx, jump if rcx != 0."""
+    if target not in s.labels:
+        raise InvalidJumpTarget(f"invalid loop target: {target}")
+    s.regs['rcx'] = (s.regs['rcx'] - 1) & MASK64
+    if s.regs['rcx'] != 0:
+        s.rip = s.labels[target]
+    else:
+        s.rip += 1
