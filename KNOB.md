@@ -1006,3 +1006,22 @@ NO_REGRESSION         = VERIFIED (baseline untouched)
 1. **ASM-SEM-002**: توسيع النموذج ليشمل `jmp, jcc, call, ret, loop`
 2. **MAL-INTEROP-C2**: بناء DIFF-TEST adapter لمقارنة `math_complete.py` مع MAL
 3. **C1.2**: Set Theory (يتطلب عقداً صريحاً جديداً)
+
+---
+# 🔜 ASM-SEM-002 (Control Flow Instructions — PLANNED)
+- **التاريخ:** 2026-09-13
+- **الحالة:** ⏳ PLANNED
+- **النطاق:** `jmp, jcc (16 variants), call, ret, loop`
+- **عقد المهمة:** `TASKS/ACTIVE/ASM-SEM-002.md`
+- **الـcorpus:** `KNOWLEDGE/ASM-SEM-002-CORPUS.md`
+
+## الأهداف
+- توسيع النموذج ليشمل Control Flow
+- 11 حالة اختبارية
+- عدم تعديل MAL Parser أو Compiler
+
+## القرار الدستوري```
+ASM-SEM-002           = PLANNED
+MAL_PARSER_UNCHANGED  = REQUIRED
+FAIL_CLOSED_CONTRACT  = REQUIRED
+```
