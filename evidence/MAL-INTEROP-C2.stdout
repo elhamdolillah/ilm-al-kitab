@@ -1,0 +1,28 @@
+=== MAL-INTEROP-C2 EQUIVALENCE MODEL RUN ===
+
+--- INTEROP-001: print(5) ---
+  [EQUIVALENT] print(5)
+--- INTEROP-002: print(0) ---
+  [EQUIVALENT] print(0)
+--- INTEROP-003: plus(3, 4) ---
+  [EQUIVALENT] plus(3, 4)
+--- INTEROP-004: plus(-5, 10) ---
+  [EQUIVALENT] plus(-5, 10)
+--- INTEROP-005: plus(0, 0) ---
+  [EQUIVALENT] plus(0, 0)
+--- INTEROP-006: read() ---
+  [EQUIVALENT] read()
+--- INTEROP-007: print(-1) ---
+  [EQUIVALENT] print(-1)
+--- INTEROP-008: print() no args ---
+  [EQUIVALENT] print() no args
+--- INTEROP-009: plus(1) wrong args ---
+  [EQUIVALENT] plus(1) wrong args
+--- INTEROP-010: strings unsupported ---
+  [EQUIVALENT] strings unsupported
+--- INTEROP-011: full program ---
+  [EQUIVALENT] full program
+
+=== SUMMARY ===
+EQUIVALENT: 11/11
+STATUS=EQUIVALENT
