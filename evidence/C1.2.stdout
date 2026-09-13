@@ -1,0 +1,22 @@
+/root/ilm-al-kitab/RESEARCH/SET_THEORY/set_model.py:20: SyntaxWarning: invalid escape sequence '\ '
+  """A \ B = {x | x in A and x not in B}"""
+/root/ilm-al-kitab/RESEARCH/SET_THEORY/set_model.py:23: SyntaxWarning: invalid escape sequence '\ '
+  """A Δ B = (A \ B) ∪ (B \ A)"""
+=== C1.2 SET THEORY MODEL RUN ===
+
+  [PASS] SET-001: union
+  [PASS] SET-002: intersection
+  [PASS] SET-003: difference
+  [PASS] SET-004: symmetric diff
+  [PASS] SET-005: cartesian
+  [PASS] SET-006: subset true
+  [PASS] SET-007: superset true
+  [PASS] SET-008: subset false
+  [PASS] SET-009: union identity
+  [PASS] SET-010: intersection empty
+  [PASS] SET-011: diff with empty
+  [PASS] SET-012: reflexivity
+
+=== SUMMARY ===
+RESULTS: 12/12 passed
+STATUS=PASS

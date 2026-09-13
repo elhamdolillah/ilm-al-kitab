@@ -1105,3 +1105,38 @@ NO_REGRESSION         = VERIFIED (ASM-SEM-001 still passes)
 الخطوات المتاحة:
 1. **C1.2**: Set Theory (يتطلب عقداً صريحاً جديداً)
 2. **استراحة**: توثيق النتائج والعودة لاحقاً
+
+---
+# Checkpoint: C1.2 (Set Theory Operations — PROVEN_FOR_SCOPE)
+- **Date:** 2026-09-13
+- **Status:** PROVEN_FOR_SCOPE
+- **SHA-256:** `04d50067e5f9e290538effcbe830820b0a5a74b41d85193dad4a3d6560298dd1`
+- **Tests:** 12/12 passed (7 operations)
+- **Exit code:** 0
+
+## Key Insight
+AUTHORIZED INNOVATION: Set theory ops not in math_complete.py.
+User gave explicit consent on 2026-09-13.
+
+## Operations Verified
+- union (001, 009)
+- intersection (002, 010)
+- difference (003, 011)
+- symmetric_diff (004)
+- cartesian (005)
+- subset (006, 008, 012)
+- superset (007)
+
+## Out of Scope
+- Infinite sets
+- String elements
+- MAL Parser/Compiler integration
+
+## Constitutional Decision
+```
+C1.2                = PROVEN_FOR_SCOPE
+SET_THEORY_OPS     = VERIFIED (12/12)
+AUTHORIZED_INNOV   = VERIFIED
+MAL_PARSER_UNCHANGED = VERIFIED
+BASELINE_UNTOUCHED = VERIFIED
+```
