@@ -1,0 +1,36 @@
+=== ASM-SEM-001 CORPUS RUN ===
+
+--- MOV-001: mov rax, 7 ---
+  [PASS] rax=7
+  [PASS] rbx unchanged
+  [PASS] rsp unchanged
+--- ADD-001: mov rax, 7; add rax, 5 ---
+  [PASS] rax=12
+  [PASS] ZF=0
+  [PASS] SF=0
+--- SUB-001: mov rax, 7; sub rax, 5 ---
+  [PASS] rax=2
+  [PASS] ZF=0
+  [PASS] SF=0
+--- STACK-001: rsp=0x1000; push rax; pop rbx ---
+  [PASS] rbx=42
+  [PASS] rsp restored
+--- CMP-001: mov rax, 4; cmp rax, 4 ---
+  [PASS] ZF=1
+  [PASS] rax unchanged
+--- TEST-001: mov rax, 0; test rax, rax ---
+  [PASS] ZF=1
+  [PASS] rax unchanged
+--- ERR-001: pop rax with invalid memory ---
+  [PASS] pop invalid mem — InvalidMemory: invalid memory address: 0x1000
+--- ERR-002: mov unknown, 1 ---
+  [PASS] unknown register — UnknownRegister: unknown register: unknown
+--- BOUND-001: 2^64-1 + 1 ---
+  [PASS] rax=0 (modular)
+  [PASS] CF=1 (carry)
+  [PASS] OF=0
+
+=== SUMMARY ===
+RESULTS: 20/20 passed
+ERRORS (expected failures caught): 2
+STATUS=PASS

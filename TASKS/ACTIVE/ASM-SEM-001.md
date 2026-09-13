@@ -2,7 +2,7 @@
 
 ## الحالة
 
-`PLANNED`
+`PROVEN_FOR_SCOPE`
 
 ## الهدف
 

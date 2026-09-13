@@ -962,3 +962,47 @@ NO_REGRESSION           = VERIFIED (23/23 اختبار قديم نجح)
 - corpus: `KNOWLEDGE/ASM-SEM-001-CORPUS.md`.
 - القرار: نموذج دلالي offline مستقل قبل تعديل Parser أو AOT compiler.
 - لا يوجد إثبات تنفيذي جديد حتى الآن.
+
+---
+# ✅ Checkpoint: ASM-SEM-001 (Offline x86 Semantics Model — PROVEN_FOR_SCOPE)
+- **التاريخ:** 2026-09-13
+- **الحالة:** ✅ PROVEN_FOR_SCOPE
+- **SHA-256:** `d457bd84fc50254ebdd948bd2fadce6885a3ef0ae9dd73113a81b3c9f5647400`
+- **الاختبارات:** 20/20 فحص ناجح (9 حالات × فحوصات متعددة)
+- **Exit code:** 0
+
+## النطاق المُثبت
+
+### النموذج الرياضي التنفيذي
+- `RESEARCH/ASM_SEMANTICS/model_x86.py`: نموذج offline لدلالات `mov, add, sub, push, pop, cmp, test`
+- فضاء الحالة: `Σ = Mem × Reg × Flags`
+- العقد: `Instruction × State ⇀ State + Error`
+- fail-closed: `UnknownRegister`, `InvalidMemory` تُرفع كأخطاء صريحة
+
+### نتائج الـcorpus
+- MOV-001, ADD-001, SUB-001: العمليات الحسابية الصحيحة
+- STACK-001: push/pop يحفظان القيمة ويعيدان rsp
+- CMP-001, TEST-001: الأعلام تُحدّث دون تخزين النتيجة
+- ERR-001, ERR-002: الفشل الصريح للذاكرة والمسجل غير المعروف
+- BOUND-001: الحساب المعياري `2^64-1 + 1 = 0` مع CF=1
+
+## ما لا يُثبته هذا الـ checkpoint
+⚠️ لا يثبت أن MAL Parser أو AOT Compiler يدعمان هذه التعليمات
+⚠️ لا يثبت التكامل مع `math_complete.py`
+⚠️ لا يشمل SIMD, Floating Point, Interrupts, fork/execve/epoll
+⚠️ `syscall` خارج النطاق (مهمة لاحقة)
+
+## القرار الدستوري
+```
+ASM-SEM-001           = PROVEN_FOR_SCOPE
+X86_MODEL_OFFLINE     = VERIFIED (20/20 checks)
+FAIL_CLOSED_CONTRACT  = VERIFIED (2 expected errors caught)
+MAL_PARSER_UNCHANGED  = VERIFIED (no Parser/Compiler modification)
+NO_REGRESSION         = VERIFIED (baseline untouched)
+```
+
+## الانتقال للمهمة التالية
+الخطوات المتاحة:
+1. **ASM-SEM-002**: توسيع النموذج ليشمل `jmp, jcc, call, ret, loop`
+2. **MAL-INTEROP-C2**: بناء DIFF-TEST adapter لمقارنة `math_complete.py` مع MAL
+3. **C1.2**: Set Theory (يتطلب عقداً صريحاً جديداً)
