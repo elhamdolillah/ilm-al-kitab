@@ -944,3 +944,12 @@ NO_REGRESSION           = VERIFIED (23/23 اختبار قديم نجح)
 - الإخفاق الواحد: تمرير نص أعاد قيمة رقمية (`4209213`) بدل `مرحبا`، وهو خلل runtime/codegen مستقل.
 - تم تصحيح سكربت الاختبار محلياً ليعيد exit code=1 عند وجود فشل، لكن push إلى remote `arabic-math-lang` مرفوض بسبب divergence؛ لم يُستخدم force push.
 - الأدلة: `MAL-DIFF-DIAGNOSTIC-20260913.*` و`MAL-DIFF-EXTERNAL-FAILCLOSED.*`.
+
+---
+# 21. ASM-SEMANTICS RESEARCH
+
+- حُفظت المراجع الرياضية المرفقة في `RESEARCH/ASM_SEMANTICS/` كمواد `RESEARCH` غير ملزمة.
+- أضيفت `KNOWLEDGE/X86_MAL_SEMANTICS_DRAFT.md` كمسودة عقد عملي.
+- لا تعلن هذه المواد دعم MAL لتعليمات x86 ولا codegen أو syscall runtime.
+- المرحلة التالية المقترحة: عقد IR صغير ثم model checker offline واختبارات push/pop وmov/add/sub/cmp/test.
+- كل تعليمات SIMD وfloating point وfork/exec/epoll تبقى خارج النطاق حتى تنفيذ واختبار مستقل.
