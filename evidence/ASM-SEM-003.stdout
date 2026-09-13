@@ -1,0 +1,24 @@
+=== ASM-SEM-003 CORPUS RUN ===
+
+--- SYS-001: write 5 bytes to stdout ---
+  [PASS] rax=5 (bytes written)
+  [PASS] stdout_data correct
+--- SYS-002: read 10 bytes from stdin ---
+  [PASS] rax=10 (bytes read)
+  [PASS] memory contains World12345
+  [PASS] stdin_data consumed
+--- SYS-003: exit with code 0 ---
+  [PASS] program exits — ProgramExit: program exited with code 0
+--- SYS-004: exit with code 42 ---
+  [PASS] exit code=42
+--- SYS-005: unknown syscall (n=999) ---
+  [PASS] unknown syscall — UnknownSyscall: unknown syscall number: 999
+--- SYS-006: invalid FD for write (fd=99) ---
+  [PASS] invalid FD — InvalidFD: invalid fd for write: 99 (only stdout=1, stderr=2 supported)
+--- SYS-007: invalid FD for read (fd=5) ---
+  [PASS] invalid FD for read — InvalidFD: invalid fd for read: 5 (only stdin=0 supported)
+
+=== SUMMARY ===
+RESULTS: 10/10 passed
+ERRORS (expected failures caught): 4
+STATUS=PASS

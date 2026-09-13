@@ -1048,3 +1048,24 @@ NO_REGRESSION         = VERIFIED (ASM-SEM-001 still passes)
 1. **ASM-SEM-003**: توسيع النموذج ليشمل `syscall` (sys_read, sys_write, sys_exit)
 2. **MAL-INTEROP-C2**: بناء DIFF-TEST adapter لمقارنة `math_complete.py` مع MAL
 3. **C1.2**: Set Theory (يتطلب عقداً صريحاً جديداً)
+
+---
+# ✅ Checkpoint: ASM-SEM-003 (Syscall Instructions — PROVEN_FOR_SCOPE)
+- **التاريخ:** 2026-09-13
+- **الحالة:** ✅ PROVEN_FOR_SCOPE
+- **SHA-256:** `4bba01e989852ce14658fd7de1b2b462f4111f694a9c3267030c762737a99fb0`
+- **الاختبارات:** 10/10 فحص ناجح (7 حالات × فحوصات متعددة)
+- **Exit code:** 0
+
+## النطاق المُثبت\التعليمات المُنفَّذة:
+- sys_read (n=0): قراءة من stdin إلى الذاكرة\sys_write (n=1): كتابة من الذاكرة إلى stdout/stderr\sys_exit (n=60): إنهاء البرنامج مع exit code\syscall: dispatch بناءً على rax
+
+النتائج الرئيسية:\SYS-001: كتابة 5 بايتات إلى stdout بنجاح\SYS-002: قراءة 10 بايتات من stdin بنجاح\SYS-003/004: sys_exit مع exit codes مختلفة\SYS-005: UnknownSyscall يُرفع بشكل صريح\SYS-006/007: InvalidFD يُرفع بشكل صريح
+
+## ما لا يُثبته هذا الـ checkpoint\⚠️ لا يثبت أن MAL Parser أو AOT Compiler يدعمان هذه التعليمات\⚠️ لا يشمل fork, execve, mmap, epoll, pipe2\⚠️ لا يشمل الملفات الفعلية (محاكاة فقط)
+
+## القرار الدستوري
+```\ASM-SEM-003           = PROVEN_FOR_SCOPE\X86_SYSCALLS          = VERIFIED (10/10 checks)\FAIL_CLOSED_CONTRACT  = VERIFIED (4 expected errors caught)\MAL_PARSER_UNCHANGED  = VERIFIED (no Parser/Compiler modification)\BASELINE_UNTOUCHED    = VERIFIED (ASM-SEM-001/002 still pass)
+```
+
+## الانتقال للمهمة التالية\الخطوات المتاحة:. **MAL-INTEROP-C2**: بناء DIFF-TEST adapter لمقارنة `math_complete.py` مع MAL. **C1.2**: Set Theory (يتطلب عقداً صريحاً جديداً). **استراحة**: توثيق النتائج والعودة لاحقاً```

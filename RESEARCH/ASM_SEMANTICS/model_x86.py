@@ -192,3 +192,65 @@ def loop(s: State, target: str) -> None:
         s.rip = s.labels[target]
     else:
         s.rip += 1
+
+# ─── Syscall Instructions (ASM-SEM-003) ───────────────
+class UnknownSyscall(Error):
+    pass
+class InvalidFD(Error):
+    pass
+class ProgramExit(Error):
+    """Raised when sys_exit is called. Carries exit code."""
+    def __init__(self, code):
+        super().__init__(f'program exited with code {code}')
+        self.code = code
+def sys_read(s: State, fd: int, buf_addr: int, count: int) -> int:
+    """sys_read (n=0): read count bytes from fd into memory at buf_addr."""
+    if fd != 0:
+        raise InvalidFD(f'invalid fd for read: {fd} (only stdin=0 supported)')
+    if not hasattr(s, 'stdin_data') or not s.stdin_data:
+        return 0
+    to_read = min(count, len(s.stdin_data))
+    data = s.stdin_data[:to_read]
+    s.stdin_data = s.stdin_data[to_read:]
+    for i, b in enumerate(data):
+        s.mem[(buf_addr + i) & MASK64] = b if isinstance(b, int) else ord(b)
+    return to_read
+def sys_write(s: State, fd: int, buf_addr: int, count: int) -> int:
+    """sys_write (n=1): write count bytes from memory at buf_addr to fd."""
+    if fd not in (1, 2):
+        raise InvalidFD(f'invalid fd for write: {fd} (only stdout=1, stderr=2 supported)')
+    data = []
+    for i in range(count):
+        addr = (buf_addr + i) & MASK64
+        if addr not in s.mem:
+            raise InvalidMemory(f'invalid memory address: 0x{addr:x}')
+        data.append(s.mem[addr])
+    if not hasattr(s, 'stdout_data'):
+        s.stdout_data = bytearray()
+    if fd == 1:
+        s.stdout_data.extend(data)
+    else:
+        if not hasattr(s, 'stderr_data'):
+            s.stderr_data = bytearray()
+        s.stderr_data.extend(data)
+    return count
+def sys_exit(s: State, code: int) -> None:
+    """sys_exit (n=60): terminate program with exit code."""
+    raise ProgramExit(code & MASK64)
+def syscall(s: State) -> None:
+    """syscall: dispatch based on rax value.
+    - n=0: sys_read(fd=rdi, buf=rsi, count=rdx) -> rax=bytes_read
+    - n=1: sys_write(fd=rdi, buf=rsi, count=rdx) -> rax=bytes_written
+    - n=60: sys_exit(code=rdi) -> raises ProgramExit
+    """
+    n = s.regs['rax']
+    if n == 0:
+        result = sys_read(s, s.regs['rdi'], s.regs['rsi'], s.regs['rdx'])
+        s.regs['rax'] = result
+    elif n == 1:
+        result = sys_write(s, s.regs['rdi'], s.regs['rsi'], s.regs['rdx'])
+        s.regs['rax'] = result
+    elif n == 60:
+        sys_exit(s, s.regs['rdi'])
+    else:
+        raise UnknownSyscall(f'unknown syscall number: {n}')
