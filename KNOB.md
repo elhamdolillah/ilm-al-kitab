@@ -1264,7 +1264,7 @@ Equivalence Classes:
 - **parse_postfix**: MISSING (no call chaining)
 - **-2 ^ 2 semantics**: UNDECIDED
 - **Boolean literals**: MISSING (no true/false or top/bot)
-- **UnaryOp AST node**: MISSING (unary in BinOp with right=INVALID)
+- **UnaryOp AST node**: ✅ RESOLVED (proper UnaryOp variant)
 - **Chained comparisons**: UNDEFINED behavior
 - **Runtime semantics**: NONE for /, %, ^, comparisons, logic
 - **Type checking**: NONE
@@ -1302,7 +1302,7 @@ Missing: parse_postfix (between unary and primary)
 - call chaining support (parse_postfix missing)
 - type-safe unary (no type checking)
 ### What Remains for Next Session
-- [ ] Add ASTNode::UnaryOp (proper variant)
+- [x] Add ASTNode::UnaryOp (proper variant) - COMPLETED
 - [ ] Add parse_postfix layer
 - [ ] Decide -2^2 semantics + test
 - [ ] Add Boolean literals (true/false or top/bot)

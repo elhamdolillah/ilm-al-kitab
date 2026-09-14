@@ -63,6 +63,8 @@ pub enum TypeTag {
     Exists,
     /// Set literal: ⟨...⟩.
     Set,
+    /// Unary operation (- or ¬).
+    UnaryOp,
 }
 
 /// AST node with inline payload (no heap allocation per node).
@@ -154,6 +156,14 @@ pub enum ASTNode {
         /// Elements as List chain (NodeID::INVALID if empty).
         elems: NodeID,
     },
+    /// Unary operation: op + expr.
+    /// op codes: 16 = unary minus (-), 17 = logical NOT (¬)
+    UnaryOp {
+        /// Operator code (16 = neg, 17 = not).
+        op: u8,
+        /// Operand expression node.
+        expr: NodeID,
+    },
 }
 
 
@@ -176,6 +186,7 @@ impl ASTNode {
             ASTNode::Mu { .. } => TypeTag::Mu,
             ASTNode::Exists { .. } => TypeTag::Exists,
             ASTNode::Set { .. } => TypeTag::Set,
+            ASTNode::UnaryOp { .. } => TypeTag::UnaryOp,
         }
     }
 }

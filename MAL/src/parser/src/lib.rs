@@ -299,20 +299,18 @@ impl<'a> Parser<'a> {
         if let Some(tok) = self.peek() {
             if tok.kind == TokenKind::Minus {
                 self.bump();
-                let operand = self.parse_unary(arena)?;
-                return Ok(arena.allocate(ASTNode::BinOp {
+                let expr = self.parse_unary(arena)?;
+                return Ok(arena.allocate(ASTNode::UnaryOp {
                     op: 16, // unary minus
-                    left: operand,
-                    right: NodeID::INVALID,
+                    expr,
                 })?);
             }
             if tok.kind == TokenKind::Not {
                 self.bump();
-                let operand = self.parse_unary(arena)?;
-                return Ok(arena.allocate(ASTNode::BinOp {
+                let expr = self.parse_unary(arena)?;
+                return Ok(arena.allocate(ASTNode::UnaryOp {
                     op: 17, // logical NOT
-                    left: operand,
-                    right: NodeID::INVALID,
+                    expr,
                 })?);
             }
         }
@@ -907,10 +905,9 @@ mod tests {
     fn test_parse_unary_minus() {
         let mut arena = Arena::new(100);
         let root = parse("-5", &mut arena).unwrap();
-        if let ASTNode::BinOp { op, left, right } = arena.get(root).unwrap() {
+        if let ASTNode::UnaryOp { op, expr } = arena.get(root).unwrap() {
             assert_eq!(*op, 16); // unary minus
-            assert_eq!(*right, NodeID::INVALID);
-            if let ASTNode::Int(v) = arena.get(*left).unwrap() {
+            if let ASTNode::Int(v) = arena.get(*expr).unwrap() {
                 assert_eq!(*v, 5);
             } else {
                 panic!("Expected Int for operand");
@@ -923,15 +920,14 @@ mod tests {
     fn test_parse_unary_minus_ident() {
         let mut arena = Arena::new(100);
         let root = parse("-س", &mut arena).unwrap();
-        assert!(matches!(arena.get(root).unwrap(), ASTNode::BinOp { op: 16, .. }));
+        assert!(matches!(arena.get(root).unwrap(), ASTNode::UnaryOp { op: 16, .. }));
     }
     #[test]
     fn test_parse_unary_not() {
         let mut arena = Arena::new(100);
         let root = parse("¬P", &mut arena).unwrap();
-        if let ASTNode::BinOp { op, right, .. } = arena.get(root).unwrap() {
+        if let ASTNode::UnaryOp { op, .. } = arena.get(root).unwrap() {
             assert_eq!(*op, 17); // logical NOT
-            assert_eq!(*right, NodeID::INVALID);
         } else {
             panic!("Expected BinOp for logical NOT");
         }
@@ -1122,9 +1118,8 @@ mod tests {
         let root = parse("-5 + 3", &mut arena).unwrap();
         if let ASTNode::BinOp { op, left, .. } = arena.get(root).unwrap() {
             assert_eq!(*op, 0); // +
-            if let ASTNode::BinOp { op: inner_op, right, .. } = arena.get(*left).unwrap() {
+            if let ASTNode::UnaryOp { op: inner_op, .. } = arena.get(*left).unwrap() {
                 assert_eq!(*inner_op, 16); // unary minus
-                assert_eq!(*right, NodeID::INVALID);
             } else {
                 panic!("Expected unary minus inside +");
             }
@@ -1139,7 +1134,7 @@ mod tests {
         let root = parse("¬P ∧ Q", &mut arena).unwrap();
         if let ASTNode::BinOp { op, left, .. } = arena.get(root).unwrap() {
             assert_eq!(*op, 14); // AND
-            if let ASTNode::BinOp { op: inner_op, .. } = arena.get(*left).unwrap() {
+            if let ASTNode::UnaryOp { op: inner_op, .. } = arena.get(*left).unwrap() {
                 assert_eq!(*inner_op, 17); // NOT
             } else {
                 panic!("Expected NOT inside AND");
