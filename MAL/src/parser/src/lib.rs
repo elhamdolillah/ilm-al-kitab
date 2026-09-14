@@ -110,9 +110,9 @@ impl<'a> Parser<'a> {
                 let op = self.bump().unwrap();
                 let right = self.parse_multiplicative(arena)?;
                 let op_code = match op.kind {
-                    TokenKind::Plus => 0,
-                    TokenKind::Minus => 1,
-                    TokenKind::Concat => 4,
+                    TokenKind::Plus => BinaryOp::Add,
+                    TokenKind::Minus => BinaryOp::Sub,
+                    TokenKind::Concat => BinaryOp::Concat,
                     _ => unreachable!(),
                 };
                 left = arena.allocate(ASTNode::BinOp {
@@ -131,9 +131,9 @@ impl<'a> Parser<'a> {
         let mut left = self.parse_primary(arena)?;
         while let Some(tok) = self.peek() {
             let op_code = match tok.kind {
-                TokenKind::Mul => 2,
-                TokenKind::Div => 3,
-                TokenKind::Mod => 5,
+                TokenKind::Mul => BinaryOp::Mul,
+                TokenKind::Div => BinaryOp::Div,
+                TokenKind::Mod => BinaryOp::Mod,
                 _ => break,
             };
             self.bump();
@@ -291,7 +291,7 @@ impl<'a> Parser<'a> {
                 self.bump();
                 let expr = self.parse_unary(arena)?;
                 return Ok(arena.allocate(ASTNode::UnaryOp {
-                    op: 16, // unary minus
+                    op: UnaryOp::Neg,
                     expr,
                 })?);
             }
@@ -299,7 +299,7 @@ impl<'a> Parser<'a> {
                 self.bump();
                 let expr = self.parse_unary(arena)?;
                 return Ok(arena.allocate(ASTNode::UnaryOp {
-                    op: 17, // logical NOT
+                    op: UnaryOp::Not,
                     expr,
                 })?);
             }
@@ -326,7 +326,7 @@ impl<'a> Parser<'a> {
             self.bump();
             let exp = self.parse_power(arena)?; // right-associative recursion
             Ok(arena.allocate(ASTNode::BinOp {
-                op: 6, // power
+                op: BinaryOp::Pow,
                 left: base,
                 right: exp,
             })?)
@@ -343,12 +343,12 @@ impl<'a> Parser<'a> {
         let left = self.parse_additive(arena)?;
         if let Some(tok) = self.peek() {
             let op_code = match tok.kind {
-                TokenKind::Lt => 7,
-                TokenKind::Gt => 8,
-                TokenKind::Le => 9,
-                TokenKind::Eq => 11,
-                TokenKind::Neq => 12,
-                TokenKind::Ge => 13,
+                TokenKind::Lt => BinaryOp::Lt,
+                TokenKind::Gt => BinaryOp::Gt,
+                TokenKind::Le => BinaryOp::Le,
+                TokenKind::Eq => BinaryOp::Eq,
+                TokenKind::Neq => BinaryOp::Neq,
+                TokenKind::Ge => BinaryOp::Ge,
                 _ => return Ok(left),
             };
             let first_op_line = tok.line;
@@ -387,7 +387,7 @@ impl<'a> Parser<'a> {
             self.bump();
             let right = self.parse_comparison(arena)?;
             left = arena.allocate(ASTNode::BinOp {
-                op: 14, // AND
+                op: BinaryOp::And,
                 left,
                 right,
             })?;
@@ -403,7 +403,7 @@ impl<'a> Parser<'a> {
             self.bump();
             let right = self.parse_logical_and(arena)?;
             left = arena.allocate(ASTNode::BinOp {
-                op: 15, // OR
+                op: BinaryOp::Or,
                 left,
                 right,
             })?;
@@ -502,7 +502,7 @@ impl<'a> Parser<'a> {
                     let value = self.parse_expr(arena)?;
                     let left_ident = arena.allocate(ASTNode::Ident(0))?;
                     Ok(arena.allocate(ASTNode::BinOp {
-                        op: 10, // assignment marker
+                        op: BinaryOp::Assign,
                         left: left_ident,
                         right: value,
                     })?)
@@ -595,7 +595,7 @@ mod tests {
         let mut arena = Arena::new(100);
         let root = parse("1 + 2", &mut arena).unwrap();
         if let ASTNode::BinOp { op, left, right } = arena.get(root).unwrap() {
-            assert_eq!(*op, 0); // +
+            assert_eq!(*op, BinaryOp::Add);
             assert!(matches!(arena.get(*left).unwrap(), ASTNode::Int(1)));
             assert!(matches!(arena.get(*right).unwrap(), ASTNode::Int(2)));
         } else {
@@ -622,7 +622,7 @@ mod tests {
         let root = parse("1 + 2 · 3", &mut arena).unwrap();
         // Should parse as: 1 + (2 · 3)
         if let ASTNode::BinOp { op, left, right } = arena.get(root).unwrap() {
-            assert_eq!(*op, 0); // +
+            assert_eq!(*op, BinaryOp::Add);
             assert!(matches!(arena.get(*left).unwrap(), ASTNode::Int(1)));
             if let ASTNode::BinOp { op: op2, .. } = arena.get(*right).unwrap() {
                 assert_eq!(*op2, 2); // ·
@@ -925,7 +925,7 @@ mod tests {
         let mut arena = Arena::new(100);
         let root = parse("-5", &mut arena).unwrap();
         if let ASTNode::UnaryOp { op, expr } = arena.get(root).unwrap() {
-            assert_eq!(*op, 16); // unary minus
+            assert_eq!(*op, UnaryOp::Neg);
             if let ASTNode::Int(v) = arena.get(*expr).unwrap() {
                 assert_eq!(*v, 5);
             } else {
@@ -939,14 +939,14 @@ mod tests {
     fn test_parse_unary_minus_ident() {
         let mut arena = Arena::new(100);
         let root = parse("-س", &mut arena).unwrap();
-        assert!(matches!(arena.get(root).unwrap(), ASTNode::UnaryOp { op: 16, .. }));
+        assert!(matches!(arena.get(root).unwrap(), ASTNode::UnaryOp { op: UnaryOp::Neg, .. }));
     }
     #[test]
     fn test_parse_unary_not() {
         let mut arena = Arena::new(100);
         let root = parse("¬P", &mut arena).unwrap();
         if let ASTNode::UnaryOp { op, .. } = arena.get(root).unwrap() {
-            assert_eq!(*op, 17); // logical NOT
+            assert_eq!(*op, UnaryOp::Not);
         } else {
             panic!("Expected BinOp for logical NOT");
         }
@@ -956,7 +956,7 @@ mod tests {
         let mut arena = Arena::new(100);
         let root = parse("2 ^ 3", &mut arena).unwrap();
         if let ASTNode::BinOp { op, left, right } = arena.get(root).unwrap() {
-            assert_eq!(*op, 6); // power
+            assert_eq!(*op, BinaryOp::Pow);
             if let ASTNode::Int(lv) = arena.get(*left).unwrap() {
                 assert_eq!(*lv, 2);
             }
@@ -1071,7 +1071,7 @@ mod tests {
         let mut arena = Arena::new(100);
         let root = parse("P ∧ Q", &mut arena).unwrap();
         if let ASTNode::BinOp { op, .. } = arena.get(root).unwrap() {
-            assert_eq!(*op, 14); // AND
+            assert_eq!(*op, BinaryOp::And); // AND
         } else {
             panic!("Expected BinOp for ∧");
         }
@@ -1092,8 +1092,8 @@ mod tests {
         // P ∧ Q ∧ R should parse as (P ∧ Q) ∧ R
         let root = parse("P ∧ Q ∧ R", &mut arena).unwrap();
         if let ASTNode::BinOp { op, left, right } = arena.get(root).unwrap() {
-            assert_eq!(*op, 14);
-            assert!(matches!(arena.get(*left).unwrap(), ASTNode::BinOp { op: 14, .. }));
+            assert_eq!(*op, BinaryOp::And);
+            assert!(matches!(arena.get(*left).unwrap(), ASTNode::BinOp { op: BinaryOp::And, .. }));
         } else {
             panic!("Expected BinOp for ∧");
         }
@@ -1104,9 +1104,9 @@ mod tests {
         // 2 + 3 * 4 should parse as 2 + (3 * 4)
         let root = parse("2 + 3 * 4", &mut arena).unwrap();
         if let ASTNode::BinOp { op, right, .. } = arena.get(root).unwrap() {
-            assert_eq!(*op, 0); // +
+            assert_eq!(*op, BinaryOp::Add);
             if let ASTNode::BinOp { op: inner_op, .. } = arena.get(*right).unwrap() {
-                assert_eq!(*inner_op, 2); // *
+                assert_eq!(*inner_op, BinaryOp::Mul);
             } else {
                 panic!("Expected * inside +");
             }
@@ -1122,7 +1122,7 @@ mod tests {
         if let ASTNode::BinOp { op, right, .. } = arena.get(root).unwrap() {
             assert_eq!(*op, 2); // *
             if let ASTNode::BinOp { op: inner_op, .. } = arena.get(*right).unwrap() {
-                assert_eq!(*inner_op, 6); // ^
+                assert_eq!(*inner_op, BinaryOp::Pow);
             } else {
                 panic!("Expected ^ inside *");
             }
@@ -1136,9 +1136,9 @@ mod tests {
         // -5 + 3 should parse as (-5) + 3
         let root = parse("-5 + 3", &mut arena).unwrap();
         if let ASTNode::BinOp { op, left, .. } = arena.get(root).unwrap() {
-            assert_eq!(*op, 0); // +
+            assert_eq!(*op, BinaryOp::Add);
             if let ASTNode::UnaryOp { op: inner_op, .. } = arena.get(*left).unwrap() {
-                assert_eq!(*inner_op, 16); // unary minus
+                assert_eq!(*inner_op, UnaryOp::Neg);
             } else {
                 panic!("Expected unary minus inside +");
             }
@@ -1152,9 +1152,9 @@ mod tests {
         // ¬P ∧ Q should parse as (¬P) ∧ Q
         let root = parse("¬P ∧ Q", &mut arena).unwrap();
         if let ASTNode::BinOp { op, left, .. } = arena.get(root).unwrap() {
-            assert_eq!(*op, 14); // AND
+            assert_eq!(*op, BinaryOp::And); // AND
             if let ASTNode::UnaryOp { op: inner_op, .. } = arena.get(*left).unwrap() {
-                assert_eq!(*inner_op, 17); // NOT
+                assert_eq!(*inner_op, UnaryOp::Not);
             } else {
                 panic!("Expected NOT inside AND");
             }
@@ -1168,9 +1168,9 @@ mod tests {
         // 1 + 2 < 3 + 4 should parse as (1+2) < (3+4)
         let root = parse("1 + 2 < 3 + 4", &mut arena).unwrap();
         if let ASTNode::BinOp { op, left, right } = arena.get(root).unwrap() {
-            assert_eq!(*op, 7); // <
-            assert!(matches!(arena.get(*left).unwrap(), ASTNode::BinOp { op: 0, .. }));
-            assert!(matches!(arena.get(*right).unwrap(), ASTNode::BinOp { op: 0, .. }));
+            assert_eq!(*op, BinaryOp::Lt);
+            assert!(matches!(arena.get(*left).unwrap(), ASTNode::BinOp { op: BinaryOp::Add, .. }));
+            assert!(matches!(arena.get(*right).unwrap(), ASTNode::BinOp { op: BinaryOp::Add, .. }));
         } else {
             panic!("Expected comparison");
         }
@@ -1180,7 +1180,7 @@ mod tests {
         let mut arena = Arena::new(100);
         // ¬(a < b ∧ c) ∨ d
         let root = parse("¬(a < b ∧ c) ∨ d", &mut arena).unwrap();
-        assert!(matches!(arena.get(root).unwrap(), ASTNode::BinOp { op: 15, .. }));
+        assert!(matches!(arena.get(root).unwrap(), ASTNode::BinOp { op: BinaryOp::Or, .. }));
     }
     #[test]
     fn test_parse_mixed_ops() {
@@ -1189,9 +1189,9 @@ mod tests {
         // Should parse as ((2^3)*4) + 5
         let root = parse("2 ^ 3 * 4 + 5", &mut arena).unwrap();
         if let ASTNode::BinOp { op, left, right } = arena.get(root).unwrap() {
-            assert_eq!(*op, 0); // +
+            assert_eq!(*op, BinaryOp::Add);
             if let ASTNode::BinOp { op: mul_op, .. } = arena.get(*left).unwrap() {
-                assert_eq!(*mul_op, 2); // *
+                assert_eq!(*mul_op, BinaryOp::Mul);
             }
             if let ASTNode::Int(v) = arena.get(*right).unwrap() {
                 assert_eq!(*v, 5);
@@ -1251,7 +1251,7 @@ mod tests {
         // (f + g)(x) should parse as Call { func: BinOp(+), args: x }
         let root = parse("(f + g)(x)", &mut arena).unwrap();
         if let ASTNode::Call { func, args } = arena.get(root).unwrap() {
-            assert!(matches!(arena.get(*func).unwrap(), ASTNode::BinOp { op: 0, .. }));
+            assert!(matches!(arena.get(*func).unwrap(), ASTNode::BinOp { op: BinaryOp::Add, .. }));
             assert!(matches!(arena.get(*args).unwrap(), ASTNode::Ident(_)));
         } else {
             panic!("Expected Call for (f + g)(x)");
@@ -1290,12 +1290,12 @@ mod tests {
     fn test_parse_unary_power_math_convention() {
         let mut arena = Arena::new(100);
         // -2^2 should parse as -(2^2) = -4 (mathematical convention)
-        // AST: UnaryOp { op: 16, expr: BinOp { op: 6, left: 2, right: 2 } }
+        // AST: UnaryOp { op: UnaryOp::Neg, expr: BinOp { op: 6, left: 2, right: 2 } }
         let root = parse("-2 ^ 2", &mut arena).unwrap();
         if let ASTNode::UnaryOp { op, expr } = arena.get(root).unwrap() {
-            assert_eq!(*op, 16); // unary minus
+            assert_eq!(*op, UnaryOp::Neg);
             if let ASTNode::BinOp { op: pow_op, left, right } = arena.get(*expr).unwrap() {
-                assert_eq!(*pow_op, 6); // power
+                assert_eq!(*pow_op, BinaryOp::Pow);
                 if let ASTNode::Int(v) = arena.get(*left).unwrap() {
                     assert_eq!(*v, 2);
                 }
@@ -1315,7 +1315,7 @@ mod tests {
         // 2^3^2 should parse as 2^(3^2) = 512 (right-associative)
         let root = parse("2 ^ 3 ^ 2", &mut arena).unwrap();
         if let ASTNode::BinOp { op, left, right } = arena.get(root).unwrap() {
-            assert_eq!(*op, 6); // power
+            assert_eq!(*op, BinaryOp::Pow);
             if let ASTNode::Int(v) = arena.get(*left).unwrap() {
                 assert_eq!(*v, 2); // leftmost
             }
@@ -1354,7 +1354,7 @@ mod tests {
         // true ∧ false should parse correctly
         let root = parse("true ∧ false", &mut arena).unwrap();
         if let ASTNode::BinOp { op, left, right } = arena.get(root).unwrap() {
-            assert_eq!(*op, 14); // AND
+            assert_eq!(*op, BinaryOp::And); // AND
             assert!(matches!(arena.get(*left).unwrap(), ASTNode::BoolLit(true)));
             assert!(matches!(arena.get(*right).unwrap(), ASTNode::BoolLit(false)));
         } else {
@@ -1391,7 +1391,7 @@ mod tests {
         // (a < b) ∧ (b < c) should be ALLOWED (explicit conjunction)
         let root = parse("(a < b) ∧ (b < c)", &mut arena).unwrap();
         // Should parse as AND of two comparisons
-        assert!(matches!(arena.get(root).unwrap(), ASTNode::BinOp { op: 14, .. }));
+        assert!(matches!(arena.get(root).unwrap(), ASTNode::BinOp { op: BinaryOp::And, .. }));
     }
     #[test]
     fn test_parse_single_comparison_allowed() {
@@ -1411,7 +1411,7 @@ mod tests {
         let root = parse("a < b + c", &mut arena).unwrap();
         if let ASTNode::BinOp { op, right, .. } = arena.get(root).unwrap() {
             assert_eq!(*op, 7); // Lt at top
-            assert!(matches!(arena.get(*right).unwrap(), ASTNode::BinOp { op: 0, .. })); // + inside
+            assert!(matches!(arena.get(*right).unwrap(), ASTNode::BinOp { op: BinaryOp::Add, .. })); // + inside
         } else {
             panic!("Expected comparison with arithmetic inside");
         }
