@@ -1252,75 +1252,63 @@ Equivalence Classes:
 - ∀ P₁, P₂: [P₁] = [P₂] ∨ [P₁] ∩ [P₂] = ∅
 - ∀ P: P ∈ [P]
 ---
-## Parser Precedence Refactor — Completed 2026-09-14
+## Parser Precedence Refactor — 2026-09-14 (HONEST STATUS)
 ### Commit
 `73d3326` — feat(parser): Add operator precedence layers and new operators
-### Changes Summary
-- **Lexer**: Added 8 new tokens (Div, Mod, Pow, Le, Ge, Not, And, Or)
-- **Parser**: Restructured into 8-layer precedence hierarchy
+### What Was Actually Done (Syntax Only)
+- **Lexer**: Added 8 tokens (Div, Mod, Pow, Le, Ge, Not, And, Or)
 - **Parser**: Added 5 new parse functions
-- **Tests**: Added 23 new tests (total: 58)
-- **Files changed**: 3 (+443 lines, -13 lines)
-### Precedence Hierarchy
-
----
-## Parser Precedence Refactor — Completed 2026-09-14
-### Commit
-`73d3326` — feat(parser): Add operator precedence layers and new operators
-### Changes Summary
-- **Lexer**: Added 8 new tokens (Div, Mod, Pow, Le, Ge, Not, And, Or)
-- **Parser**: Restructured into 8-layer precedence hierarchy
-- **Parser**: Added 5 new parse functions
-- **Tests**: Added 23 new tests (total: 58)
-- **Files changed**: 3 (+443 lines, -13 lines)
-### Precedence Hierarchy
-parse_expr → parse_logical_or → parse_logical_and → parse_comparison
-→ parse_additive → parse_multiplicative → parse_power → parse_unary → parse_primary
-### New Tokens (Lexer)
-- Div (/), Mod (%), Pow (^)
-- Le (≤), Ge (≥)
-- Not (¬), And (∧), Or (∨)
-### New Parse Functions (5)
-- parse_unary: unary minus (-x), logical NOT (¬P)
-- parse_power: right-associative power (^)
-- parse_comparison: <, >, ≤, ≥, =, ≠
-- parse_logical_and: ∧ (left-associative)
-- parse_logical_or: ∨ (left-associative)
-### Modified Functions
-- parse_multiplicative: now supports ·, *, /, %
-- parse_expr: now calls parse_logical_or (was parse_additive)
-### Operator Codes (BinOp.op)
-| Code | Operator | Type |
-|---|---|---|
-| 0 | Add (+) | Binary |
-| 1 | Sub (-) | Binary |
-| 2 | Mul (·) | Binary |
-| 3 | Div (/) | Binary |
-| 4 | Concat (⊕) | Binary |
-| 5 | Mod (%) | Binary |
-| 6 | Pow (^) | Binary (right-associative) |
-| 7 | Lt (<) | Comparison |
-| 8 | Gt (>) | Comparison |
-| 9 | Le (≤) | Comparison |
-| 10 | Assign (≔) | Assignment |
-| 11 | Eq (=) | Comparison |
-| 12 | Neq (≠) | Comparison |
-| 13 | Ge (≥) | Comparison |
-| 14 | And (∧) | Logical |
-| 15 | Or (∨) | Logical |
-| 16 | UnaryMinus (-) | Unary |
-| 17 | LogicalNot (¬) | Unary |
-### Test Coverage (58 total)
-- Unary operators: 3 tests
-- Power operator: 2 tests
-- Division/Modulo: 2 tests
-- Comparisons: 6 tests
-- Logical AND/OR: 3 tests
-- Precedence verification: 5 tests
-- Complex expressions: 2 tests
-### Status
-- Parser restructure: PROVEN_FOR_SCOPE
-- New operators: PROVEN_FOR_SCOPE
-- Tests: 58 total (23 new)
-- MAL Compiler: UNCHANGED
-- Baseline: UNTOUCHED
+- **Parser**: parse_multiplicative now handles ·, *, /, %
+- **Tests**: 23 new parser-level tests (total: 58)
+### Known Gaps (Not Implemented)
+- **parse_postfix**: MISSING (no call chaining)
+- **-2 ^ 2 semantics**: UNDECIDED
+- **Boolean literals**: MISSING (no true/false or top/bot)
+- **UnaryOp AST node**: MISSING (unary in BinOp with right=INVALID)
+- **Chained comparisons**: UNDEFINED behavior
+- **Runtime semantics**: NONE for /, %, ^, comparisons, logic
+- **Type checking**: NONE
+- **Overflow/zero-division**: UNHANDLED
+- **Equality operator**: = used (conflicts with assign in docs)
+- **!= ASCII**: NOT SUPPORTED (only neq Unicode)
+- **== ASCII**: NOT SUPPORTED (only = Unicode)
+### True Status (No Exaggeration)
+| Component | Status |
+|---|---|
+| Lexer tokens | SYNTAX_COMPLETE |
+| Parser structure | SYNTAX_ONLY (no postfix) |
+| AST representation | HACKED (unary in BinOp) |
+| Test coverage | 58 parser tests |
+| Type checking | NOT IMPLEMENTED |
+| Runtime/evaluator | NOT IMPLEMENTED |
+| Compiler codegen | NOT IMPLEMENTED (UNCHANGED) |
+| Error semantics | NOT SPECIFIED |
+| Boolean values | NOT IMPLEMENTED |
+| Baseline (parser only) | PASS |
+### Layer Count (Honest: 9 levels)
+1. parse_expr (entry point)
+2. parse_logical_or
+3. parse_logical_and
+4. parse_comparison
+5. parse_additive
+6. parse_multiplicative
+7. parse_power (right-associative)
+8. parse_unary
+9. parse_primary
+Missing: parse_postfix (between unary and primary)
+### What Should NOT Be Claimed
+- PROVEN_FOR_SCOPE for operators without runtime
+- 8-layer hierarchy (it is 9)
+- call chaining support (parse_postfix missing)
+- type-safe unary (no type checking)
+### What Remains for Next Session
+- [ ] Add ASTNode::UnaryOp (proper variant)
+- [ ] Add parse_postfix layer
+- [ ] Decide -2^2 semantics + test
+- [ ] Add Boolean literals (true/false or top/bot)
+- [ ] Reject chained comparisons
+- [ ] Add runtime evaluator for new ops
+- [ ] Add type checker for unary distinction
+- [ ] Handle division/modulo by zero
+- [ ] Handle overflow (checked arithmetic)
+- [ ] Settle == vs = vs equiv and != vs neq
