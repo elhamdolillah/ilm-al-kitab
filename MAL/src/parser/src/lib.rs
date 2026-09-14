@@ -92,7 +92,7 @@ impl<'a> Parser<'a> {
     }
 
     fn parse_expr(&mut self, arena: &mut Arena) -> Result<NodeID, ParserError> {
-        self.parse_additive(arena)
+        self.parse_logical_or(arena)
     }
 
     fn parse_additive(&mut self, arena: &mut Arena) -> Result<NodeID, ParserError> {
@@ -122,17 +122,19 @@ impl<'a> Parser<'a> {
     fn parse_multiplicative(&mut self, arena: &mut Arena) -> Result<NodeID, ParserError> {
         let mut left = self.parse_primary(arena)?;
         while let Some(tok) = self.peek() {
-            if tok.kind == TokenKind::Mul {
-                self.bump();
-                let right = self.parse_primary(arena)?;
-                left = arena.allocate(ASTNode::BinOp {
-                    op: 2, // ·
-                    left,
-                    right,
-                })?;
-            } else {
-                break;
-            }
+            let op_code = match tok.kind {
+                TokenKind::Mul => 2,
+                TokenKind::Div => 3,
+                TokenKind::Mod => 5,
+                _ => break,
+            };
+            self.bump();
+            let right = self.parse_power(arena)?;
+            left = arena.allocate(ASTNode::BinOp {
+                op: op_code,
+                left,
+                right,
+            })?;
         }
         Ok(left)
     }
@@ -290,6 +292,107 @@ impl<'a> Parser<'a> {
         }
     }
 
+
+    /// Unary operators: - (negation), ¬ (logical NOT)
+    /// Grammar: Unary = "-" Unary | "¬" Unary | Primary
+    fn parse_unary(&mut self, arena: &mut Arena) -> Result<NodeID, ParserError> {
+        if let Some(tok) = self.peek() {
+            if tok.kind == TokenKind::Minus {
+                self.bump();
+                let operand = self.parse_unary(arena)?;
+                return Ok(arena.allocate(ASTNode::BinOp {
+                    op: 16, // unary minus
+                    left: operand,
+                    right: NodeID::INVALID,
+                })?);
+            }
+            if tok.kind == TokenKind::Not {
+                self.bump();
+                let operand = self.parse_unary(arena)?;
+                return Ok(arena.allocate(ASTNode::BinOp {
+                    op: 17, // logical NOT
+                    left: operand,
+                    right: NodeID::INVALID,
+                })?);
+            }
+        }
+        self.parse_primary(arena)
+    }
+
+    /// Power operator: ^ (right-associative)
+    /// Grammar: Power = Unary ["^" Power]
+    fn parse_power(&mut self, arena: &mut Arena) -> Result<NodeID, ParserError> {
+        let base = self.parse_unary(arena)?;
+        if self.peek().map_or(false, |t| t.kind == TokenKind::Pow) {
+            self.bump();
+            let exp = self.parse_power(arena)?; // right-associative recursion
+            Ok(arena.allocate(ASTNode::BinOp {
+                op: 6, // power
+                left: base,
+                right: exp,
+            })?)
+        } else {
+            Ok(base)
+        }
+    }
+
+    /// Comparison operators: <, >, ≤, ≥, ==, ≠
+    /// Grammar: Comparison = Additive [("<" | ">" | "≤" | "≥" | "==" | "≠") Additive]
+    fn parse_comparison(&mut self, arena: &mut Arena) -> Result<NodeID, ParserError> {
+        let left = self.parse_additive(arena)?;
+        if let Some(tok) = self.peek() {
+            let op_code = match tok.kind {
+                TokenKind::Lt => 7,
+                TokenKind::Gt => 8,
+                TokenKind::Le => 9,
+                TokenKind::Eq => 11,
+                TokenKind::Neq => 12,
+                TokenKind::Ge => 13,
+                _ => return Ok(left),
+            };
+            self.bump();
+            let right = self.parse_additive(arena)?;
+            Ok(arena.allocate(ASTNode::BinOp {
+                op: op_code,
+                left,
+                right,
+            })?)
+        } else {
+            Ok(left)
+        }
+    }
+
+    /// Logical AND: ∧ (left-associative)
+    /// Grammar: LogicalAnd = Comparison {"∧" Comparison}
+    fn parse_logical_and(&mut self, arena: &mut Arena) -> Result<NodeID, ParserError> {
+        let mut left = self.parse_comparison(arena)?;
+        while self.peek().map_or(false, |t| t.kind == TokenKind::And) {
+            self.bump();
+            let right = self.parse_comparison(arena)?;
+            left = arena.allocate(ASTNode::BinOp {
+                op: 14, // AND
+                left,
+                right,
+            })?;
+        }
+        Ok(left)
+    }
+
+    /// Logical OR: ∨ (left-associative)
+    /// Grammar: LogicalOr = LogicalAnd {"∨" LogicalAnd}
+    fn parse_logical_or(&mut self, arena: &mut Arena) -> Result<NodeID, ParserError> {
+        let mut left = self.parse_logical_and(arena)?;
+        while self.peek().map_or(false, |t| t.kind == TokenKind::Or) {
+            self.bump();
+            let right = self.parse_logical_and(arena)?;
+            left = arena.allocate(ASTNode::BinOp {
+                op: 15, // OR
+                left,
+                right,
+            })?;
+        }
+        Ok(left)
+    }
     fn parse_forall(&mut self, arena: &mut Arena) -> Result<NodeID, ParserError> {
         // ∀ already consumed by parse_primary
         let var_tok = self.bump().ok_or(ParserError::UnexpectedEof)?;
@@ -797,4 +900,291 @@ mod tests {
         // يجب أن يُبنى كـ Call مع func = Lambda
         assert!(matches!(arena.get(root).unwrap(), ASTNode::Call { .. }));
     }
+    // ═══════════════════════════════════════════════════════════════
+    // Phase 3 Tests — Unary, Power, Comparison, Logical Operators
+    // ═══════════════════════════════════════════════════════════════
+    #[test]
+    fn test_parse_unary_minus() {
+        let mut arena = Arena::new(100);
+        let root = parse("-5", &mut arena).unwrap();
+        if let ASTNode::BinOp { op, left, right } = arena.get(root).unwrap() {
+            assert_eq!(*op, 16); // unary minus
+            assert_eq!(*right, NodeID::INVALID);
+            if let ASTNode::Int(v) = arena.get(*left).unwrap() {
+                assert_eq!(*v, 5);
+            } else {
+                panic!("Expected Int for operand");
+            }
+        } else {
+            panic!("Expected BinOp for unary minus");
+        }
+    }
+    #[test]
+    fn test_parse_unary_minus_ident() {
+        let mut arena = Arena::new(100);
+        let root = parse("-س", &mut arena).unwrap();
+        assert!(matches!(arena.get(root).unwrap(), ASTNode::BinOp { op: 16, .. }));
+    }
+    #[test]
+    fn test_parse_unary_not() {
+        let mut arena = Arena::new(100);
+        let root = parse("¬P", &mut arena).unwrap();
+        if let ASTNode::BinOp { op, right, .. } = arena.get(root).unwrap() {
+            assert_eq!(*op, 17); // logical NOT
+            assert_eq!(*right, NodeID::INVALID);
+        } else {
+            panic!("Expected BinOp for logical NOT");
+        }
+    }
+    #[test]
+    fn test_parse_power() {
+        let mut arena = Arena::new(100);
+        let root = parse("2 ^ 3", &mut arena).unwrap();
+        if let ASTNode::BinOp { op, left, right } = arena.get(root).unwrap() {
+            assert_eq!(*op, 6); // power
+            if let ASTNode::Int(lv) = arena.get(*left).unwrap() {
+                assert_eq!(*lv, 2);
+            }
+            if let ASTNode::Int(rv) = arena.get(*right).unwrap() {
+                assert_eq!(*rv, 3);
+            }
+        } else {
+            panic!("Expected BinOp for power");
+        }
+    }
+    #[test]
+    fn test_parse_power_right_assoc() {
+        let mut arena = Arena::new(100);
+        // 2 ^ 3 ^ 4 should parse as 2 ^ (3 ^ 4)
+        let root = parse("2 ^ 3 ^ 4", &mut arena).unwrap();
+        if let ASTNode::BinOp { op, left, right } = arena.get(root).unwrap() {
+            assert_eq!(*op, 6);
+            if let ASTNode::Int(lv) = arena.get(*left).unwrap() {
+                assert_eq!(*lv, 2); // leftmost
+            }
+            if let ASTNode::BinOp { op: inner_op, .. } = arena.get(*right).unwrap() {
+                assert_eq!(*inner_op, 6); // right side is also power
+            } else {
+                panic!("Expected right-associative power");
+            }
+        } else {
+            panic!("Expected BinOp for power");
+        }
+    }
+    #[test]
+    fn test_parse_division() {
+        let mut arena = Arena::new(100);
+        let root = parse("10 / 2", &mut arena).unwrap();
+        if let ASTNode::BinOp { op, .. } = arena.get(root).unwrap() {
+            assert_eq!(*op, 3); // division
+        } else {
+            panic!("Expected BinOp for division");
+        }
+    }
+    #[test]
+    fn test_parse_modulo() {
+        let mut arena = Arena::new(100);
+        let root = parse("10 % 3", &mut arena).unwrap();
+        if let ASTNode::BinOp { op, .. } = arena.get(root).unwrap() {
+            assert_eq!(*op, 5); // modulo
+        } else {
+            panic!("Expected BinOp for modulo");
+        }
+    }
+    #[test]
+    fn test_parse_comparison_lt() {
+        let mut arena = Arena::new(100);
+        let root = parse("أ < ب", &mut arena).unwrap();
+        if let ASTNode::BinOp { op, .. } = arena.get(root).unwrap() {
+            assert_eq!(*op, 7); // less than
+        } else {
+            panic!("Expected BinOp for comparison");
+        }
+    }
+    #[test]
+    fn test_parse_comparison_le() {
+        let mut arena = Arena::new(100);
+        let root = parse("أ ≤ ب", &mut arena).unwrap();
+        if let ASTNode::BinOp { op, .. } = arena.get(root).unwrap() {
+            assert_eq!(*op, 9); // less than or equal
+        } else {
+            panic!("Expected BinOp for ≤");
+        }
+    }
+    #[test]
+    fn test_parse_comparison_gt() {
+        let mut arena = Arena::new(100);
+        let root = parse("أ > ب", &mut arena).unwrap();
+        if let ASTNode::BinOp { op, .. } = arena.get(root).unwrap() {
+            assert_eq!(*op, 8); // greater than
+        } else {
+            panic!("Expected BinOp for >");
+        }
+    }
+    #[test]
+    fn test_parse_comparison_ge() {
+        let mut arena = Arena::new(100);
+        let root = parse("أ ≥ ب", &mut arena).unwrap();
+        if let ASTNode::BinOp { op, .. } = arena.get(root).unwrap() {
+            assert_eq!(*op, 13); // greater than or equal
+        } else {
+            panic!("Expected BinOp for ≥");
+        }
+    }
+    #[test]
+    fn test_parse_comparison_eq() {
+        let mut arena = Arena::new(100);
+        let root = parse("أ = ب", &mut arena).unwrap();
+        if let ASTNode::BinOp { op, .. } = arena.get(root).unwrap() {
+            assert_eq!(*op, 11); // equality
+        } else {
+            panic!("Expected BinOp for =");
+        }
+    }
+    #[test]
+    fn test_parse_comparison_neq() {
+        let mut arena = Arena::new(100);
+        let root = parse("أ ≠ ب", &mut arena).unwrap();
+        if let ASTNode::BinOp { op, .. } = arena.get(root).unwrap() {
+            assert_eq!(*op, 12); // not equal
+        } else {
+            panic!("Expected BinOp for ≠");
+        }
+    }
+    #[test]
+    fn test_parse_logical_and() {
+        let mut arena = Arena::new(100);
+        let root = parse("P ∧ Q", &mut arena).unwrap();
+        if let ASTNode::BinOp { op, .. } = arena.get(root).unwrap() {
+            assert_eq!(*op, 14); // AND
+        } else {
+            panic!("Expected BinOp for ∧");
+        }
+    }
+    #[test]
+    fn test_parse_logical_or() {
+        let mut arena = Arena::new(100);
+        let root = parse("P ∨ Q", &mut arena).unwrap();
+        if let ASTNode::BinOp { op, .. } = arena.get(root).unwrap() {
+            assert_eq!(*op, 15); // OR
+        } else {
+            panic!("Expected BinOp for ∨");
+        }
+    }
+    #[test]
+    fn test_parse_and_left_assoc() {
+        let mut arena = Arena::new(100);
+        // P ∧ Q ∧ R should parse as (P ∧ Q) ∧ R
+        let root = parse("P ∧ Q ∧ R", &mut arena).unwrap();
+        if let ASTNode::BinOp { op, left, right } = arena.get(root).unwrap() {
+            assert_eq!(*op, 14);
+            assert!(matches!(arena.get(*left).unwrap(), ASTNode::BinOp { op: 14, .. }));
+        } else {
+            panic!("Expected BinOp for ∧");
+        }
+    }
+    #[test]
+    fn test_parse_precedence_mul_add() {
+        let mut arena = Arena::new(100);
+        // 2 + 3 * 4 should parse as 2 + (3 * 4)
+        let root = parse("2 + 3 * 4", &mut arena).unwrap();
+        if let ASTNode::BinOp { op, right, .. } = arena.get(root).unwrap() {
+            assert_eq!(*op, 0); // +
+            if let ASTNode::BinOp { op: inner_op, .. } = arena.get(*right).unwrap() {
+                assert_eq!(*inner_op, 2); // *
+            } else {
+                panic!("Expected * inside +");
+            }
+        } else {
+            panic!("Expected BinOp for +");
+        }
+    }
+    #[test]
+    fn test_parse_precedence_power_mul() {
+        let mut arena = Arena::new(100);
+        // 2 * 3 ^ 4 should parse as 2 * (3 ^ 4)
+        let root = parse("2 * 3 ^ 4", &mut arena).unwrap();
+        if let ASTNode::BinOp { op, right, .. } = arena.get(root).unwrap() {
+            assert_eq!(*op, 2); // *
+            if let ASTNode::BinOp { op: inner_op, .. } = arena.get(*right).unwrap() {
+                assert_eq!(*inner_op, 6); // ^
+            } else {
+                panic!("Expected ^ inside *");
+            }
+        } else {
+            panic!("Expected BinOp for *");
+        }
+    }
+    #[test]
+    fn test_parse_unary_vs_sub() {
+        let mut arena = Arena::new(100);
+        // -5 + 3 should parse as (-5) + 3
+        let root = parse("-5 + 3", &mut arena).unwrap();
+        if let ASTNode::BinOp { op, left, .. } = arena.get(root).unwrap() {
+            assert_eq!(*op, 0); // +
+            if let ASTNode::BinOp { op: inner_op, right, .. } = arena.get(*left).unwrap() {
+                assert_eq!(*inner_op, 16); // unary minus
+                assert_eq!(*right, NodeID::INVALID);
+            } else {
+                panic!("Expected unary minus inside +");
+            }
+        } else {
+            panic!("Expected BinOp for +");
+        }
+    }
+    #[test]
+    fn test_parse_logical_not_precedence() {
+        let mut arena = Arena::new(100);
+        // ¬P ∧ Q should parse as (¬P) ∧ Q
+        let root = parse("¬P ∧ Q", &mut arena).unwrap();
+        if let ASTNode::BinOp { op, left, .. } = arena.get(root).unwrap() {
+            assert_eq!(*op, 14); // AND
+            if let ASTNode::BinOp { op: inner_op, .. } = arena.get(*left).unwrap() {
+                assert_eq!(*inner_op, 17); // NOT
+            } else {
+                panic!("Expected NOT inside AND");
+            }
+        } else {
+            panic!("Expected BinOp for ∧");
+        }
+    }
+    #[test]
+    fn test_parse_comparison_vs_arithmetic() {
+        let mut arena = Arena::new(100);
+        // 1 + 2 < 3 + 4 should parse as (1+2) < (3+4)
+        let root = parse("1 + 2 < 3 + 4", &mut arena).unwrap();
+        if let ASTNode::BinOp { op, left, right } = arena.get(root).unwrap() {
+            assert_eq!(*op, 7); // <
+            assert!(matches!(arena.get(*left).unwrap(), ASTNode::BinOp { op: 0, .. }));
+            assert!(matches!(arena.get(*right).unwrap(), ASTNode::BinOp { op: 0, .. }));
+        } else {
+            panic!("Expected comparison");
+        }
+    }
+    #[test]
+    fn test_parse_complex_expression() {
+        let mut arena = Arena::new(100);
+        // ¬(a < b ∧ c) ∨ d
+        let root = parse("¬(a < b ∧ c) ∨ d", &mut arena).unwrap();
+        assert!(matches!(arena.get(root).unwrap(), ASTNode::BinOp { op: 15, .. }));
+    }
+    #[test]
+    fn test_parse_mixed_ops() {
+        let mut arena = Arena::new(100);
+        // 2 ^ 3 * 4 + 5
+        // Should parse as ((2^3)*4) + 5
+        let root = parse("2 ^ 3 * 4 + 5", &mut arena).unwrap();
+        if let ASTNode::BinOp { op, left, right } = arena.get(root).unwrap() {
+            assert_eq!(*op, 0); // +
+            if let ASTNode::BinOp { op: mul_op, .. } = arena.get(*left).unwrap() {
+                assert_eq!(*mul_op, 2); // *
+            }
+            if let ASTNode::Int(v) = arena.get(*right).unwrap() {
+                assert_eq!(*v, 5);
+            }
+        } else {
+            panic!("Expected BinOp");
+        }
+    }
+
 }

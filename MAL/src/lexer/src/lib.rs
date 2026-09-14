@@ -69,6 +69,22 @@ pub enum TokenKind {
     In,
     /// `μ`
     Mu,
+    /// `/`
+    Div,
+    /// `%`
+    Mod,
+    /// `^`
+    Pow,
+    /// `≤`
+    Le,
+    /// `≥`
+    Ge,
+    /// `¬`
+    Not,
+    /// `∧`
+    And,
+    /// `∨`
+    Or,
     /// `λ`
     Lambda,
     /// `⊸` linear implication (ownership transfer)
@@ -151,6 +167,14 @@ fn symbol_kind(c: char) -> Option<TokenKind> {
         '>' => TokenKind::Gt,
         '=' => TokenKind::Eq,
         '≠' => TokenKind::Neq,
+        '/' => TokenKind::Div,
+        '%' => TokenKind::Mod,
+        '^' => TokenKind::Pow,
+        '≤' => TokenKind::Le,
+        '≥' => TokenKind::Ge,
+        '¬' => TokenKind::Not,
+        '∧' => TokenKind::And,
+        '∨' => TokenKind::Or,
         '؟' => TokenKind::Question,
         '∀' => TokenKind::Forall,
         '∃' => TokenKind::Exists,
@@ -238,7 +262,7 @@ impl<'a> Lexer<'a> {
                 self.bump();
                 loop {
                     match self.peek() {
-                        None => return Err(LexerError::UnterminatedString { line, col }),
+        None => return Err(LexerError::UnterminatedString { line, col }),
                         Some('"') => {
                             self.bump();
                             break;
