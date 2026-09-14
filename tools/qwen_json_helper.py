@@ -22,7 +22,7 @@ if mode == "request":
         "Return EXPLANATION_BEGIN/EXPLANATION_END, then PATCH_BEGIN/PATCH_END, or NO_PATCH with a concise reason."
     )
     print(json.dumps({"model": model, "stream": False,
-        "options": {"temperature": 0.1, "num_ctx": 2048, "num_predict": 512, "top_p": 0.9},
+        "options": {"temperature": 0.1, "num_ctx": 2048, "num_predict": 512, "num_thread": 2, "top_p": 0.9},
         "messages": [
             {"role": "system", "content": "You are a fail-closed local coding agent. Work on exactly one phase. Do not invent semantics. Return a short explanation between EXPLANATION_BEGIN and EXPLANATION_END, then a unified git patch between PATCH_BEGIN and PATCH_END, or NO_PATCH if blocked. Never include shell commands, secrets, or edits outside allowed project scope."},
             {"role": "user", "content": content}
