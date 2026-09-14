@@ -38,6 +38,14 @@ pub enum ParserError {
     UnexpectedEof,
     /// Arena capacity exceeded.
     ArenaError(ArenaError),
+    /// Chained comparisons not allowed (e.g. a < b < c).
+    /// Use explicit: (a < b) ∧ (b < c)
+    ChainedComparison {
+        /// Line number.
+        line: u32,
+        /// Column number.
+        col: u32,
+    },
 }
 
 impl From<LexerError> for ParserError {
@@ -329,6 +337,8 @@ impl<'a> Parser<'a> {
 
     /// Comparison operators: <, >, ≤, ≥, ==, ≠
     /// Grammar: Comparison = Additive [("<" | ">" | "≤" | "≥" | "==" | "≠") Additive]
+    /// Chained comparisons are REJECTED (e.g. a < b < c → error).
+    /// Use explicit conjunction: (a < b) ∧ (b < c)
     fn parse_comparison(&mut self, arena: &mut Arena) -> Result<NodeID, ParserError> {
         let left = self.parse_additive(arena)?;
         if let Some(tok) = self.peek() {
@@ -341,13 +351,29 @@ impl<'a> Parser<'a> {
                 TokenKind::Ge => 13,
                 _ => return Ok(left),
             };
+            let first_op_line = tok.line;
+            let first_op_col = tok.col;
             self.bump();
             let right = self.parse_additive(arena)?;
-            Ok(arena.allocate(ASTNode::BinOp {
+            let result = arena.allocate(ASTNode::BinOp {
                 op: op_code,
                 left,
                 right,
-            })?)
+            })?;
+            // Check for chained comparison (e.g. a < b < c)
+            if let Some(next_tok) = self.peek() {
+                match next_tok.kind {
+                    TokenKind::Lt | TokenKind::Gt | TokenKind::Le
+                    | TokenKind::Eq | TokenKind::Neq | TokenKind::Ge => {
+                        return Err(ParserError::ChainedComparison {
+                            line: first_op_line,
+                            col: first_op_col,
+                        });
+                    }
+                    _ => {}
+                }
+            }
+            Ok(result)
         } else {
             Ok(left)
         }
@@ -1335,6 +1361,62 @@ mod tests {
             panic!("Expected BinOp for true ∧ false");
         }
     }
+    // ═══════════════════════════════════════════════════════════════
+    // Task 5 Tests: Reject chained comparisons
+    // ═══════════════════════════════════════════════════════════════
+    #[test]
+    fn test_parse_chained_lt_rejected() {
+        let mut arena = Arena::new(100);
+        // a < b < c should be REJECTED
+        let result = parse("a < b < c", &mut arena);
+        assert!(matches!(result, Err(ParserError::ChainedComparison { .. })));
+    }
+    #[test]
+    fn test_parse_chained_mixed_rejected() {
+        let mut arena = Arena::new(100);
+        // a < b = c should be REJECTED
+        let result = parse("a < b = c", &mut arena);
+        assert!(matches!(result, Err(ParserError::ChainedComparison { .. })));
+    }
+    #[test]
+    fn test_parse_chained_le_ge_rejected() {
+        let mut arena = Arena::new(100);
+        // a ≤ b ≥ c should be REJECTED
+        let result = parse("a ≤ b ≥ c", &mut arena);
+        assert!(matches!(result, Err(ParserError::ChainedComparison { .. })));
+    }
+    #[test]
+    fn test_parse_explicit_and_allowed() {
+        let mut arena = Arena::new(100);
+        // (a < b) ∧ (b < c) should be ALLOWED (explicit conjunction)
+        let root = parse("(a < b) ∧ (b < c)", &mut arena).unwrap();
+        // Should parse as AND of two comparisons
+        assert!(matches!(arena.get(root).unwrap(), ASTNode::BinOp { op: 14, .. }));
+    }
+    #[test]
+    fn test_parse_single_comparison_allowed() {
+        let mut arena = Arena::new(100);
+        // a < b should be ALLOWED
+        let root = parse("a < b", &mut arena).unwrap();
+        if let ASTNode::BinOp { op, .. } = arena.get(root).unwrap() {
+            assert_eq!(*op, 7); // Lt
+        } else {
+            panic!("Expected BinOp for single comparison");
+        }
+    }
+    #[test]
+    fn test_parse_comparison_then_arithmetic_allowed() {
+        let mut arena = Arena::new(100);
+        // a < b + c should be ALLOWED (not chained, + is not comparison)
+        let root = parse("a < b + c", &mut arena).unwrap();
+        if let ASTNode::BinOp { op, right, .. } = arena.get(root).unwrap() {
+            assert_eq!(*op, 7); // Lt at top
+            assert!(matches!(arena.get(*right).unwrap(), ASTNode::BinOp { op: 0, .. })); // + inside
+        } else {
+            panic!("Expected comparison with arithmetic inside");
+        }
+    }
+
 
 
 

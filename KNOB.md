@@ -1265,7 +1265,7 @@ Equivalence Classes:
 - **-2 ^ 2 semantics**: ✅ RESOLVED (mathematical convention: -(2^2) = -4)
 - **Boolean literals**: ✅ RESOLVED (true/false supported)
 - **UnaryOp AST node**: ✅ RESOLVED (proper UnaryOp variant)
-- **Chained comparisons**: UNDEFINED behavior
+- **Chained comparisons**: ✅ RESOLVED (explicitly rejected, use (a<b) ∧ (b<c))
 - **Runtime semantics**: NONE for /, %, ^, comparisons, logic
 - **Type checking**: NONE
 - **Overflow/zero-division**: UNHANDLED
@@ -1306,7 +1306,7 @@ Missing: parse_postfix (between unary and primary)
 - [x] Add parse_postfix layer - COMPLETED
 - [x] Decide -2^2 semantics + test - COMPLETED (mathematical convention: -(2^2))
 - [x] Add Boolean literals (true/false or top/bot) - COMPLETED (true/false)
-- [ ] Reject chained comparisons
+- [x] Reject chained comparisons - COMPLETED
 - [ ] Add runtime evaluator for new ops
 - [ ] Add type checker for unary distinction
 - [ ] Handle division/modulo by zero
