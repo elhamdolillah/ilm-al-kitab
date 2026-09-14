@@ -221,6 +221,12 @@ impl<'a> Parser<'a> {
     fn parse_primary(&mut self, arena: &mut Arena) -> Result<NodeID, ParserError> {
         let tok = self.bump().ok_or(ParserError::UnexpectedEof)?;
         match tok.kind {
+            TokenKind::TrueLit => {
+                Ok(arena.allocate(ASTNode::BoolLit(true))?)
+            }
+            TokenKind::FalseLit => {
+                Ok(arena.allocate(ASTNode::BoolLit(false))?)
+            }
             TokenKind::Lambda => {
                 self.pos -= 1; // backtrack λ consumed above
                 self.parse_lambda(arena)
@@ -290,7 +296,7 @@ impl<'a> Parser<'a> {
                 })?);
             }
         }
-        self.parse_postfix(arena)
+        self.parse_power(arena)
     }
 
     /// Postfix operators: function call chaining.
@@ -307,7 +313,7 @@ impl<'a> Parser<'a> {
     /// Power operator: ^ (right-associative)
     /// Grammar: Power = Unary ["^" Power]
     fn parse_power(&mut self, arena: &mut Arena) -> Result<NodeID, ParserError> {
-        let base = self.parse_unary(arena)?;
+        let base = self.parse_postfix(arena)?;
         if self.peek().map_or(false, |t| t.kind == TokenKind::Pow) {
             self.bump();
             let exp = self.parse_power(arena)?; // right-associative recursion
@@ -1251,6 +1257,85 @@ mod tests {
             panic!("Expected outer Call");
         }
     }
+    // ═══════════════════════════════════════════════════════════════
+    // Task 3 Tests: -2^2 semantics (mathematical convention)
+    // ═══════════════════════════════════════════════════════════════
+    #[test]
+    fn test_parse_unary_power_math_convention() {
+        let mut arena = Arena::new(100);
+        // -2^2 should parse as -(2^2) = -4 (mathematical convention)
+        // AST: UnaryOp { op: 16, expr: BinOp { op: 6, left: 2, right: 2 } }
+        let root = parse("-2 ^ 2", &mut arena).unwrap();
+        if let ASTNode::UnaryOp { op, expr } = arena.get(root).unwrap() {
+            assert_eq!(*op, 16); // unary minus
+            if let ASTNode::BinOp { op: pow_op, left, right } = arena.get(*expr).unwrap() {
+                assert_eq!(*pow_op, 6); // power
+                if let ASTNode::Int(v) = arena.get(*left).unwrap() {
+                    assert_eq!(*v, 2);
+                }
+                if let ASTNode::Int(v) = arena.get(*right).unwrap() {
+                    assert_eq!(*v, 2);
+                }
+            } else {
+                panic!("Expected power inside unary minus");
+            }
+        } else {
+            panic!("Expected UnaryOp for -2^2");
+        }
+    }
+    #[test]
+    fn test_parse_power_right_assoc_three() {
+        let mut arena = Arena::new(100);
+        // 2^3^2 should parse as 2^(3^2) = 512 (right-associative)
+        let root = parse("2 ^ 3 ^ 2", &mut arena).unwrap();
+        if let ASTNode::BinOp { op, left, right } = arena.get(root).unwrap() {
+            assert_eq!(*op, 6); // power
+            if let ASTNode::Int(v) = arena.get(*left).unwrap() {
+                assert_eq!(*v, 2); // leftmost
+            }
+            if let ASTNode::BinOp { op: inner_op, .. } = arena.get(*right).unwrap() {
+                assert_eq!(*inner_op, 6); // right side is also power
+            } else {
+                panic!("Expected right-associative power");
+            }
+        } else {
+            panic!("Expected power");
+        }
+    }
+    #[test]
+    fn test_parse_bool_literal_true() {
+        let mut arena = Arena::new(100);
+        let root = parse("true", &mut arena).unwrap();
+        if let ASTNode::BoolLit(v) = arena.get(root).unwrap() {
+            assert_eq!(*v, true);
+        } else {
+            panic!("Expected BoolLit(true)");
+        }
+    }
+    #[test]
+    fn test_parse_bool_literal_false() {
+        let mut arena = Arena::new(100);
+        let root = parse("false", &mut arena).unwrap();
+        if let ASTNode::BoolLit(v) = arena.get(root).unwrap() {
+            assert_eq!(*v, false);
+        } else {
+            panic!("Expected BoolLit(false)");
+        }
+    }
+    #[test]
+    fn test_parse_bool_in_expression() {
+        let mut arena = Arena::new(100);
+        // true ∧ false should parse correctly
+        let root = parse("true ∧ false", &mut arena).unwrap();
+        if let ASTNode::BinOp { op, left, right } = arena.get(root).unwrap() {
+            assert_eq!(*op, 14); // AND
+            assert!(matches!(arena.get(*left).unwrap(), ASTNode::BoolLit(true)));
+            assert!(matches!(arena.get(*right).unwrap(), ASTNode::BoolLit(false)));
+        } else {
+            panic!("Expected BinOp for true ∧ false");
+        }
+    }
+
 
 
 }

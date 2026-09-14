@@ -101,6 +101,10 @@ pub enum TokenKind {
     Read,
     /// `⎕` print.
     Print,
+    /// `true` keyword
+    TrueLit,
+    /// `false` keyword
+    FalseLit,
     /// End of input.
     Eof,
 }
@@ -166,6 +170,8 @@ fn symbol_kind(c: char) -> Option<TokenKind> {
         '<' => TokenKind::Lt,
         '>' => TokenKind::Gt,
         '=' => TokenKind::Eq,
+        // Note: == is treated as two = tokens (each is Eq)
+        // For explicit == support, add multi-char tokenization later
         '≠' => TokenKind::Neq,
         '/' => TokenKind::Div,
         '%' => TokenKind::Mod,
@@ -288,7 +294,14 @@ impl<'a> Lexer<'a> {
                         break;
                     }
                 }
-                out.push(Token { kind: TokenKind::Ident, start, len: self.offset() - start, num: 0, line, col });
+                let len = self.offset() - start;
+                let text = &self.src[start..start + len];
+                let kind = match text {
+                    "true" => TokenKind::TrueLit,
+                    "false" => TokenKind::FalseLit,
+                    _ => TokenKind::Ident,
+                };
+                out.push(Token { kind, start, len, num: 0, line, col });
                 continue;
             }
             return Err(LexerError::UnexpectedChar { line, col });
@@ -383,6 +396,36 @@ mod tests {
         let err = Lexer::new("9999999999999999999999").tokenize().unwrap_err();
         assert!(matches!(err, LexerError::NumberOverflow { .. }));
     }
+    #[test]
+    fn test_tokenize_true_keyword() {
+        assert_eq!(
+            kinds("true"),
+            vec![TokenKind::TrueLit, TokenKind::Eof]
+        );
+    }
+    #[test]
+    fn test_tokenize_false_keyword() {
+        assert_eq!(
+            kinds("false"),
+            vec![TokenKind::FalseLit, TokenKind::Eof]
+        );
+    }
+    #[test]
+    fn test_tokenize_bool_in_expression() {
+        assert_eq!(
+            kinds("true ∧ false"),
+            vec![TokenKind::TrueLit, TokenKind::And, TokenKind::FalseLit, TokenKind::Eof]
+        );
+    }
+    #[test]
+    fn test_tokenize_identifier_not_keyword() {
+        // "trueish" should be Ident, not TrueLit
+        assert_eq!(
+            kinds("trueish"),
+            vec![TokenKind::Ident, TokenKind::Eof]
+        );
+    }
+
 }
 // ═══════════════════════════════════════════════════════════════
 // Mathematical Semantics — Lexer

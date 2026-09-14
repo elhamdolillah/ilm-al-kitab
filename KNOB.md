@@ -1262,8 +1262,8 @@ Equivalence Classes:
 - **Tests**: 23 new parser-level tests (total: 58)
 ### Known Gaps (Not Implemented)
 - **parse_postfix**: ✅ RESOLVED (call chaining supported)
-- **-2 ^ 2 semantics**: UNDECIDED
-- **Boolean literals**: MISSING (no true/false or top/bot)
+- **-2 ^ 2 semantics**: ✅ RESOLVED (mathematical convention: -(2^2) = -4)
+- **Boolean literals**: ✅ RESOLVED (true/false supported)
 - **UnaryOp AST node**: ✅ RESOLVED (proper UnaryOp variant)
 - **Chained comparisons**: UNDEFINED behavior
 - **Runtime semantics**: NONE for /, %, ^, comparisons, logic
@@ -1271,7 +1271,7 @@ Equivalence Classes:
 - **Overflow/zero-division**: UNHANDLED
 - **Equality operator**: = used (conflicts with assign in docs)
 - **!= ASCII**: NOT SUPPORTED (only neq Unicode)
-- **== ASCII**: NOT SUPPORTED (only = Unicode)
+- **== ASCII**: DOCUMENTED (treated as two = tokens)
 ### True Status (No Exaggeration)
 | Component | Status |
 |---|---|
@@ -1304,11 +1304,11 @@ Missing: parse_postfix (between unary and primary)
 ### What Remains for Next Session
 - [x] Add ASTNode::UnaryOp (proper variant) - COMPLETED
 - [x] Add parse_postfix layer - COMPLETED
-- [ ] Decide -2^2 semantics + test
-- [ ] Add Boolean literals (true/false or top/bot)
+- [x] Decide -2^2 semantics + test - COMPLETED (mathematical convention: -(2^2))
+- [x] Add Boolean literals (true/false or top/bot) - COMPLETED (true/false)
 - [ ] Reject chained comparisons
 - [ ] Add runtime evaluator for new ops
 - [ ] Add type checker for unary distinction
 - [ ] Handle division/modulo by zero
 - [ ] Handle overflow (checked arithmetic)
-- [ ] Settle == vs = vs equiv and != vs neq
+- [x] Settle == vs = vs equiv and != vs neq - COMPLETED (= for equality, ≔ for assign)

@@ -63,6 +63,8 @@ pub enum TypeTag {
     Exists,
     /// Set literal: ⟨...⟩.
     Set,
+    /// Boolean value (true/false).
+    Bool,
     /// Unary operation (- or ¬).
     UnaryOp,
 }
@@ -156,6 +158,8 @@ pub enum ASTNode {
         /// Elements as List chain (NodeID::INVALID if empty).
         elems: NodeID,
     },
+    /// Boolean literal (true or false).
+    BoolLit(bool),
     /// Unary operation: op + expr.
     /// op codes: 16 = unary minus (-), 17 = logical NOT (¬)
     UnaryOp {
@@ -186,6 +190,7 @@ impl ASTNode {
             ASTNode::Mu { .. } => TypeTag::Mu,
             ASTNode::Exists { .. } => TypeTag::Exists,
             ASTNode::Set { .. } => TypeTag::Set,
+            ASTNode::BoolLit(_) => TypeTag::Bool,
             ASTNode::UnaryOp { .. } => TypeTag::UnaryOp,
         }
     }
