@@ -69,6 +69,62 @@ pub enum TypeTag {
     UnaryOp,
 }
 
+/// Binary operator (type-safe, no magic numbers).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum BinaryOp {
+    // Arithmetic
+    Add, Sub, Mul, Div, Mod, Pow, Concat,
+    // Comparison
+    Lt, Gt, Le, Ge, Eq, Neq,
+    // Logical
+    And, Or,
+    // Assignment
+    Assign,
+}
+/// Unary operator (type-safe, no magic numbers).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum UnaryOp {
+    Neg, Not,
+}
+/// Relational algebra operator (for SQL-like queries).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum RelOp {
+    Select, Project, Rename, Join, CrossProduct,
+    Union, Intersect, Difference, Divide,
+    Group, Sort,
+}
+/// Three-valued logic for SQL NULL semantics.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Truth3 {
+    True, False, Unknown,
+}
+/// SQL-like value with NULL support.
+#[derive(Debug, Clone, PartialEq)]
+pub enum SqlValue {
+    Int(i64),
+    Bool(Truth3),
+    Text(String),
+    Null,
+}
+/// Source location for diagnostics.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct SourceSpan {
+    pub line: u32,
+    pub col: u32,
+    pub len: u16,
+}
+/// Placeholder for future query IR nodes.
+#[derive(Debug, Clone, PartialEq)]
+pub enum QueryNode {
+    Placeholder,
+}
+/// Feature support status.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum SupportStatus {
+    Implemented,
+    ParseOnly,
+    Reserved,
+}
 /// AST node with inline payload (no heap allocation per node).
 #[derive(Debug, Clone)]
 pub enum ASTNode {
@@ -84,8 +140,8 @@ pub enum ASTNode {
     Ident(u32),
     /// Binary operation: op + left + right.
     BinOp {
-        /// Operator code (0=+, 1=-, 2=·, 3=÷, etc.).
-        op: u8,
+        /// Operator (type-safe enum).
+        op: BinaryOp,
         /// Left operand node.
         left: NodeID,
         /// Right operand node.
@@ -161,10 +217,9 @@ pub enum ASTNode {
     /// Boolean literal (true or false).
     BoolLit(bool),
     /// Unary operation: op + expr.
-    /// op codes: 16 = unary minus (-), 17 = logical NOT (¬)
     UnaryOp {
-        /// Operator code (16 = neg, 17 = not).
-        op: u8,
+        /// Operator (type-safe enum).
+        op: UnaryOp,
         /// Operand expression node.
         expr: NodeID,
     },

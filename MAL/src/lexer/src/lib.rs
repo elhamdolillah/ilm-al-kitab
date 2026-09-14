@@ -105,6 +105,107 @@ pub enum TokenKind {
     TrueLit,
     /// `false` keyword
     FalseLit,
+    // ═══ Relational Algebra Operators (SQL-like queries) ═══
+    /// `σ` selection/filter
+    Sigma,
+    /// `π` projection
+    Pi,
+    /// `ρ` rename
+    Rho,
+    /// `γ` grouping/aggregation
+    Gamma,
+    /// `τ` sorting
+    Tau,
+    /// `⋈` join (natural/theta)
+    Bowtie,
+    /// `⟕` left outer join
+    LeftOuterJoin,
+    /// `⟖` right outer join
+    RightOuterJoin,
+    /// `⟗` full outer join
+    FullOuterJoin,
+    /// `⋉` left semi join
+    LeftSemiJoin,
+    /// `⋊` right semi join
+    RightSemiJoin,
+    /// `▷` anti join
+    AntiJoin,
+    // ═══ SQL Keywords (reserved for future use) ═══
+    /// `SELECT`
+    Select,
+    /// `FROM`
+    From,
+    /// `WHERE`
+    Where,
+    /// `JOIN`
+    Join,
+    /// `ON`
+    On,
+    /// `LEFT`
+    Left,
+    /// `RIGHT`
+    Right,
+    /// `FULL`
+    Full,
+    /// `INNER`
+    Inner,
+    /// `OUTER`
+    Outer,
+    /// `CROSS`
+    Cross,
+    /// `NATURAL`
+    Natural,
+    /// `AS`
+    As,
+    /// `DISTINCT`
+    Distinct,
+    /// `ALL`
+    All,
+    /// `GROUP`
+    Group,
+    /// `BY`
+    By,
+    /// `HAVING`
+    Having,
+    /// `ORDER`
+    Order,
+    /// `LIMIT`
+    Limit,
+    /// `OFFSET`
+    Offset,
+    /// `ASC`
+    Asc,
+    /// `DESC`
+    Desc,
+    /// `NULL`
+    Null,
+    /// `IS`
+    Is,
+    /// `EXISTS`
+    ExistsSql,
+    /// `IN`
+    In,
+    /// `ANY`
+    Any,
+    /// `CASE`
+    Case,
+    /// `WHEN`
+    When,
+    /// `THEN`
+    Then,
+    /// `ELSE`
+    Else,
+    /// `END`
+    End,
+    /// `UNION`
+    UnionSql,
+    /// `INTERSECT`
+    IntersectSql,
+    /// `EXCEPT`
+    ExceptSql,
+    // ═══ Three-valued logic ═══
+    /// `UNKNOWN` (for NULL semantics)
+    Unknown,
     /// End of input.
     Eof,
 }
@@ -193,6 +294,19 @@ fn symbol_kind(c: char) -> Option<TokenKind> {
         '⊸' => TokenKind::LinearImplication,
         '⊙' => TokenKind::Read,
         '⎕' => TokenKind::Print,
+        // ═══ Relational Algebra Operators (SQL-like queries) ═══
+        'σ' => TokenKind::Sigma,
+        'π' => TokenKind::Pi,
+        'ρ' => TokenKind::Rho,
+        'γ' => TokenKind::Gamma,
+        'τ' => TokenKind::Tau,
+        '⋈' => TokenKind::Bowtie,
+        '⟕' => TokenKind::LeftOuterJoin,
+        '⟖' => TokenKind::RightOuterJoin,
+        '⟗' => TokenKind::FullOuterJoin,
+        '⋉' => TokenKind::LeftSemiJoin,
+        '⋊' => TokenKind::RightSemiJoin,
+        '▷' => TokenKind::AntiJoin,
         _ => return None,
     })
 }
@@ -299,6 +413,45 @@ impl<'a> Lexer<'a> {
                 let kind = match text {
                     "true" => TokenKind::TrueLit,
                     "false" => TokenKind::FalseLit,
+                    // Three-valued logic
+                    "unknown" | "UNKNOWN" => TokenKind::Unknown,
+                    // SQL keywords (reserved, case-insensitive)
+                    "select" | "SELECT" => TokenKind::Select,
+                    "from" | "FROM" => TokenKind::From,
+                    "where" | "WHERE" => TokenKind::Where,
+                    "join" | "JOIN" => TokenKind::Join,
+                    "on" | "ON" => TokenKind::On,
+                    "left" | "LEFT" => TokenKind::Left,
+                    "right" | "RIGHT" => TokenKind::Right,
+                    "full" | "FULL" => TokenKind::Full,
+                    "inner" | "INNER" => TokenKind::Inner,
+                    "outer" | "OUTER" => TokenKind::Outer,
+                    "cross" | "CROSS" => TokenKind::Cross,
+                    "natural" | "NATURAL" => TokenKind::Natural,
+                    "as" | "AS" => TokenKind::As,
+                    "distinct" | "DISTINCT" => TokenKind::Distinct,
+                    "all" | "ALL" => TokenKind::All,
+                    "group" | "GROUP" => TokenKind::Group,
+                    "by" | "BY" => TokenKind::By,
+                    "having" | "HAVING" => TokenKind::Having,
+                    "order" | "ORDER" => TokenKind::Order,
+                    "limit" | "LIMIT" => TokenKind::Limit,
+                    "offset" | "OFFSET" => TokenKind::Offset,
+                    "asc" | "ASC" => TokenKind::Asc,
+                    "desc" | "DESC" => TokenKind::Desc,
+                    "null" | "NULL" => TokenKind::Null,
+                    "is" | "IS" => TokenKind::Is,
+                    "exists" | "EXISTS" => TokenKind::ExistsSql,
+                    "in" | "IN" => TokenKind::In,
+                    "any" | "ANY" => TokenKind::Any,
+                    "case" | "CASE" => TokenKind::Case,
+                    "when" | "WHEN" => TokenKind::When,
+                    "then" | "THEN" => TokenKind::Then,
+                    "else" | "ELSE" => TokenKind::Else,
+                    "end" | "END" => TokenKind::End,
+                    "union" | "UNION" => TokenKind::UnionSql,
+                    "intersect" | "INTERSECT" => TokenKind::IntersectSql,
+                    "except" | "EXCEPT" => TokenKind::ExceptSql,
                     _ => TokenKind::Ident,
                 };
                 out.push(Token { kind, start, len, num: 0, line, col });
