@@ -1251,3 +1251,76 @@ Equivalence Classes:
 - [P] = {Q ∣ Q ≡ P}
 - ∀ P₁, P₂: [P₁] = [P₂] ∨ [P₁] ∩ [P₂] = ∅
 - ∀ P: P ∈ [P]
+---
+## Parser Precedence Refactor — Completed 2026-09-14
+### Commit
+`73d3326` — feat(parser): Add operator precedence layers and new operators
+### Changes Summary
+- **Lexer**: Added 8 new tokens (Div, Mod, Pow, Le, Ge, Not, And, Or)
+- **Parser**: Restructured into 8-layer precedence hierarchy
+- **Parser**: Added 5 new parse functions
+- **Tests**: Added 23 new tests (total: 58)
+- **Files changed**: 3 (+443 lines, -13 lines)
+### Precedence Hierarchy
+
+---
+## Parser Precedence Refactor — Completed 2026-09-14
+### Commit
+`73d3326` — feat(parser): Add operator precedence layers and new operators
+### Changes Summary
+- **Lexer**: Added 8 new tokens (Div, Mod, Pow, Le, Ge, Not, And, Or)
+- **Parser**: Restructured into 8-layer precedence hierarchy
+- **Parser**: Added 5 new parse functions
+- **Tests**: Added 23 new tests (total: 58)
+- **Files changed**: 3 (+443 lines, -13 lines)
+### Precedence Hierarchy
+parse_expr → parse_logical_or → parse_logical_and → parse_comparison
+→ parse_additive → parse_multiplicative → parse_power → parse_unary → parse_primary
+### New Tokens (Lexer)
+- Div (/), Mod (%), Pow (^)
+- Le (≤), Ge (≥)
+- Not (¬), And (∧), Or (∨)
+### New Parse Functions (5)
+- parse_unary: unary minus (-x), logical NOT (¬P)
+- parse_power: right-associative power (^)
+- parse_comparison: <, >, ≤, ≥, =, ≠
+- parse_logical_and: ∧ (left-associative)
+- parse_logical_or: ∨ (left-associative)
+### Modified Functions
+- parse_multiplicative: now supports ·, *, /, %
+- parse_expr: now calls parse_logical_or (was parse_additive)
+### Operator Codes (BinOp.op)
+| Code | Operator | Type |
+|---|---|---|
+| 0 | Add (+) | Binary |
+| 1 | Sub (-) | Binary |
+| 2 | Mul (·) | Binary |
+| 3 | Div (/) | Binary |
+| 4 | Concat (⊕) | Binary |
+| 5 | Mod (%) | Binary |
+| 6 | Pow (^) | Binary (right-associative) |
+| 7 | Lt (<) | Comparison |
+| 8 | Gt (>) | Comparison |
+| 9 | Le (≤) | Comparison |
+| 10 | Assign (≔) | Assignment |
+| 11 | Eq (=) | Comparison |
+| 12 | Neq (≠) | Comparison |
+| 13 | Ge (≥) | Comparison |
+| 14 | And (∧) | Logical |
+| 15 | Or (∨) | Logical |
+| 16 | UnaryMinus (-) | Unary |
+| 17 | LogicalNot (¬) | Unary |
+### Test Coverage (58 total)
+- Unary operators: 3 tests
+- Power operator: 2 tests
+- Division/Modulo: 2 tests
+- Comparisons: 6 tests
+- Logical AND/OR: 3 tests
+- Precedence verification: 5 tests
+- Complex expressions: 2 tests
+### Status
+- Parser restructure: PROVEN_FOR_SCOPE
+- New operators: PROVEN_FOR_SCOPE
+- Tests: 58 total (23 new)
+- MAL Compiler: UNCHANGED
+- Baseline: UNTOUCHED
