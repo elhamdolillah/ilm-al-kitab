@@ -2,7 +2,7 @@
 set -euo pipefail
 
 ROOT="/root/ilm-al-kitab"
-MODEL="${QWEN_MODEL:-hermes-qwen-code:latest}"
+MODEL="${QWEN_MODEL:-qwen2.5-coder:1.5b-instruct}"
 PHASE_FILE="${1:-$ROOT/TASKS/ACTIVE/SYMBOLS_NEXT.md}"
 PLAN_FILE="${QWEN_PLAN_FILE:-$ROOT/QWEN_REMAINING_PHASES.md}"
 RUN_ID="$(date -u +%Y%m%d_%H%M%S)"
@@ -28,7 +28,7 @@ else
   echo "CHAT_API_FAILED: using ollama CLI fallback" >"$RUN_DIR/qwen-api-fallback.txt"
   QWEN_ROOT="$ROOT" QWEN_PHASE="$PHASE_FILE" QWEN_PLAN="$PLAN_FILE" \
     python3 "$ROOT/tools/qwen_json_helper.py" prompt >"$RUN_DIR/prompt.txt"
-  timeout 180 ollama run "$MODEL" "$(cat "$RUN_DIR/prompt.txt")" >"$RUN_DIR/qwen.txt" 2>"$RUN_DIR/ollama.stderr" || fail "both chat API and ollama CLI failed"
+  timeout 240 ollama run "$MODEL" "$(cat "$RUN_DIR/prompt.txt")" >"$RUN_DIR/qwen.txt" 2>"$RUN_DIR/ollama.stderr" || fail "both chat API and ollama CLI failed"
 fi
 if grep -q '^NO_PATCH' "$RUN_DIR/qwen.txt"; then
   cp "$RUN_DIR/qwen.txt" "$ROOT/TASKS/ACTIVE/PHASE-BLOCKED.md"
@@ -36,6 +36,7 @@ if grep -q '^NO_PATCH' "$RUN_DIR/qwen.txt"; then
   exit 0
 fi
 awk '/PATCH_BEGIN/{flag=1;next}/PATCH_END/{flag=0}flag' "$RUN_DIR/qwen.txt" >"$RUN_DIR/change.patch"
+awk '/EXPLANATION_BEGIN/{flag=1;next}/EXPLANATION_END/{flag=0}flag' "$RUN_DIR/qwen.txt" >"$RUN_DIR/explanation.txt"
 [ -s "$RUN_DIR/change.patch" ] || fail "Qwen returned no valid patch"
 if grep -E '(^|/)(\.git|\.github|\.ssh|AGENT_CONTRACT\.md|\.qwen_autotest/run_all_tests\.sh)(/|$)' "$RUN_DIR/change.patch" >/dev/null; then fail "forbidden path in patch"; fi
 git apply --check "$RUN_DIR/change.patch" || fail "patch does not apply cleanly"
