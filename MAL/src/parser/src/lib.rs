@@ -180,6 +180,44 @@ impl<'a> Parser<'a> {
         })?)
     }
 
+    /// Parse function call arguments: (expr, expr, ...)
+    /// Assumes '(' already consumed. Returns NodeID for args list or INVALID if empty.
+    fn parse_call_args(&mut self, arena: &mut Arena) -> Result<NodeID, ParserError> {
+        let mut args = Vec::new();
+        while self.peek().map_or(false, |t| t.kind != TokenKind::RParen) {
+            args.push(self.parse_expr(arena)?);
+            if self.peek().map_or(false, |t| t.kind == TokenKind::Comma) {
+                self.bump();
+            } else {
+                break;
+            }
+        }
+        self.expect(TokenKind::RParen)?;
+        if args.is_empty() {
+            Ok(NodeID::INVALID)
+        } else if args.len() == 1 {
+            Ok(args[0])
+        } else {
+            let mut list = arena.allocate(ASTNode::List {
+                head: args[args.len() - 1],
+                tail: NodeID::INVALID,
+            })?;
+            for i in (0..args.len() - 1).rev() {
+                list = arena.allocate(ASTNode::List {
+                    head: args[i],
+                    tail: list,
+                })?;
+            }
+            Ok(list)
+        }
+    }
+    /// Build a Call node from a function expression and consume (args).
+    /// Assumes next token is '('.
+    fn make_call_node(&mut self, arena: &mut Arena, func: NodeID) -> Result<NodeID, ParserError> {
+        self.bump(); // consume (
+        let args = self.parse_call_args(arena)?;
+        Ok(arena.allocate(ASTNode::Call { func, args })?)
+    }
     fn parse_primary(&mut self, arena: &mut Arena) -> Result<NodeID, ParserError> {
         let tok = self.bump().ok_or(ParserError::UnexpectedEof)?;
         match tok.kind {
@@ -191,76 +229,14 @@ impl<'a> Parser<'a> {
                 Ok(arena.allocate(ASTNode::Int(tok.num))?)
             }
             TokenKind::Ident => {
-                // Check if it's a function call
-                if self.peek().map_or(false, |t| t.kind == TokenKind::LParen) {
-                    self.bump(); // consume (
-                    let mut args = Vec::new();
-                    while self.peek().map_or(false, |t| t.kind != TokenKind::RParen) {
-                        args.push(self.parse_expr(arena)?);
-                        if self.peek().map_or(false, |t| t.kind == TokenKind::Comma) {
-                            self.bump();
-                        } else {
-                            break;
-                        }
-                    }
-                    self.expect(TokenKind::RParen)?;
-                    // Build argument list as linked list
-                    let args_node = if args.is_empty() {
-                        NodeID::INVALID
-                    } else {
-                        let mut list = arena.allocate(ASTNode::List {
-                            head: args[args.len() - 1],
-                            tail: NodeID::INVALID,
-                        })?;
-                        for i in (0..args.len() - 1).rev() {
-                            list = arena.allocate(ASTNode::List {
-                                head: args[i],
-                                tail: list,
-                            })?;
-                        }
-                        list
-                    };
-                    // Function name as identifier
-                    let _func_name = &self.src[tok.start as usize..(tok.start + tok.len) as usize];
-                    let func_str_idx = arena.allocate(ASTNode::Str(0))?; // placeholder
-                    Ok(arena.allocate(ASTNode::Call {
-                        func: func_str_idx,
-                        args: args_node,
-                    })?)
-                } else {
-                    // Plain identifier
-                    let _name = &self.src[tok.start as usize..(tok.start + tok.len) as usize];
-                    Ok(arena.allocate(ASTNode::Ident(0))?) // placeholder
-                }
+                // Plain identifier (call logic moved to parse_postfix)
+                let _name = &self.src[tok.start as usize..(tok.start + tok.len) as usize];
+                Ok(arena.allocate(ASTNode::Ident(0))?) // placeholder
             }
             TokenKind::LParen => {
-                let mut expr = self.parse_expr(arena)?;
+                // Grouped expression (call chaining moved to parse_postfix)
+                let expr = self.parse_expr(arena)?;
                 self.expect(TokenKind::RParen)?;
-                while self.peek().map_or(false, |t| t.kind == TokenKind::LParen) {
-                    self.bump();
-                    let mut args = Vec::new();
-                    while !self.peek().map_or(false, |t| t.kind == TokenKind::RParen) {
-                        args.push(self.parse_expr(arena)?);
-                        if self.peek().map_or(false, |t| t.kind == TokenKind::Comma) {
-                            self.bump();
-                        } else {
-                            break;
-                        }
-                    }
-                    self.expect(TokenKind::RParen)?;
-                    let args_node = if args.is_empty() {
-                        NodeID::INVALID
-                    } else if args.len() == 1 {
-                        args[0]
-                    } else {
-                        let mut list = arena.allocate(ASTNode::List { head: args[args.len() - 1], tail: NodeID::INVALID })?;
-                        for i in (0..args.len() - 1).rev() {
-                            list = arena.allocate(ASTNode::List { head: args[i], tail: list })?;
-                        }
-                        list
-                    };
-                    expr = arena.allocate(ASTNode::Call { func: expr, args: args_node })?;
-                }
                 Ok(expr)
             }
             TokenKind::Forall => {
@@ -314,7 +290,18 @@ impl<'a> Parser<'a> {
                 })?);
             }
         }
-        self.parse_primary(arena)
+        self.parse_postfix(arena)
+    }
+
+    /// Postfix operators: function call chaining.
+    /// Grammar: Postfix = Primary { "(" args ")" }
+    /// This allows: f(x), (f)(x), f(x)(y), (λx.x+1)(5)
+    fn parse_postfix(&mut self, arena: &mut Arena) -> Result<NodeID, ParserError> {
+        let mut expr = self.parse_primary(arena)?;
+        while self.peek().map_or(false, |t| t.kind == TokenKind::LParen) {
+            expr = self.make_call_node(arena, expr)?;
+        }
+        Ok(expr)
     }
 
     /// Power operator: ^ (right-associative)
@@ -1181,5 +1168,89 @@ mod tests {
             panic!("Expected BinOp");
         }
     }
+    // ═══════════════════════════════════════════════════════════════
+    // Phase 2.2 Tests — parse_postfix (call chaining)
+    // ═══════════════════════════════════════════════════════════════
+    #[test]
+    fn test_parse_postfix_ident_call() {
+        let mut arena = Arena::new(100);
+        // f(x) should parse as Call { func: Ident, args: Ident }
+        let root = parse("f(x)", &mut arena).unwrap();
+        if let ASTNode::Call { func, args } = arena.get(root).unwrap() {
+            assert!(matches!(arena.get(*func).unwrap(), ASTNode::Ident(_)));
+            assert!(matches!(arena.get(*args).unwrap(), ASTNode::Ident(_)));
+        } else {
+            panic!("Expected Call for f(x)");
+        }
+    }
+    #[test]
+    fn test_parse_postfix_grouped_call() {
+        let mut arena = Arena::new(100);
+        // (f)(x) should parse as Call { func: Ident, args: Ident }
+        let root = parse("(f)(x)", &mut arena).unwrap();
+        if let ASTNode::Call { func, args } = arena.get(root).unwrap() {
+            assert!(matches!(arena.get(*func).unwrap(), ASTNode::Ident(_)));
+            assert!(matches!(arena.get(*args).unwrap(), ASTNode::Ident(_)));
+        } else {
+            panic!("Expected Call for (f)(x)");
+        }
+    }
+    #[test]
+    fn test_parse_postfix_chain() {
+        let mut arena = Arena::new(100);
+        // f(x)(y) should parse as Call { func: Call, args: y } (left-associative)
+        let root = parse("f(x)(y)", &mut arena).unwrap();
+        if let ASTNode::Call { func, args } = arena.get(root).unwrap() {
+            // Outer call's args should be y (Ident)
+            assert!(matches!(arena.get(*args).unwrap(), ASTNode::Ident(_)));
+            // Outer call's func should be another Call
+            if let ASTNode::Call { func: inner_func, .. } = arena.get(*func).unwrap() {
+                assert!(matches!(arena.get(*inner_func).unwrap(), ASTNode::Ident(_)));
+            } else {
+                panic!("Expected inner Call for f(x)(y)");
+            }
+        } else {
+            panic!("Expected Call for f(x)(y)");
+        }
+    }
+    #[test]
+    fn test_parse_postfix_complex_expr_call() {
+        let mut arena = Arena::new(100);
+        // (f + g)(x) should parse as Call { func: BinOp(+), args: x }
+        let root = parse("(f + g)(x)", &mut arena).unwrap();
+        if let ASTNode::Call { func, args } = arena.get(root).unwrap() {
+            assert!(matches!(arena.get(*func).unwrap(), ASTNode::BinOp { op: 0, .. }));
+            assert!(matches!(arena.get(*args).unwrap(), ASTNode::Ident(_)));
+        } else {
+            panic!("Expected Call for (f + g)(x)");
+        }
+    }
+    #[test]
+    fn test_parse_postfix_chain_three() {
+        let mut arena = Arena::new(100);
+        // f(1)(2)(3) should be left-associative: ((f(1))(2))(3)
+        let root = parse("f(1)(2)(3)", &mut arena).unwrap();
+        // Outer: Call { func: Call(f(1)(2)), args: 3 }
+        if let ASTNode::Call { func: outer_func, args: outer_args } = arena.get(root).unwrap() {
+            if let ASTNode::Int(v) = arena.get(*outer_args).unwrap() {
+                assert_eq!(*v, 3);
+            }
+            if let ASTNode::Call { func: mid_func, args: mid_args } = arena.get(*outer_func).unwrap() {
+                if let ASTNode::Int(v) = arena.get(*mid_args).unwrap() {
+                    assert_eq!(*v, 2);
+                }
+                if let ASTNode::Call { .. } = arena.get(*mid_func).unwrap() {
+                    // inner-most call f(1) - good
+                } else {
+                    panic!("Expected innermost Call");
+                }
+            } else {
+                panic!("Expected middle Call");
+            }
+        } else {
+            panic!("Expected outer Call");
+        }
+    }
+
 
 }

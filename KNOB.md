@@ -1261,7 +1261,7 @@ Equivalence Classes:
 - **Parser**: parse_multiplicative now handles ·, *, /, %
 - **Tests**: 23 new parser-level tests (total: 58)
 ### Known Gaps (Not Implemented)
-- **parse_postfix**: MISSING (no call chaining)
+- **parse_postfix**: ✅ RESOLVED (call chaining supported)
 - **-2 ^ 2 semantics**: UNDECIDED
 - **Boolean literals**: MISSING (no true/false or top/bot)
 - **UnaryOp AST node**: ✅ RESOLVED (proper UnaryOp variant)
@@ -1303,7 +1303,7 @@ Missing: parse_postfix (between unary and primary)
 - type-safe unary (no type checking)
 ### What Remains for Next Session
 - [x] Add ASTNode::UnaryOp (proper variant) - COMPLETED
-- [ ] Add parse_postfix layer
+- [x] Add parse_postfix layer - COMPLETED
 - [ ] Decide -2^2 semantics + test
 - [ ] Add Boolean literals (true/false or top/bot)
 - [ ] Reject chained comparisons
