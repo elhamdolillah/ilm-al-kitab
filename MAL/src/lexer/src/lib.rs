@@ -183,8 +183,6 @@ pub enum TokenKind {
     Is,
     /// `EXISTS`
     ExistsSql,
-    /// `IN`
-    In,
     /// `ANY`
     Any,
     /// `CASE`
@@ -409,7 +407,7 @@ impl<'a> Lexer<'a> {
                     }
                 }
                 let len = self.offset() - start;
-                let text = &self.src[start..start + len];
+                let text = &self.src[start as usize..(start + len) as usize];
                 let kind = match text {
                     "true" => TokenKind::TrueLit,
                     "false" => TokenKind::FalseLit,
