@@ -1,0 +1,57 @@
+=== contract_syntax ===
+EXIT=0
+=== interop_c2 ===
+=== MAL-INTEROP-C2 RUN ===
+
+  [EQUIVALENT] INTEROP-001: print(5)
+  [EQUIVALENT] INTEROP-002: print(0)
+  [EQUIVALENT] INTEROP-003: print(-1)
+  [EQUIVALENT] INTEROP-004: plus(3,4)
+  [EQUIVALENT] INTEROP-005: plus(-5,10)
+  [EQUIVALENT] INTEROP-006: plus(0,0)
+  [EQUIVALENT] INTEROP-007: read()
+  [EQUIVALENT] INTEROP-008: print() no args
+  [EQUIVALENT] INTEROP-009: plus(1) wrong args
+  [EQUIVALENT] INTEROP-010: strings unsupported
+  [EQUIVALENT] INTEROP-011: full program
+
+=== SUMMARY ===
+EQUIVALENT: 11/11
+STATUS=EQUIVALENT
+EXIT=0
+=== set_theory ===
+/root/ilm-al-kitab/RESEARCH/SET_THEORY/set_model.py:20: SyntaxWarning: invalid escape sequence '\ '
+  """A \ B = {x | x in A and x not in B}"""
+/root/ilm-al-kitab/RESEARCH/SET_THEORY/set_model.py:23: SyntaxWarning: invalid escape sequence '\ '
+  """A Δ B = (A \ B) ∪ (B \ A)"""
+=== C1.2 SET THEORY MODEL RUN ===
+
+  [PASS] SET-001: union
+  [PASS] SET-002: intersection
+  [PASS] SET-003: difference
+  [PASS] SET-004: symmetric diff
+  [PASS] SET-005: cartesian
+  [PASS] SET-006: subset true
+  [PASS] SET-007: superset true
+  [PASS] SET-008: subset false
+  [PASS] SET-009: union identity
+  [PASS] SET-010: intersection empty
+  [PASS] SET-011: diff with empty
+  [PASS] SET-012: reflexivity
+
+=== SUMMARY ===
+RESULTS: 12/12 passed
+STATUS=PASS
+EXIT=0
+=== ownership_contract ===
+PASS single transfer
+PASS second transfer rejected
+PASS already moved rejected
+PASS destination owns
+PASS source not owned
+SUMMARY: 5/5 PASS
+EXIT=0
+LEGACY_EXIT=1
+GATES_PASS=4
+GATES_FAIL=0
+FINAL_STATUS: PASS

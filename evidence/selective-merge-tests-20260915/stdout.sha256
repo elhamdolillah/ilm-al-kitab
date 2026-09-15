@@ -1,0 +1,5 @@
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /root/ilm-al-kitab/evidence/selective-merge-tests-20260915/contract_syntax.stdout
+71d3dc6a495236aa4fd7c0e0d4f7897080265cd05d015834c8389a819f20e817  /root/ilm-al-kitab/evidence/selective-merge-tests-20260915/interop_c2.stdout
+33eb87c6bdfd67706809e0ebfd54883b915f547bb82e59b3342ade63cd2d3619  /root/ilm-al-kitab/evidence/selective-merge-tests-20260915/legacy_math_suite.stdout
+7967d73694ffc2a69c725a49de78c5684f3582f635258e01ab8306d6c4163ac6  /root/ilm-al-kitab/evidence/selective-merge-tests-20260915/ownership_contract.stdout
+04d50067e5f9e290538effcbe830820b0a5a74b41d85193dad4a3d6560298dd1  /root/ilm-al-kitab/evidence/selective-merge-tests-20260915/set_theory.stdout
