@@ -1,0 +1,13 @@
+[package]
+name = "mal_pattern"
+version = "0.1.0"
+edition = "2021"
+description = "MAL Pattern Matching: Phase 43 — Rust/Erlang-style match"
+license = "MIT"
+[lib]
+path = "src/lib.rs"
+crate-type = ["lib"]
+[dependencies]
+mal_arena = { path = "../arena" }
+mal_types = { path = "../types" }
+mal_ownership = { path = "../ownership" }

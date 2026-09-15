@@ -1,5 +1,8 @@
 //! # MAL Arena — Memory Arena for the Mathematical Arabic Language
 //!
+//! ## Dependencies
+//! - `mal_types` — mathematical foundation types (re-exported)
+//!
 //! ## Constitutional Compliance
 //! - `#![forbid(unsafe_code)]` — no raw pointers allowed
 //! - `NodeID(u32)` — typed index, not raw `Handle`
@@ -67,64 +70,26 @@ pub enum TypeTag {
     Bool,
     /// Unary operation (- or ¬).
     UnaryOp,
+    /// Pattern match expression (Phase 43).
+    Match,
+    /// Pattern match arm (Phase 43).
+    MatchArm,
 }
 
-/// Binary operator (type-safe, no magic numbers).
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum BinaryOp {
-    // Arithmetic
-    Add, Sub, Mul, Div, Mod, Pow, Concat,
-    // Comparison
-    Lt, Gt, Le, Ge, Eq, Neq,
-    // Logical
-    And, Or,
-    // Assignment
-    Assign,
-}
-/// Unary operator (type-safe, no magic numbers).
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum UnaryOp {
-    Neg, Not,
-}
-/// Relational algebra operator (for SQL-like queries).
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum RelOp {
-    Select, Project, Rename, Join, CrossProduct,
-    Union, Intersect, Difference, Divide,
-    Group, Sort,
-}
-/// Three-valued logic for SQL NULL semantics.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum Truth3 {
-    True, False, Unknown,
-}
-/// SQL-like value with NULL support.
-#[derive(Debug, Clone, PartialEq)]
-pub enum SqlValue {
-    Int(i64),
-    Bool(Truth3),
-    Text(String),
-    Null,
-}
-/// Source location for diagnostics.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct SourceSpan {
-    pub line: u32,
-    pub col: u32,
-    pub len: u16,
-}
-/// Placeholder for future query IR nodes.
-#[derive(Debug, Clone, PartialEq)]
-pub enum QueryNode {
-    Placeholder,
-}
-/// Feature support status.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum SupportStatus {
-    Implemented,
-    ParseOnly,
-    Reserved,
-}
+// ═══════════════════════════════════════════════════════════════
+// Re-exported from mal_types (mathematical foundation)
+// ═══════════════════════════════════════════════════════════════
+pub use mal_types::{
+    BinaryOp, UnaryOp, RelOp,
+    Truth3, ScalarValue,
+    SourceSpan, SupportStatus,
+    QueryNode,
+    DataType, Nullability,
+    ColumnId, RelationId, Identifier,
+    Column, Schema, Row,
+    TypeError, Coercion,
+    check_coercion, validate_value, validate_row,
+};
 /// AST node with inline payload (no heap allocation per node).
 #[derive(Debug, Clone)]
 pub enum ASTNode {
@@ -223,6 +188,31 @@ pub enum ASTNode {
         /// Operand expression node.
         expr: NodeID,
     },
+    /// Match expression: ⎇ scrutinee : arms (Phase 43).
+    Match {
+        /// Expression to match against.
+        scrutinee: NodeID,
+        /// List of MatchArm nodes.
+        arms: NodeID,
+    },
+    /// Match arm: pattern ⇒ body (Phase 43).
+    MatchArm {
+        /// Pattern to match.
+        pattern: Pattern,
+        /// Body expression to evaluate if pattern matches.
+        body: NodeID,
+    },
+}
+
+/// Pattern for match expressions (Phase 43).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Pattern {
+    /// Wildcard: matches anything, binds nothing.
+    Wildcard,
+    /// Literal pattern: matches a literal value.
+    Literal(NodeID),
+    /// Variable binding: matches anything, binds to name.
+    Binding(u32),
 }
 
 
@@ -247,6 +237,8 @@ impl ASTNode {
             ASTNode::Set { .. } => TypeTag::Set,
             ASTNode::BoolLit(_) => TypeTag::Bool,
             ASTNode::UnaryOp { .. } => TypeTag::UnaryOp,
+            ASTNode::Match { .. } => TypeTag::Match,
+            ASTNode::MatchArm { .. } => TypeTag::MatchArm,
         }
     }
 }
