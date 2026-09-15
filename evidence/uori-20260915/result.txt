@@ -1,0 +1,3 @@
+UORI archive vnext tests: 3/3 PASS (pytest -q vnext/tests)
+math_complete.py: py_compile PASS
+MAL Rust cargo: BLOCKED by existing compile errors; no Rust source modified
