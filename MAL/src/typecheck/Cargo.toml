@@ -1,0 +1,13 @@
+[package]
+name = "mal_typecheck"
+version = "0.1.0"
+edition = "2021"
+description = "MAL Type Checker: type inference and checking"
+license = "MIT"
+[lib]
+path = "src/lib.rs"
+crate-type = ["lib"]
+[dependencies]
+mal_arena = { path = "../arena" }
+mal_types = { path = "../types" }
+mal_ownership = { path = "../ownership" }
