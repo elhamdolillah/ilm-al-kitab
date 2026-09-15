@@ -1,0 +1,1 @@
+/root/ilm-al-kitab/MAL/src/ownership/target/release/libmal_ownership.rlib: /root/ilm-al-kitab/MAL/src/arena/src/lib.rs /root/ilm-al-kitab/MAL/src/ownership/src/lib.rs /root/ilm-al-kitab/MAL/src/types/src/lib.rs
