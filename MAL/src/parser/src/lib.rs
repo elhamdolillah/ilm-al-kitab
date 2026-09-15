@@ -15,7 +15,7 @@
 #![forbid(unsafe_code)]
 #![deny(missing_docs)]
 
-use mal_arena::{Arena, NodeID, ASTNode, ArenaError};
+use mal_arena::{Arena, NodeID, ASTNode, ArenaError, BinaryOp, UnaryOp};
 use mal_lexer::{Lexer, Token, TokenKind, LexerError};
 
 /// Parser failure modes (fail-closed).
