@@ -1,0 +1,12 @@
+[package]
+name = "mal_kb"
+version = "0.1.0"
+edition = "2021"
+description = "MAL Knowledge Base — Hybrid Relational + Graph + Vector store"
+license = "MIT"
+[lib]
+path = "src/lib.rs"
+crate-type = ["lib"]
+[dependencies]
+mal_index = { path = "../index" }
+mal_arena = { path = "../arena" }
