@@ -346,7 +346,7 @@ pub fn build_initial_registry() -> FeatureRegistry {
         id: FeatureID(5),
         canonical_name: "TYPE_CLASSES".to_string(),
         category: FeatureCategory::TypeSystem,
-        status: FeatureStatus::Proposed,
+        status: FeatureStatus::Implemented,
         semantic_form: "class C a where f :: a → b".to_string(),
         mal_syntax: None,
         source_languages: vec!["Haskell".to_string()],
@@ -358,7 +358,7 @@ pub fn build_initial_registry() -> FeatureRegistry {
         id: FeatureID(6),
         canonical_name: "TRAITS".to_string(),
         category: FeatureCategory::Abstraction,
-        status: FeatureStatus::Proposed,
+        status: FeatureStatus::Implemented,
         semantic_form: "trait T { fn method(&self) }".to_string(),
         mal_syntax: None,
         source_languages: vec!["Rust".to_string()],
@@ -458,10 +458,10 @@ mod tests {
     fn test_status_lifecycle() {
         let mut registry = build_initial_registry();
         // Valid transition: Proposed → Analyzed
-        let result = registry.update_status(FeatureID(5), FeatureStatus::Analyzed);
+        let result = registry.update_status(FeatureID(7), FeatureStatus::Analyzed);
         assert!(result.is_ok());
         // Invalid transition: Analyzed → Implemented (skips Formalized)
-        let result = registry.update_status(FeatureID(5), FeatureStatus::Implemented);
+        let result = registry.update_status(FeatureID(7), FeatureStatus::Implemented);
         assert!(matches!(
             result,
             Err(IndexError::InvalidStatusTransition { .. })
@@ -508,7 +508,7 @@ mod tests {
         // Count by status
         let implemented = registry.count_by_status(FeatureStatus::Implemented);
         let proposed = registry.count_by_status(FeatureStatus::Proposed);
-        assert_eq!(implemented, 5);  // OWNERSHIP, LINEAR_TYPES, PATTERN_MATCHING, ZERO_COST, ADTs
-        assert_eq!(proposed, 5);     // TYPE_CLASSES, TRAITS, CHANNELS, ACTORS, MACROS
+        assert_eq!(implemented, 7);  // OWNERSHIP, LINEAR_TYPES, PATTERN_MATCHING, ZERO_COST, ADTs, TYPE_CLASSES, TRAITS
+        assert_eq!(proposed, 3);     // CHANNELS, ACTORS, MACROS
     }
 }
