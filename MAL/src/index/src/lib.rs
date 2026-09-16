@@ -458,6 +458,31 @@ pub fn build_initial_registry() -> FeatureRegistry {
         equivalent_features: vec![],
         proof_obligations: vec!["monad_laws".to_string()],
     }).unwrap();
+
+    // 14. FUTURE_TYPE (Rust Future / Haskell IO / JS Promise) — IMPLEMENTED Phase 47
+    registry.register(FeatureDef {
+        id: FeatureID(14),
+        canonical_name: "FUTURE_TYPE".to_string(),
+        category: FeatureCategory::TypeSystem,
+        status: FeatureStatus::Implemented,
+        semantic_form: "Future(T) : poll : Pin<&mut Self> × Context → Poll(T)".to_string(),
+        mal_syntax: Some("نوع آجل(ت) = { استطلع: ... → استطلاع(ت) }".to_string()),
+        source_languages: vec!["Rust".to_string(), "Haskell".to_string(), "JavaScript".to_string()],
+        equivalent_features: vec![],
+        proof_obligations: vec!["no_starvation".to_string(), "cancellation_safety".to_string()],
+    }).unwrap();
+    // 15. ASYNC_AWAIT (Rust/Haskell/C# async syntax) — IMPLEMENTED Phase 47
+    registry.register(FeatureDef {
+        id: FeatureID(15),
+        canonical_name: "ASYNC_AWAIT".to_string(),
+        category: FeatureCategory::Concurrency,
+        status: FeatureStatus::Implemented,
+        semantic_form: "async fn f(): T ≡ fn f() -> impl Future<Output = T>".to_string(),
+        mal_syntax: Some("دالة_آجلة ... انتظر ...".to_string()),
+        source_languages: vec!["Rust".to_string(), "C#".to_string(), "JavaScript".to_string()],
+        equivalent_features: vec![],
+        proof_obligations: vec!["pin_correctness".to_string()],
+    }).unwrap();
     // Mark equivalent features bidirectionally
     // (register() alone only sets one direction because features are created sequentially)
     registry.mark_equivalent(FeatureID(1), FeatureID(2)).unwrap(); // OWNERSHIP <-> LINEAR_TYPES
@@ -467,6 +492,7 @@ pub fn build_initial_registry() -> FeatureRegistry {
 }
 #[cfg(test)]
 mod tests {
+    // Note: ASYNC_AWAIT added to Concurrency category (Phase 47)
     use super::*;
     #[test]
     fn test_register_and_lookup_feature() {
@@ -523,9 +549,9 @@ mod tests {
         assert_eq!(memory_features.len(), 1);
         assert_eq!(memory_features[0].canonical_name, "OWNERSHIP");
         let type_system_features = registry.features_by_category(FeatureCategory::TypeSystem);
-        assert_eq!(type_system_features.len(), 6);  // + Result, Option, Monad
+        assert_eq!(type_system_features.len(), 7);  // + Result, Option, Monad, Future
         let concurrency_features = registry.features_by_category(FeatureCategory::Concurrency);
-        assert_eq!(concurrency_features.len(), 2);
+        assert_eq!(concurrency_features.len(), 3);  // CHANNELS, ACTORS, ASYNC_AWAIT
     }
     #[test]
     fn test_equivalent_features() {
@@ -553,11 +579,11 @@ mod tests {
     #[test]
     fn test_initial_registry_stats() {
         let registry = build_initial_registry();
-        assert_eq!(registry.len(), 13);  // 10 original + 3 (Result, Option, Monad)
+        assert_eq!(registry.len(), 15);  // 13 + FUTURE_TYPE + ASYNC_AWAIT
         // Count by status
         let implemented = registry.count_by_status(FeatureStatus::Implemented);
         let proposed = registry.count_by_status(FeatureStatus::Proposed);
-        assert_eq!(implemented, 10); // OWNERSHIP, LINEAR_TYPES, PATTERN_MATCHING, ZERO_COST, ADTs, TYPE_CLASSES, TRAITS, RESULT, OPTION, MONAD
+        assert_eq!(implemented, 12); // + FUTURE_TYPE, ASYNC_AWAIT
         assert_eq!(proposed, 3);     // CHANNELS, ACTORS, MACROS
     }
 }
