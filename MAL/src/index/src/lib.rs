@@ -458,10 +458,10 @@ mod tests {
     fn test_status_lifecycle() {
         let mut registry = build_initial_registry();
         // Valid transition: Proposed → Analyzed
-        let result = registry.update_status(FeatureID(4), FeatureStatus::Analyzed);
+        let result = registry.update_status(FeatureID(5), FeatureStatus::Analyzed);
         assert!(result.is_ok());
         // Invalid transition: Analyzed → Implemented (skips Formalized)
-        let result = registry.update_status(FeatureID(4), FeatureStatus::Implemented);
+        let result = registry.update_status(FeatureID(5), FeatureStatus::Implemented);
         assert!(matches!(
             result,
             Err(IndexError::InvalidStatusTransition { .. })
@@ -508,7 +508,7 @@ mod tests {
         // Count by status
         let implemented = registry.count_by_status(FeatureStatus::Implemented);
         let proposed = registry.count_by_status(FeatureStatus::Proposed);
-        assert_eq!(implemented, 4);  // OWNERSHIP, LINEAR_TYPES, PATTERN_MATCHING, ZERO_COST
-        assert_eq!(proposed, 6);     // ADTs, TYPE_CLASSES, TRAITS, CHANNELS, ACTORS, MACROS
+        assert_eq!(implemented, 5);  // OWNERSHIP, LINEAR_TYPES, PATTERN_MATCHING, ZERO_COST, ADTs
+        assert_eq!(proposed, 5);     // TYPE_CLASSES, TRAITS, CHANNELS, ACTORS, MACROS
     }
 }
