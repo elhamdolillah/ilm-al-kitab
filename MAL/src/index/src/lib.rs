@@ -198,6 +198,14 @@ impl FeatureRegistry {
         }
         Ok(())
     }
+    /// Find the first feature with a given status (for robust tests)
+    /// Mathematical: exists f in F : status(f) = s
+    pub fn find_first_by_status(&self, status: FeatureStatus) -> Option<FeatureID> {
+        self.features
+            .values()
+            .find(|f| f.status == status)
+            .map(|f| f.id)
+    }
     /// Count features by status
     pub fn count_by_status(&self, status: FeatureStatus) -> usize {
         self.features
@@ -457,11 +465,15 @@ mod tests {
     #[test]
     fn test_status_lifecycle() {
         let mut registry = build_initial_registry();
+        // ROBUST: find ANY feature with Proposed status dynamically
+        // Mathematical: exists f in F : status(f) = Proposed
+        let proposed_id = registry.find_first_by_status(FeatureStatus::Proposed)
+            .expect("At least one Proposed feature must exist");
         // Valid transition: Proposed → Analyzed
-        let result = registry.update_status(FeatureID(7), FeatureStatus::Analyzed);
+        let result = registry.update_status(proposed_id, FeatureStatus::Analyzed);
         assert!(result.is_ok());
         // Invalid transition: Analyzed → Implemented (skips Formalized)
-        let result = registry.update_status(FeatureID(7), FeatureStatus::Implemented);
+        let result = registry.update_status(proposed_id, FeatureStatus::Implemented);
         assert!(matches!(
             result,
             Err(IndexError::InvalidStatusTransition { .. })
