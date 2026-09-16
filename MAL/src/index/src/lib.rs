@@ -421,6 +421,43 @@ pub fn build_initial_registry() -> FeatureRegistry {
         equivalent_features: vec![],
         proof_obligations: vec!["no_runtime_overhead".to_string()],
     }).unwrap();
+
+    // 11. RESULT_TYPE (Rust Result / Haskell Either / Scala Try) — IMPLEMENTED Phase 46
+    registry.register(FeatureDef {
+        id: FeatureID(11),
+        canonical_name: "RESULT_TYPE".to_string(),
+        category: FeatureCategory::TypeSystem,
+        status: FeatureStatus::Implemented,
+        semantic_form: "Result(T, E) = Ok(T) | Err(E)".to_string(),
+        mal_syntax: Some("نوع نتيجة(ت، خ) = نجاح(ت) | فشل(خ)".to_string()),
+        source_languages: vec!["Rust".to_string(), "Haskell".to_string(), "Scala".to_string()],
+        equivalent_features: vec![],
+        proof_obligations: vec!["no_exception_leak".to_string(), "error_propagation".to_string()],
+    }).unwrap();
+    // 12. OPTION_TYPE (Rust Option / Haskell Maybe / Java Optional) — IMPLEMENTED Phase 46
+    registry.register(FeatureDef {
+        id: FeatureID(12),
+        canonical_name: "OPTION_TYPE".to_string(),
+        category: FeatureCategory::TypeSystem,
+        status: FeatureStatus::Implemented,
+        semantic_form: "Option(T) = Some(T) | None".to_string(),
+        mal_syntax: Some("نوع ربما(ت) = بعض(ت) | لا_شيء".to_string()),
+        source_languages: vec!["Rust".to_string(), "Haskell".to_string(), "Java".to_string()],
+        equivalent_features: vec![],
+        proof_obligations: vec!["no_null_pointer".to_string()],
+    }).unwrap();
+    // 13. MONAD_TRAIT (Haskell Monad / Category Theory) — IMPLEMENTED Phase 46
+    registry.register(FeatureDef {
+        id: FeatureID(13),
+        canonical_name: "MONAD_TRAIT".to_string(),
+        category: FeatureCategory::TypeSystem,
+        status: FeatureStatus::Implemented,
+        semantic_form: "Monad(M) = {return: T -> M(T), bind: M(T) x (T -> M(U)) -> M(U)}".to_string(),
+        mal_syntax: Some("واجهة موناد(م) { إرجاع, ربط }".to_string()),
+        source_languages: vec!["Haskell".to_string(), "Scala".to_string()],
+        equivalent_features: vec![],
+        proof_obligations: vec!["monad_laws".to_string()],
+    }).unwrap();
     // Mark equivalent features bidirectionally
     // (register() alone only sets one direction because features are created sequentially)
     registry.mark_equivalent(FeatureID(1), FeatureID(2)).unwrap(); // OWNERSHIP <-> LINEAR_TYPES
@@ -486,7 +523,7 @@ mod tests {
         assert_eq!(memory_features.len(), 1);
         assert_eq!(memory_features[0].canonical_name, "OWNERSHIP");
         let type_system_features = registry.features_by_category(FeatureCategory::TypeSystem);
-        assert_eq!(type_system_features.len(), 3);
+        assert_eq!(type_system_features.len(), 6);  // + Result, Option, Monad
         let concurrency_features = registry.features_by_category(FeatureCategory::Concurrency);
         assert_eq!(concurrency_features.len(), 2);
     }
@@ -516,11 +553,11 @@ mod tests {
     #[test]
     fn test_initial_registry_stats() {
         let registry = build_initial_registry();
-        assert_eq!(registry.len(), 10);
+        assert_eq!(registry.len(), 13);  // 10 original + 3 (Result, Option, Monad)
         // Count by status
         let implemented = registry.count_by_status(FeatureStatus::Implemented);
         let proposed = registry.count_by_status(FeatureStatus::Proposed);
-        assert_eq!(implemented, 7);  // OWNERSHIP, LINEAR_TYPES, PATTERN_MATCHING, ZERO_COST, ADTs, TYPE_CLASSES, TRAITS
+        assert_eq!(implemented, 10); // OWNERSHIP, LINEAR_TYPES, PATTERN_MATCHING, ZERO_COST, ADTs, TYPE_CLASSES, TRAITS, RESULT, OPTION, MONAD
         assert_eq!(proposed, 3);     // CHANNELS, ACTORS, MACROS
     }
 }
