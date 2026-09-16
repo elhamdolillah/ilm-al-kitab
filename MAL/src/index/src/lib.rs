@@ -334,7 +334,7 @@ pub fn build_initial_registry() -> FeatureRegistry {
         id: FeatureID(4),
         canonical_name: "ALGEBRAIC_DATA_TYPES".to_string(),
         category: FeatureCategory::TypeSystem,
-        status: FeatureStatus::Proposed,
+        status: FeatureStatus::Implemented,
         semantic_form: "type T = C₁ | C₂ | ... | Cₙ where Cᵢ are constructors".to_string(),
         mal_syntax: Some("نوع T = C₁ | C₂ | ... | Cₙ".to_string()),
         source_languages: vec!["Haskell".to_string(), "OCaml".to_string(), "Rust".to_string()],
