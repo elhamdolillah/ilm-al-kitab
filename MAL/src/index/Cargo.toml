@@ -1,0 +1,12 @@
+[package]
+name = "mal_index"
+version = "0.1.0"
+edition = "2021"
+description = "MAL Semantic Feature Index — The unified knowledge base for all absorbed language features"
+license = "MIT"
+[lib]
+path = "src/lib.rs"
+crate-type = ["lib"]
+[dependencies]
+mal_arena = { path = "../arena" }
+mal_types = { path = "../types" }

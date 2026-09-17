@@ -1,0 +1,13 @@
+[package]
+name = "mal_backend"
+version = "0.1.0"
+edition = "2021"
+description = "MAL Backend — C Transpiler (cfront approach)"
+license = "MIT"
+[lib]
+path = "src/lib.rs"
+crate-type = ["lib"]
+[dependencies]
+mal_arena = { path = "../arena" }
+mal_index = { path = "../index" }
+mal_nir = { path = "../nir" }
