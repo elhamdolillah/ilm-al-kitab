@@ -1,0 +1,11 @@
+[package]
+name = "mal_cli"
+version = "1.0.0"
+edition = "2021"
+description = "MAL CLI Tools — malc compiler"
+license = "MIT"
+[[bin]]
+name = "malc"
+path = "src/main.rs"
+[dependencies]
+mal_backend = { path = "../backend" }
