@@ -1,0 +1,9 @@
+[package]
+name = "mal_std"
+version = "1.0.0"
+edition = "2021"
+description = "MAL Standard Library — Math, IO, String utilities"
+license = "MIT"
+[lib]
+path = "src/lib.rs"
+crate-type = ["lib"]
