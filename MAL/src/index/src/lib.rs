@@ -519,6 +519,30 @@ pub fn build_initial_registry() -> FeatureRegistry {
         ],
     }).unwrap();
 
+    
+    // 19. SESSION_TYPES (Honda 1993 — deadlock-free concurrency) — IMPLEMENTED Phase 51
+    registry.register(FeatureDef {
+        id: FeatureID(19),
+        canonical_name: "SESSION_TYPES".to_string(),
+        category: FeatureCategory::Concurrency,
+        status: FeatureStatus::Implemented,
+        semantic_form: "{Out(A,K), In(A,K), End, Branch, Offer} + duality".to_string(),
+        mal_syntax: Some("قناة بروتوكول = !عدد.?نص.نهاية".to_string()),
+        source_languages: vec![
+            "Honda Session Types".to_string(),
+            "Rust session-types".to_string(),
+            "Scala lchannels".to_string(),
+            "F* Sessions".to_string(),
+        ],
+        equivalent_features: vec![FeatureID(18)],  // LINEAR_LOGIC (uses linear channels)
+        proof_obligations: vec![
+            "deadlock_freedom".to_string(),
+            "protocol_compliance".to_string(),
+            "liveness".to_string(),
+            "communication_safety".to_string(),
+        ],
+    }).unwrap();
+
     // Mark equivalent features bidirectionally
     // (register() alone only sets one direction because features are created sequentially)
     registry.mark_equivalent(FeatureID(1), FeatureID(2)).unwrap(); // OWNERSHIP <-> LINEAR_TYPES
@@ -587,7 +611,7 @@ mod tests {
         let type_system_features = registry.features_by_category(FeatureCategory::TypeSystem);
         assert_eq!(type_system_features.len(), 9);  // + Result, Option, Monad, Future
         let concurrency_features = registry.features_by_category(FeatureCategory::Concurrency);
-        assert_eq!(concurrency_features.len(), 3);  // CHANNELS, ACTORS, ASYNC_AWAIT
+        assert_eq!(concurrency_features.len(), 4);  // CHANNELS, ACTORS, ASYNC_AWAIT
     }
     #[test]
     fn test_equivalent_features() {
@@ -615,11 +639,11 @@ mod tests {
     #[test]
     fn test_initial_registry_stats() {
         let registry = build_initial_registry();
-        assert_eq!(registry.len(), 17);  // 15 + HYGIENIC_MACROS
+        assert_eq!(registry.len(), 18);  // 15 + HYGIENIC_MACROS
         // Count by status
         let implemented = registry.count_by_status(FeatureStatus::Implemented);
         let proposed = registry.count_by_status(FeatureStatus::Proposed);
-        assert_eq!(implemented, 14); // + FUTURE_TYPE, ASYNC_AWAIT, HYGIENIC_MACROS
+        assert_eq!(implemented, 15); // + FUTURE_TYPE, ASYNC_AWAIT, HYGIENIC_MACROS
         assert_eq!(proposed, 3);     // CHANNELS, ACTORS, MACROS
     }
 }

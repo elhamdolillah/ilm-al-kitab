@@ -1,0 +1,13 @@
+[package]
+name = "mal_session"
+version = "0.1.0"
+edition = "2021"
+description = "MAL Session Types — Deadlock-free concurrency via Honda's calculus"
+license = "MIT"
+[lib]
+path = "src/lib.rs"
+crate-type = ["lib"]
+[dependencies]
+mal_arena = { path = "../arena" }
+mal_index = { path = "../index" }
+mal_linear = { path = "../linear" }
