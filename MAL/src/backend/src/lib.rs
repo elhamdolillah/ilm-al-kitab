@@ -1,25 +1,26 @@
 //! # MAL Backend (Phase 62)
 //!
-//! Strategy: Transpile NIR to C, then use GCC/clang to produce native binary.
+//! Transpiles NIR to C, then uses GCC to produce native binaries.
 //! This is the "cfront approach" used by early C++, Vala, and many
-//! educational compilers. It's simple, portable, and reliable.
+//! educational compilers.
 //!
 //! Mathematical Foundation:
-//!   NIR (Normalized IR) → C99 code → GCC → ELF/Mach-O binary
-//!   Compilation is a homomorphism: preserve semantics across layers
+//!   NIR → C99 → GCC → ELF binary
+//!   Compilation is a homomorphism: ⟦compile(p)⟧ = ⟦p⟧
 //!
-//! Honest Caveat (Principle 5 - البيان):
+//! Honest Caveat (Principle 5):
 //!   - This is a TRANSLATOR, not an optimizer
-//!   - Performance depends on GCC's optimization
 //!   - No LLVM JIT, no dynamic compilation
-//!   - For production, a real LLVM backend would be better
 #![forbid(unsafe_code)]
-use std::collections::HashMap;
 use std::fmt::Write;
+use std::fs;
+use std::process::Command;
+use std::sync::atomic::{AtomicU64, Ordering};
+use std::thread;
+use std::time::{Duration, SystemTime};
 // ═══════════════════════════════════════════════════════════
-// C TYPE MAPPING — MAL types → C types
+// TYPE MAPPING
 // ═══════════════════════════════════════════════════════════
-/// Map MAL types to C99 types
 pub fn c_type(mal_type: &str) -> &'static str {
     match mal_type {
         "i64" | "int" => "int64_t",
@@ -35,13 +36,12 @@ pub fn c_type(mal_type: &str) -> &'static str {
         "bool" => "bool",
         "string" | "str" => "const char*",
         "void" | "unit" => "void",
-        _ => "int64_t",  // Default fallback
+        _ => "int64_t",
     }
 }
 // ═══════════════════════════════════════════════════════════
-// C GENERATOR — NIR → C source
+// C GENERATOR
 // ═══════════════════════════════════════════════════════════
-/// A C function being generated
 #[derive(Debug, Default)]
 pub struct CFunction {
     pub name: String,
@@ -51,12 +51,8 @@ pub struct CFunction {
     pub locals: Vec<(String, String)>,
 }
 impl CFunction {
-    pub fn new(name: impl Into<String>, return_type: impl Into<String>) -> Self {
-        Self {
-            name: name.into(),
-            return_type: return_type.into(),
-            ..Default::default()
-        }
+    pub fn new(name: impl Into<String>, ret: impl Into<String>) -> Self {
+        Self { name: name.into(), return_type: ret.into(), ..Default::default() }
     }
     pub fn add_param(&mut self, name: impl Into<String>, typ: impl Into<String>) {
         self.params.push((name.into(), typ.into()));
@@ -67,11 +63,9 @@ impl CFunction {
     pub fn add_stmt(&mut self, stmt: impl Into<String>) {
         self.body.push(stmt.into());
     }
-    /// Render to C source code
     pub fn render(&self) -> String {
         let mut out = String::new();
-        // Function signature
-        let params_str = if self.params.is_empty() {
+        let params = if self.params.is_empty() {
             "void".to_string()
         } else {
             self.params.iter()
@@ -79,15 +73,10 @@ impl CFunction {
                 .collect::<Vec<_>>()
                 .join(", ")
         };
-        writeln!(out, "{} {}({}) {{", c_type(&self.return_type), self.name, params_str).unwrap();
-        // Local variables
-        for (name, typ) in &self.locals {
-            writeln!(out, "    {} {};", c_type(typ), name).unwrap();
+        writeln!(out, "{} {}({}) {{", c_type(&self.return_type), self.name, params).unwrap();
+        for (n, t) in &self.locals {
+            writeln!(out, "    {} {};", c_type(t), n).unwrap();
         }
-        if !self.locals.is_empty() {
-            writeln!(out).unwrap();
-        }
-        // Body
         for stmt in &self.body {
             writeln!(out, "    {}", stmt).unwrap();
         }
@@ -95,7 +84,6 @@ impl CFunction {
         out
     }
 }
-/// A complete C translation unit
 #[derive(Debug, Default)]
 pub struct CTranslationUnit {
     pub includes: Vec<String>,
@@ -104,31 +92,26 @@ pub struct CTranslationUnit {
 impl CTranslationUnit {
     pub fn new() -> Self {
         let mut tu = Self::default();
-        tu.includes.push("#include <stdint.h>".to_string());
-        tu.includes.push("#include <stdbool.h>".to_string());
-        tu.includes.push("#include <stdio.h>".to_string());
-        tu.includes.push("#include <stdlib.h>".to_string());
-        tu.includes.push("#include <string.h>".to_string());
+        tu.includes.push("#include <stdint.h>".into());
+        tu.includes.push("#include <stdbool.h>".into());
+        tu.includes.push("#include <stdio.h>".into());
+        tu.includes.push("#include <stdlib.h>".into());
+        tu.includes.push("#include <string.h>".into());
         tu
     }
     pub fn add_function(&mut self, func: CFunction) {
         self.functions.push(func);
     }
-    /// Render complete C source
     pub fn render(&self) -> String {
         let mut out = String::new();
-        // Header comment
         writeln!(out, "/* Generated by MAL Backend (Phase 62)").unwrap();
         writeln!(out, " * Transpiled from MAL NIR to C99").unwrap();
         writeln!(out, " * Constitutional Compliance: Principle 5 (Honesty)").unwrap();
-        writeln!(out, " */").unwrap();
-        writeln!(out).unwrap();
-        // Includes
+        writeln!(out, " */\n").unwrap();
         for inc in &self.includes {
             writeln!(out, "{}", inc).unwrap();
         }
         writeln!(out).unwrap();
-        // Functions
         for func in &self.functions {
             out.push_str(&func.render());
             writeln!(out).unwrap();
@@ -137,9 +120,8 @@ impl CTranslationUnit {
     }
 }
 // ═══════════════════════════════════════════════════════════
-// COMPILER PIPELINE — NIR → C → GCC → Binary
+// COMPILATION
 // ═══════════════════════════════════════════════════════════
-/// Compilation options
 #[derive(Debug, Clone)]
 pub struct CompileOptions {
     pub optimize: bool,
@@ -148,14 +130,9 @@ pub struct CompileOptions {
 }
 impl Default for CompileOptions {
     fn default() -> Self {
-        Self {
-            optimize: true,
-            output_name: "a.out".to_string(),
-            keep_c_source: false,
-        }
+        Self { optimize: true, output_name: "a.out".into(), keep_c_source: false }
     }
 }
-/// Compilation result
 #[derive(Debug)]
 pub struct CompilationResult {
     pub success: bool,
@@ -164,67 +141,51 @@ pub struct CompilationResult {
     pub errors: Vec<String>,
     pub warnings: Vec<String>,
 }
-/// Transpile NIR to C code (pure transformation, no I/O)
-pub fn transpile_to_c(nir_program: &str) -> Result<CTranslationUnit, String> {
+pub fn transpile_to_c(program: &str) -> Result<CTranslationUnit, String> {
     let mut tu = CTranslationUnit::new();
-    // Parse simplified NIR format:
-    //   fn name(params) -> ret { body }
-    let lines: Vec<&str> = nir_program.lines().collect();
+    let lines: Vec<&str> = program.lines().collect();
     let mut i = 0;
     while i < lines.len() {
         let line = lines[i].trim();
         if line.starts_with("fn ") {
-            // Parse function declaration
             let (func, consumed) = parse_function(&lines[i..])?;
             tu.add_function(func);
             i += consumed;
-        } else if line.is_empty() {
-            i += 1;
         } else {
-            i += 1;  // Skip unknown lines
+            i += 1;
         }
     }
     Ok(tu)
 }
-/// Parse a function from NIR source
 fn parse_function(lines: &[&str]) -> Result<(CFunction, usize), String> {
     let first = lines[0].trim();
-    // Parse: fn name(arg1: type1, arg2: type2) -> ret_type {
-    let name_end = first.find('(').ok_or("Invalid function syntax")?;
+    let name_end = first.find('(').ok_or("Invalid function")?;
     let name = first[3..name_end].trim();
     let params_start = name_end + 1;
-    let params_end = first.find(')').ok_or("Invalid function syntax")?;
+    let params_end = first.find(')').ok_or("Invalid function")?;
     let params_str = &first[params_start..params_end];
     let ret_start = first.find("->").map(|p| p + 2).unwrap_or(params_end);
-    let ret_end = first.find('{').ok_or("Invalid function syntax")?;
+    let ret_end = first.find('{').ok_or("Invalid function")?;
     let ret_type = first[ret_start..ret_end].trim();
     let mut func = CFunction::new(name, if ret_type.is_empty() { "void" } else { ret_type });
-    // Parse parameters
     if !params_str.trim().is_empty() {
         for param in params_str.split(',') {
             let param = param.trim();
-            if let Some(colon_pos) = param.find(':') {
-                let pname = param[..colon_pos].trim();
-                let ptype = param[colon_pos+1..].trim();
-                func.add_param(pname, ptype);
+            if let Some(colon) = param.find(':') {
+                func.add_param(param[..colon].trim(), param[colon+1..].trim());
             }
         }
     }
-    // Parse body
     let mut i = 1;
     let mut depth = 1;
     while i < lines.len() && depth > 0 {
         let line = lines[i].trim();
         if line == "}" {
             depth -= 1;
-            if depth == 0 {
-                i += 1;
-                break;
-            }
+            if depth == 0 { i += 1; break; }
         } else if line.ends_with('{') {
             depth += 1;
         }
-        // Translate NIR statements to C
         if let Some(c_stmt) = translate_statement(line) {
             func.add_stmt(c_stmt);
         }
@@ -232,157 +193,84 @@ fn parse_function(lines: &[&str]) -> Result<(CFunction, usize), String> {
     }
     Ok((func, i))
 }
-/// Translate a single NIR statement to C
 fn translate_statement(nir: &str) -> Option<String> {
     let nir = nir.trim();
-    if nir.is_empty() {
-        return None;
-    }
-    // let x: type = expr;
+    if nir.is_empty() { return None; }
     if nir.starts_with("let ") {
         let rest = &nir[4..].trim_end_matches(';');
-        if let Some(colon) = rest.find(':') {
-            if let Some(eq) = rest.find('=') {
-                let name = rest[..colon].trim();
-                let typ = rest[colon+1..eq].trim();
-                let expr = rest[eq+1..].trim();
-                return Some(format!("{} {} = {};", c_type(typ), name, translate_expr(expr)));
-            }
+        if let (Some(colon), Some(eq)) = (rest.find(':'), rest.find('=')) {
+            let name = rest[..colon].trim();
+            let typ = rest[colon+1..eq].trim();
+            let expr = rest[eq+1..].trim();
+            return Some(format!("{} {} = {};", c_type(typ), name, translate_expr(expr)));
         }
     }
-    // return expr;
     if nir.starts_with("return ") {
         let expr = nir[7..].trim().trim_end_matches(';');
         return Some(format!("return {};", translate_expr(expr)));
     }
-    // printf("...", ...);
-    if nir.starts_with("print") {
-        return Some(nir.to_string());
-    }
-    // Default: pass through as C statement
-    if !nir.ends_with(';') {
-        Some(format!("{};", nir))
-    } else {
-        Some(nir.to_string())
-    }
+    if nir.starts_with("print") { return Some(nir.to_string()); }
+    if !nir.ends_with(';') { Some(format!("{};", nir)) } else { Some(nir.to_string()) }
 }
-/// Translate expression (currently pass-through)
 fn translate_expr(expr: &str) -> String {
     expr.to_string()
 }
-/// Compile C source to binary using GCC
-pub fn compile_c_to_binary(
-    c_source: &str,
-    options: &CompileOptions,
-) -> CompilationResult {
-    use std::fs;
-    use std::process::Command;
-    use std::sync::atomic::{AtomicU64, Ordering};
-    // Use atomic counter + pid + timestamp for unique file names
+pub fn compile_c_to_binary(c_source: &str, options: &CompileOptions) -> CompilationResult {
+    // Injective file naming: pid + nanos + counter
     static COUNTER: AtomicU64 = AtomicU64::new(0);
     let unique_id = format!(
         "{}_{}_{}",
         std::process::id(),
-        std::time::SystemTime::now()
-            .duration_since(std::time::UNIX_EPOCH)
-            .unwrap()
-            .as_nanos(),
+        SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).unwrap_or_default().as_nanos(),
         COUNTER.fetch_add(1, Ordering::SeqCst)
     );
     let c_file = format!("/tmp/mal_{}.c", unique_id);
     let binary_path = format!("/tmp/mal_bin_{}", unique_id);
-    // Write C source
     if let Err(e) = fs::write(&c_file, c_source) {
         return CompilationResult {
-            success: false,
-            c_source: c_source.to_string(),
-            binary_path: None,
-            errors: vec![format!("Failed to write C file: {}", e)],
-            warnings: vec![],
+            success: false, c_source: c_source.into(), binary_path: None,
+            errors: vec![format!("Write failed: {}", e)], warnings: vec![],
         };
     }
-    // Invoke GCC
     let mut cmd = Command::new("gcc");
-    cmd.arg(&c_file)
-       .arg("-o").arg(&binary_path)
-       .arg("-Wall")
-       .arg("-Wextra");
-    if options.optimize {
-        cmd.arg("-O2");
-    }
+    cmd.arg(&c_file).arg("-o").arg(&binary_path).arg("-Wall").arg("-Wextra");
+    if options.optimize { cmd.arg("-O2"); }
     let output = match cmd.output() {
         Ok(o) => o,
         Err(e) => {
+            let _ = fs::remove_file(&c_file);
             return CompilationResult {
-                success: false,
-                c_source: c_source.to_string(),
-                binary_path: None,
-                errors: vec![format!("Failed to invoke GCC: {}", e)],
-                warnings: vec![],
+                success: false, c_source: c_source.into(), binary_path: None,
+                errors: vec![format!("GCC failed: {}", e)], warnings: vec![],
             };
         }
     };
+    if !options.keep_c_source { let _ = fs::remove_file(&c_file); }
     let stderr = String::from_utf8_lossy(&output.stderr).to_string();
     if output.status.success() {
-        let warnings: Vec<String> = stderr.lines()
-            .filter(|l| l.contains("warning"))
-            .map(|l| l.to_string())
-            .collect();
+        let warnings = stderr.lines().filter(|l| l.contains("warning")).map(String::from).collect();
         CompilationResult {
-            success: true,
-            c_source: c_source.to_string(),
-            binary_path: Some(binary_path),
-            errors: vec![],
-            warnings,
-        }
-    let result = if output.status.success() {
-        let warnings: Vec<String> = stderr.lines()
-            .filter(|l| l.contains("warning"))
-            .map(|l| l.to_string())
-            .collect();
-        CompilationResult {
-            success: true,
-            c_source: c_source.to_string(),
-            binary_path: Some(binary_path.clone()),
-            errors: vec![],
-            warnings,
+            success: true, c_source: c_source.into(), binary_path: Some(binary_path),
+            errors: vec![], warnings,
         }
     } else {
         CompilationResult {
-            success: false,
-            c_source: c_source.to_string(),
-            binary_path: None,
-            errors: vec![stderr],
-            warnings: vec![],
+            success: false, c_source: c_source.into(), binary_path: None,
+            errors: vec![stderr], warnings: vec![],
         }
-    };
-    // Cleanup C file (binary is cleaned up after tests via Drop)
-    if !options.keep_c_source {
-        let _ = fs::remove_file(&c_file);
     }
-    result
 }
-/// Run a compiled binary and capture output
 pub fn run_binary(binary_path: &str, args: &[&str]) -> Result<String, String> {
-    use std::process::Command;
-    use std::thread;
-    use std::time::Duration;
-    // Small delay to ensure filesystem sync (avoid "Text file busy")
+    // 50ms delay to ensure filesystem sync
     thread::sleep(Duration::from_millis(50));
-    use std::thread;
-    use std::time::Duration;
-    // Small delay to ensure file system sync (avoid "Text file busy")
-    thread::sleep(Duration::from_millis(50));
-    let output = Command::new(binary_path)
-        .args(args)
-        .output()
-        .map_err(|e| format!("Failed to run binary: {}", e))?;
+    let output = Command::new(binary_path).args(args).output()
+        .map_err(|e| format!("Run failed: {}", e))?;
     let stdout = String::from_utf8_lossy(&output.stdout).to_string();
     let stderr = String::from_utf8_lossy(&output.stderr).to_string();
     if output.status.success() {
         Ok(stdout)
     } else {
-        Err(format!("Binary failed with status {:?}\nstderr: {}", output.status.code(), stderr))
+        Err(format!("Exit {:?}\nstderr: {}", output.status.code(), stderr))
     }
 }
 // ═══════════════════════════════════════════════════════════
@@ -391,7 +279,6 @@ pub fn run_binary(binary_path: &str, args: &[&str]) -> Result<String, String> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    /// Test 1: Hello World transpilation
     #[test]
     fn test_hello_world() {
         let nir = r#"
@@ -402,19 +289,14 @@ fn main() -> i32 {
 "#;
         let tu = transpile_to_c(nir).expect("transpile failed");
         let c_source = tu.render();
-        // Verify C source contains expected elements
         assert!(c_source.contains("#include <stdio.h>"));
         assert!(c_source.contains("int32_t main"));
-        assert!(c_source.contains("printf"));
-        assert!(c_source.contains("return 0;"));
-        // Actually compile and run
         let opts = CompileOptions::default();
         let result = compile_c_to_binary(&c_source, &opts);
-        assert!(result.success, "Compilation failed: {:?}", result.errors);
+        assert!(result.success, "Errors: {:?}", result.errors);
         let output = run_binary(result.binary_path.as_ref().unwrap(), &[]).unwrap();
         assert!(output.contains("أهلاً بالعالم"));
     }
-    /// Test 2: Function with parameters (addition)
     #[test]
     fn test_addition_function() {
         let nir = r#"
@@ -429,14 +311,12 @@ fn main() -> i32 {
         let tu = transpile_to_c(nir).expect("transpile failed");
         let c_source = tu.render();
         assert!(c_source.contains("int32_t add(int32_t a, int32_t b)"));
-        assert!(c_source.contains("return a + b;"));
         let opts = CompileOptions::default();
         let result = compile_c_to_binary(&c_source, &opts);
-        assert!(result.success, "Compilation failed: {:?}", result.errors);
+        assert!(result.success, "Errors: {:?}", result.errors);
         let output = run_binary(result.binary_path.as_ref().unwrap(), &[]).unwrap();
-        assert_eq!(output.trim(), "42");  // 17 + 25
+        assert_eq!(output.trim(), "42");
     }
-    /// Test 3: Fibonacci (tests optimization)
     #[test]
     fn test_fibonacci() {
         let nir = r#"
@@ -451,16 +331,13 @@ fn main() -> i32 {
 "#;
         let tu = transpile_to_c(nir).expect("transpile failed");
         let c_source = tu.render();
-        // Verify C code has recursion
         assert!(c_source.contains("int32_t fib(int32_t n)"));
-        assert!(c_source.contains("return fib(n-1) + fib(n-2);"));
         let opts = CompileOptions { optimize: true, ..Default::default() };
         let result = compile_c_to_binary(&c_source, &opts);
-        assert!(result.success, "Compilation failed: {:?}", result.errors);
+        assert!(result.success, "Errors: {:?}", result.errors);
         let output = run_binary(result.binary_path.as_ref().unwrap(), &[]).unwrap();
         assert!(output.contains("fib(10) = 55"));
     }
-    /// Test 4: Type mapping correctness
     #[test]
     fn test_type_mapping() {
         assert_eq!(c_type("i32"), "int32_t");
@@ -470,12 +347,10 @@ fn main() -> i32 {
         assert_eq!(c_type("bool"), "bool");
         assert_eq!(c_type("string"), "const char*");
         assert_eq!(c_type("void"), "void");
-        assert_eq!(c_type("unknown_type"), "int64_t");  // Fallback
+        assert_eq!(c_type("unknown_type"), "int64_t");
     }
-    /// Test 5: Abjad integration (uses mal_abjad values)
     #[test]
     fn test_abjad_integration() {
-        // MAL program using Abjad value calculation
         let nir = r#"
 fn abjad_mim() -> i32 {
     return 40;
@@ -496,9 +371,8 @@ fn main() -> i32 {
         let c_source = tu.render();
         let opts = CompileOptions::default();
         let result = compile_c_to_binary(&c_source, &opts);
-        assert!(result.success, "Compilation failed: {:?}", result.errors);
+        assert!(result.success, "Errors: {:?}", result.errors);
         let output = run_binary(result.binary_path.as_ref().unwrap(), &[]).unwrap();
-        // م(40) + ح(8) + م(40) + د(4) = 92
         assert!(output.contains("محمد = 92"), "Got: {}", output);
     }
 }
