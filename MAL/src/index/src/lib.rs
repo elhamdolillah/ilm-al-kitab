@@ -591,6 +591,29 @@ pub fn build_initial_registry() -> FeatureRegistry {
         ],
     }).unwrap();
 
+    
+    // 22. PROOF_ASSISTANTS (Coq/Lean/Agda export) — IMPLEMENTED Phase 54
+    registry.register(FeatureDef {
+        id: FeatureID(22),
+        canonical_name: "PROOF_ASSISTANTS".to_string(),
+        category: FeatureCategory::Abstraction,
+        status: FeatureStatus::Implemented,
+        semantic_form: "Export: MAL_proof → {Coq, Lean, Agda} + roundtrip".to_string(),
+        mal_syntax: Some("برهان اسم: قضية { خطوات }".to_string()),
+        source_languages: vec![
+            "Coq".to_string(),
+            "Lean 4".to_string(),
+            "Agda".to_string(),
+            "Isabelle".to_string(),
+        ],
+        equivalent_features: vec![],
+        proof_obligations: vec![
+            "export_soundness".to_string(),
+            "roundtrip_preservation".to_string(),
+            "syntax_validity".to_string(),
+        ],
+    }).unwrap();
+
     // Mark equivalent features bidirectionally
     // (register() alone only sets one direction because features are created sequentially)
     registry.mark_equivalent(FeatureID(1), FeatureID(2)).unwrap(); // OWNERSHIP <-> LINEAR_TYPES
@@ -687,11 +710,11 @@ mod tests {
     #[test]
     fn test_initial_registry_stats() {
         let registry = build_initial_registry();
-        assert_eq!(registry.len(), 20);  // 15 + HYGIENIC_MACROS
+        assert_eq!(registry.len(), 21);  // 15 + HYGIENIC_MACROS
         // Count by status
         let implemented = registry.count_by_status(FeatureStatus::Implemented);
         let proposed = registry.count_by_status(FeatureStatus::Proposed);
-        assert_eq!(implemented, 17); // + FUTURE_TYPE, ASYNC_AWAIT, HYGIENIC_MACROS
+        assert_eq!(implemented, 18); // + FUTURE_TYPE, ASYNC_AWAIT, HYGIENIC_MACROS
         assert_eq!(proposed, 3);     // CHANNELS, ACTORS, MACROS
     }
 }

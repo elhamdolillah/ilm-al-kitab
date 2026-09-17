@@ -1,0 +1,15 @@
+[package]
+name = "mal_proofs"
+version = "0.1.0"
+edition = "2021"
+description = "MAL Proof Assistants — Export to Coq, Lean, Agda"
+license = "MIT"
+[lib]
+path = "src/lib.rs"
+crate-type = ["lib"]
+[dependencies]
+mal_arena = { path = "../arena" }
+mal_index = { path = "../index" }
+mal_dependent = { path = "../dependent" }
+mal_hott = { path = "../hott" }
+mal_category = { path = "../category" }
