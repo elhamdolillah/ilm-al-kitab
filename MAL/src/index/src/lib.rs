@@ -579,11 +579,11 @@ mod tests {
     #[test]
     fn test_initial_registry_stats() {
         let registry = build_initial_registry();
-        assert_eq!(registry.len(), 15);  // 13 + FUTURE_TYPE + ASYNC_AWAIT
+        assert_eq!(registry.len(), 15);  // 15 + HYGIENIC_MACROS
         // Count by status
         let implemented = registry.count_by_status(FeatureStatus::Implemented);
         let proposed = registry.count_by_status(FeatureStatus::Proposed);
-        assert_eq!(implemented, 12); // + FUTURE_TYPE, ASYNC_AWAIT
+        assert_eq!(implemented, 12); // + FUTURE_TYPE, ASYNC_AWAIT, HYGIENIC_MACROS
         assert_eq!(proposed, 3);     // CHANNELS, ACTORS, MACROS
     }
 }
