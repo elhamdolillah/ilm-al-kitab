@@ -614,6 +614,30 @@ pub fn build_initial_registry() -> FeatureRegistry {
         ],
     }).unwrap();
 
+    
+    // 23. MODEL_THEORY (Tarski/Gödel — First-order semantics) — IMPLEMENTED Phase 55
+    registry.register(FeatureDef {
+        id: FeatureID(23),
+        canonical_name: "MODEL_THEORY".to_string(),
+        category: FeatureCategory::Abstraction,
+        status: FeatureStatus::Implemented,
+        semantic_form: "Structure(M) + Satisfaction(M,s ⊨ φ) + Compactness + L-S".to_string(),
+        mal_syntax: Some("نموذج م: س؛ م ⊨ φ".to_string()),
+        source_languages: vec![
+            "Isabelle/ZF".to_string(),
+            "Coq".to_string(),
+            "Lean".to_string(),
+            "Metamath".to_string(),
+        ],
+        equivalent_features: vec![],
+        proof_obligations: vec![
+            "tarski_satisfaction".to_string(),
+            "compactness_theorem".to_string(),
+            "lowenheim_skolem".to_string(),
+            "godel_completeness".to_string(),
+        ],
+    }).unwrap();
+
     // Mark equivalent features bidirectionally
     // (register() alone only sets one direction because features are created sequentially)
     registry.mark_equivalent(FeatureID(1), FeatureID(2)).unwrap(); // OWNERSHIP <-> LINEAR_TYPES
@@ -710,11 +734,11 @@ mod tests {
     #[test]
     fn test_initial_registry_stats() {
         let registry = build_initial_registry();
-        assert_eq!(registry.len(), 21);  // 15 + HYGIENIC_MACROS
+        assert_eq!(registry.len(), 22);  // 15 + HYGIENIC_MACROS
         // Count by status
         let implemented = registry.count_by_status(FeatureStatus::Implemented);
         let proposed = registry.count_by_status(FeatureStatus::Proposed);
-        assert_eq!(implemented, 18); // + FUTURE_TYPE, ASYNC_AWAIT, HYGIENIC_MACROS
+        assert_eq!(implemented, 19); // + FUTURE_TYPE, ASYNC_AWAIT, HYGIENIC_MACROS
         assert_eq!(proposed, 3);     // CHANNELS, ACTORS, MACROS
     }
 }
