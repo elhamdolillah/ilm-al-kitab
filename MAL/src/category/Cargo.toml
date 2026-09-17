@@ -1,0 +1,14 @@
+[package]
+name = "mal_category"
+version = "0.1.0"
+edition = "2021"
+description = "MAL Category Theory — Topos Theory, Yoneda, Adjunctions"
+license = "MIT"
+[lib]
+path = "src/lib.rs"
+crate-type = ["lib"]
+[dependencies]
+mal_arena = { path = "../arena" }
+mal_index = { path = "../index" }
+mal_dependent = { path = "../dependent" }
+mal_hott = { path = "../hott" }

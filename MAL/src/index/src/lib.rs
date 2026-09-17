@@ -567,6 +567,30 @@ pub fn build_initial_registry() -> FeatureRegistry {
         ],
     }).unwrap();
 
+    
+    // 21. CATEGORY_THEORY (Grothendieck/Lawvere — Topos Theory) — IMPLEMENTED Phase 53
+    registry.register(FeatureDef {
+        id: FeatureID(21),
+        canonical_name: "CATEGORY_THEORY".to_string(),
+        category: FeatureCategory::Abstraction,
+        status: FeatureStatus::Implemented,
+        semantic_form: "Functor + Nat + Adjunction + Yoneda + Topos (Ω)".to_string(),
+        mal_syntax: Some("ممثل_دالي ف: كون(م) → كون(ن); تكافؤ_دالي (ف -| ص)".to_string()),
+        source_languages: vec![
+            "Haskell".to_string(),
+            "Scala Cats".to_string(),
+            "Coq-HoTT".to_string(),
+            "Agda".to_string(),
+        ],
+        equivalent_features: vec![FeatureID(13)],  // MONAD_TRAIT (monads are categorical)
+        proof_obligations: vec![
+            "functor_laws".to_string(),
+            "naturality".to_string(),
+            "yoneda_lemma".to_string(),
+            "adjunction_triangle".to_string(),
+        ],
+    }).unwrap();
+
     // Mark equivalent features bidirectionally
     // (register() alone only sets one direction because features are created sequentially)
     registry.mark_equivalent(FeatureID(1), FeatureID(2)).unwrap(); // OWNERSHIP <-> LINEAR_TYPES
@@ -663,11 +687,11 @@ mod tests {
     #[test]
     fn test_initial_registry_stats() {
         let registry = build_initial_registry();
-        assert_eq!(registry.len(), 19);  // 15 + HYGIENIC_MACROS
+        assert_eq!(registry.len(), 20);  // 15 + HYGIENIC_MACROS
         // Count by status
         let implemented = registry.count_by_status(FeatureStatus::Implemented);
         let proposed = registry.count_by_status(FeatureStatus::Proposed);
-        assert_eq!(implemented, 16); // + FUTURE_TYPE, ASYNC_AWAIT, HYGIENIC_MACROS
+        assert_eq!(implemented, 17); // + FUTURE_TYPE, ASYNC_AWAIT, HYGIENIC_MACROS
         assert_eq!(proposed, 3);     // CHANNELS, ACTORS, MACROS
     }
 }
