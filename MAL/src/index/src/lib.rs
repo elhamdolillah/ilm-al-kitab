@@ -501,6 +501,24 @@ pub fn build_initial_registry() -> FeatureRegistry {
         ],
     }).unwrap();
 
+    
+    // 18. LINEAR_LOGIC (resource-aware reasoning) — IMPLEMENTED Phase 50
+    registry.register(FeatureDef {
+        id: FeatureID(18),
+        canonical_name: "LINEAR_LOGIC".to_string(),
+        category: FeatureCategory::TypeSystem,
+        status: FeatureStatus::Implemented,
+        semantic_form: "{⊗, &, ⊕, ⅋, !} + linear implication (⊸)".to_string(),
+        mal_syntax: Some("نوع_خطي ت; ⊗; !ت".to_string()),
+        source_languages: vec!["Rust".to_string(), "Linear Lisp".to_string(), "Clean".to_string()],
+        equivalent_features: vec![FeatureID(2)],  // LINEAR_TYPES
+        proof_obligations: vec![
+            "resource_soundness".to_string(),
+            "no_duplication_without_bang".to_string(),
+            "no_discard_without_bang".to_string(),
+        ],
+    }).unwrap();
+
     // Mark equivalent features bidirectionally
     // (register() alone only sets one direction because features are created sequentially)
     registry.mark_equivalent(FeatureID(1), FeatureID(2)).unwrap(); // OWNERSHIP <-> LINEAR_TYPES
@@ -567,7 +585,7 @@ mod tests {
         assert_eq!(memory_features.len(), 1);
         assert_eq!(memory_features[0].canonical_name, "OWNERSHIP");
         let type_system_features = registry.features_by_category(FeatureCategory::TypeSystem);
-        assert_eq!(type_system_features.len(), 8);  // + Result, Option, Monad, Future
+        assert_eq!(type_system_features.len(), 9);  // + Result, Option, Monad, Future
         let concurrency_features = registry.features_by_category(FeatureCategory::Concurrency);
         assert_eq!(concurrency_features.len(), 3);  // CHANNELS, ACTORS, ASYNC_AWAIT
     }
@@ -597,11 +615,11 @@ mod tests {
     #[test]
     fn test_initial_registry_stats() {
         let registry = build_initial_registry();
-        assert_eq!(registry.len(), 16);  // 15 + HYGIENIC_MACROS
+        assert_eq!(registry.len(), 17);  // 15 + HYGIENIC_MACROS
         // Count by status
         let implemented = registry.count_by_status(FeatureStatus::Implemented);
         let proposed = registry.count_by_status(FeatureStatus::Proposed);
-        assert_eq!(implemented, 13); // + FUTURE_TYPE, ASYNC_AWAIT, HYGIENIC_MACROS
+        assert_eq!(implemented, 14); // + FUTURE_TYPE, ASYNC_AWAIT, HYGIENIC_MACROS
         assert_eq!(proposed, 3);     // CHANNELS, ACTORS, MACROS
     }
 }
