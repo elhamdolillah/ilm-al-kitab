@@ -638,6 +638,54 @@ pub fn build_initial_registry() -> FeatureRegistry {
         ],
     }).unwrap();
 
+    
+    // 24. PROOF_SEARCH (Automated Theorem Proving — SAT, Resolution, Tableau) — IMPLEMENTED Phase 56
+    registry.register(FeatureDef {
+        id: FeatureID(24),
+        canonical_name: "PROOF_SEARCH".to_string(),
+        category: FeatureCategory::Abstraction,
+        status: FeatureStatus::Implemented,
+        semantic_form: "DPLL + Resolution + Tableau + SAT/SMT".to_string(),
+        mal_syntax: Some("حل_قضية(φ) → {قابل_للإشباع(تعيين) | غير_قابل}".to_string()),
+        source_languages: vec![
+            "Z3".to_string(),
+            "CVC5".to_string(),
+            "E-prover".to_string(),
+            "Vampire".to_string(),
+        ],
+        equivalent_features: vec![],
+        proof_obligations: vec![
+            "resolution_soundness".to_string(),
+            "dpll_completeness".to_string(),
+            "tableau_correctness".to_string(),
+            "proof_reconstruction".to_string(),
+        ],
+    }).unwrap();
+
+    
+    // 25. SET_THEORY (Zermelo-Fraenkel + AC — Foundations of mathematics) — IMPLEMENTED Phase 57
+    registry.register(FeatureDef {
+        id: FeatureID(25),
+        canonical_name: "SET_THEORY".to_string(),
+        category: FeatureCategory::Abstraction,
+        status: FeatureStatus::Implemented,
+        semantic_form: "ZF axioms + Ordinals + Cardinals + Choice".to_string(),
+        mal_syntax: Some("مجموعة س؛ س ∈ ص؛ بديهية_الاختيار".to_string()),
+        source_languages: vec![
+            "Isabelle/ZF".to_string(),
+            "Metamath (set.mm)".to_string(),
+            "Lean 4".to_string(),
+            "Mizar".to_string(),
+        ],
+        equivalent_features: vec![],
+        proof_obligations: vec![
+            "extensionality".to_string(),
+            "foundation".to_string(),
+            "choice_equivalence".to_string(),
+            "ordinal_arithmetic".to_string(),
+        ],
+    }).unwrap();
+
     // Mark equivalent features bidirectionally
     // (register() alone only sets one direction because features are created sequentially)
     registry.mark_equivalent(FeatureID(1), FeatureID(2)).unwrap(); // OWNERSHIP <-> LINEAR_TYPES
@@ -734,11 +782,11 @@ mod tests {
     #[test]
     fn test_initial_registry_stats() {
         let registry = build_initial_registry();
-        assert_eq!(registry.len(), 22);  // 15 + HYGIENIC_MACROS
+        assert_eq!(registry.len(), 24);  // 15 + HYGIENIC_MACROS
         // Count by status
         let implemented = registry.count_by_status(FeatureStatus::Implemented);
         let proposed = registry.count_by_status(FeatureStatus::Proposed);
-        assert_eq!(implemented, 19); // + FUTURE_TYPE, ASYNC_AWAIT, HYGIENIC_MACROS
+        assert_eq!(implemented, 21); // + FUTURE_TYPE, ASYNC_AWAIT, HYGIENIC_MACROS
         assert_eq!(proposed, 3);     // CHANNELS, ACTORS, MACROS
     }
 }

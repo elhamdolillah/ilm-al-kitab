@@ -1,0 +1,12 @@
+[package]
+name = "mal_set"
+version = "0.1.0"
+edition = "2021"
+description = "MAL Set Theory — Zermelo-Fraenkel + Axiom of Choice"
+license = "MIT"
+[lib]
+path = "src/lib.rs"
+crate-type = ["lib"]
+[dependencies]
+mal_arena = { path = "../arena" }
+mal_index = { path = "../index" }

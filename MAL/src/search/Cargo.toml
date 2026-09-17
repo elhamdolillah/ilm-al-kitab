@@ -1,0 +1,13 @@
+[package]
+name = "mal_search"
+version = "0.1.0"
+edition = "2021"
+description = "MAL Proof Search — Automated theorem proving (SAT, Resolution, Tableau)"
+license = "MIT"
+[lib]
+path = "src/lib.rs"
+crate-type = ["lib"]
+[dependencies]
+mal_arena = { path = "../arena" }
+mal_index = { path = "../index" }
+mal_model = { path = "../model" }
