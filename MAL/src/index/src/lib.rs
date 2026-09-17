@@ -686,6 +686,30 @@ pub fn build_initial_registry() -> FeatureRegistry {
         ],
     }).unwrap();
 
+    
+    // 26. QUANTUM_TYPES (Quantum computing — Dirac/von Neumann) — IMPLEMENTED Phase 58
+    registry.register(FeatureDef {
+        id: FeatureID(26),
+        canonical_name: "QUANTUM_TYPES".to_string(),
+        category: FeatureCategory::TypeSystem,
+        status: FeatureStatus::Implemented,
+        semantic_form: "Qubit + Gates + Measurement + No-Cloning + Entanglement".to_string(),
+        mal_syntax: Some("كيوبت ق؛ بوابة_ه(ق)؛ قياس(ق)".to_string()),
+        source_languages: vec![
+            "Qiskit".to_string(),
+            "Cirq".to_string(),
+            "Q#".to_string(),
+            "Quipper".to_string(),
+        ],
+        equivalent_features: vec![FeatureID(10)],  // LINEAR_LOGIC (no-cloning via linearity)
+        proof_obligations: vec![
+            "unitary_gates".to_string(),
+            "no_cloning_theorem".to_string(),
+            "bell_states".to_string(),
+            "born_rule".to_string(),
+        ],
+    }).unwrap();
+
     // Mark equivalent features bidirectionally
     // (register() alone only sets one direction because features are created sequentially)
     registry.mark_equivalent(FeatureID(1), FeatureID(2)).unwrap(); // OWNERSHIP <-> LINEAR_TYPES
@@ -752,7 +776,7 @@ mod tests {
         assert_eq!(memory_features.len(), 1);
         assert_eq!(memory_features[0].canonical_name, "OWNERSHIP");
         let type_system_features = registry.features_by_category(FeatureCategory::TypeSystem);
-        assert_eq!(type_system_features.len(), 10);  // + Result, Option, Monad, Future
+        assert_eq!(type_system_features.len(), 11);  // + Result, Option, Monad, Future
         let concurrency_features = registry.features_by_category(FeatureCategory::Concurrency);
         assert_eq!(concurrency_features.len(), 4);  // CHANNELS, ACTORS, ASYNC_AWAIT
     }
@@ -782,11 +806,11 @@ mod tests {
     #[test]
     fn test_initial_registry_stats() {
         let registry = build_initial_registry();
-        assert_eq!(registry.len(), 24);  // 15 + HYGIENIC_MACROS
+        assert_eq!(registry.len(), 25);  // 15 + HYGIENIC_MACROS
         // Count by status
         let implemented = registry.count_by_status(FeatureStatus::Implemented);
         let proposed = registry.count_by_status(FeatureStatus::Proposed);
-        assert_eq!(implemented, 21); // + FUTURE_TYPE, ASYNC_AWAIT, HYGIENIC_MACROS
+        assert_eq!(implemented, 22); // + FUTURE_TYPE, ASYNC_AWAIT, HYGIENIC_MACROS
         assert_eq!(proposed, 3);     // CHANNELS, ACTORS, MACROS
     }
 }
