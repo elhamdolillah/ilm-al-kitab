@@ -1,0 +1,13 @@
+[package]
+name = "mal_hott"
+version = "0.1.0"
+edition = "2021"
+description = "MAL Homotopy Type Theory — Voevodsky's univalent foundations"
+license = "MIT"
+[lib]
+path = "src/lib.rs"
+crate-type = ["lib"]
+[dependencies]
+mal_arena = { path = "../arena" }
+mal_index = { path = "../index" }
+mal_dependent = { path = "../dependent" }
