@@ -239,6 +239,31 @@ impl<'a> ASTLowerer<'a> {
                 // For now, just return the body value (no closure capture)
                 self.lower_node(*body)
             }
+            // Sequence: multiple statements (parser produces this for multi-line)
+            ASTNode::List { head, tail } => {
+                // Treat as sequence: lower all, return last value
+                let mut last_val = None;
+                let mut cur = *head;
+                loop {
+                    if cur.0 == u32::MAX { break; }
+                    if let Ok(node) = self.arena.get(cur) {
+                        match node {
+                            ASTNode::List { head: h, tail: t } => {
+                                last_val = self.lower_node(*h);
+                                cur = *t;
+                            }
+                            ASTNode::Empty => break,
+                            _ => {
+                                last_val = self.lower_node(cur);
+                                break;
+                            }
+                        }
+                    } else {
+                        break;
+                    }
+                }
+                last_val
+            }
             _ => None,
         };
         if let Some(v) = result {
