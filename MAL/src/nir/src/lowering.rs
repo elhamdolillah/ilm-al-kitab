@@ -1,4 +1,4 @@
-//! AST -> NIR lowering (with print_int + Loops + Lambda + nested fixes)
+//! AST -> NIR lowering with CORRECT multi-statement support
 use mal_arena::{ASTNode, NodeID, BinaryOp, UnaryOp, Arena};
 use crate::{NIRFunction, NIRInstruction, NIRValue, NIROp, NIRUnOp, ValueID, BlockID};
 use std::collections::HashMap;
@@ -6,15 +6,14 @@ pub struct ASTLowerer<'a> {
     arena: &'a Arena,
     func: NIRFunction,
     map: HashMap<u32, ValueID>,
-    vars: HashMap<u32, ValueID>,
+    vars: HashMap<String, ValueID>,
     entry: BlockID,
     current_block: BlockID,
     last_value: Option<ValueID>,
+    source: String,
     string_table: Vec<String>,
-    // Loop support
     loop_break_target: Option<BlockID>,
     loop_continue_target: Option<BlockID>,
-    source: String,
 }
 impl<'a> ASTLowerer<'a> {
     pub fn new(arena: &'a Arena, source: &str) -> Self {
@@ -59,16 +58,37 @@ impl<'a> ASTLowerer<'a> {
             entry,
             current_block: entry,
             last_value: None,
+            source: source.to_string(),
             string_table: table,
             loop_break_target: None,
             loop_continue_target: None,
-            source: source.to_string(),
         }
+    }
+    fn extract_ident_name(&self, byte_offset: u32) -> Option<String> {
+        let start = byte_offset as usize;
+        if start >= self.source.len() { return None; }
+        let bytes = self.source.as_bytes();
+        let mut end = start;
+        while end < bytes.len() {
+            let ch = bytes[end];
+            if ch.is_ascii_alphanumeric() || ch == b'_' {
+                end += 1;
+                continue;
+            }
+            if ch >= 0xD8 && ch <= 0xDB && end + 1 < bytes.len() {
+                let next = bytes[end + 1];
+                if next >= 0x80 && next <= 0xBF {
+                    end += 2;
+                    continue;
+                }
+            }
+            break;
+        }
+        Some(self.source[start..end].to_string())
     }
     pub fn lower(mut self, root: NodeID) -> NIRFunction {
         let result = self.lower_node(root);
         let return_val = result.or(self.last_value);
-        // Only add return to current block if it's not already terminated
         if let Some(v) = return_val {
             self.func.add_instruction(self.current_block,
                 NIRInstruction::Return { value: Some(v) });
@@ -95,19 +115,20 @@ impl<'a> ASTLowerer<'a> {
                 Some(self.func.fresh_value(NIRValue::IntConst(*q)))
             }
             ASTNode::Ident(idx) => {
-                self.vars.get(idx).copied()
+                self.extract_ident_name(*idx)
+                    .and_then(|name| self.vars.get(&name).copied())
             }
             ASTNode::BinOp { op: BinaryOp::Assign, left, right } => {
-                if let Ok(name_node) = self.arena.get(*left) {
-                    if let ASTNode::Ident(name_idx) = name_node {
-                        if let Some(val) = self.lower_node(*right) {
-                            self.vars.insert(*name_idx, val);
-                            self.last_value = Some(val);
-                            return Some(val);
-                        }
+                let name = self.arena.get(*left).ok()
+                    .and_then(|n| if let ASTNode::Ident(idx) = n { self.extract_ident_name(*idx) } else { None });
+                let val = self.lower_node(*right);
+                match (name, val) {
+                    (Some(n), Some(v)) => {
+                        self.vars.insert(n, v);
+                        Some(v)
                     }
+                    _ => None
                 }
-                None
             }
             ASTNode::BinOp { op, left, right } => {
                 let l = self.lower_node(*left)?;
@@ -153,116 +174,107 @@ impl<'a> ASTLowerer<'a> {
                     }
                 }
             }
-            // Call: builtin or user function
             ASTNode::Call { func: func_nid, args } => {
-                // Special case: Read builtin (⊙)
                 if func_nid.0 == u32::MAX {
                     let callee = self.func.fresh_value(NIRValue::IntConst(122));
                     let res = self.func.fresh_value(NIRValue::Undef);
                     self.func.add_instruction(self.current_block,
                         NIRInstruction::Call { callee, args: vec![], result: res });
-                    return Some(res);
-                }
-                // Collect ALL args recursively
-                let mut arg_vals = Vec::new();
-                let mut cur = *args;
-                loop {
-                    if cur.0 == u32::MAX { break; }
-                    if let Ok(arg_node) = self.arena.get(cur) {
-                        match arg_node {
-                            ASTNode::List { head, tail } => {
-                                if let Some(v) = self.lower_node(*head) {
-                                    arg_vals.push(v);
+                    Some(res)
+                } else {
+                    let mut arg_vals = Vec::new();
+                    let mut cur = *args;
+                    loop {
+                        if cur.0 == u32::MAX { break; }
+                        if let Ok(arg_node) = self.arena.get(cur) {
+                            match arg_node {
+                                ASTNode::List { head, tail } => {
+                                    if let Some(v) = self.lower_node(*head) {
+                                        arg_vals.push(v);
+                                    }
+                                    cur = *tail;
                                 }
-                                cur = *tail;
-                            }
-                            ASTNode::Empty => break,
-                            _ => {
-                                if let Some(v) = self.lower_node(cur) {
-                                    arg_vals.push(v);
+                                ASTNode::Empty => break,
+                                _ => {
+                                    if let Some(v) = self.lower_node(cur) {
+                                        arg_vals.push(v);
+                                    }
+                                    break;
                                 }
-                                break;
                             }
-                        }
-                    } else { break; }
-                }
-                // Get function name for builtin dispatch
-                if let Ok(func_node) = self.arena.get(*func_nid) {
-                    if let ASTNode::Ident(name_idx) = func_node {
-                        if let Some(builtin_tag) = self.ident_to_builtin(*name_idx) {
-                            let callee = self.func.fresh_value(NIRValue::IntConst(builtin_tag));
-                            let res = self.func.fresh_value(NIRValue::Undef);
-                            self.func.add_instruction(self.current_block,
-                                NIRInstruction::Call {
-                                    callee, args: arg_vals, result: res,
-                                });
-                            return Some(res);
-                        }
+                        } else { break; }
+                    }
+                    let builtin_tag = self.arena.get(*func_nid).ok()
+                        .and_then(|n| if let ASTNode::Ident(idx) = n { 
+                            self.ident_to_builtin(*idx) 
+                        } else { None });
+                    if let Some(tag) = builtin_tag {
+                        let callee = self.func.fresh_value(NIRValue::IntConst(tag));
+                        let res = self.func.fresh_value(NIRValue::Undef);
+                        self.func.add_instruction(self.current_block,
+                            NIRInstruction::Call {
+                                callee, args: arg_vals, result: res,
+                            });
+                        Some(res)
+                    } else {
+                        None
                     }
                 }
-                None
             }
             ASTNode::LinearLet { name, value, body } => {
-                if let Ok(name_node) = self.arena.get(*name) {
-                    if let ASTNode::Ident(name_idx) = name_node {
-                        if let Some(val) = self.lower_node(*value) {
-                            self.vars.insert(*name_idx, val);
-                            self.last_value = Some(val);
-                            if body.0 != u32::MAX && body.0 != 0 {
-                                if let Ok(body_node) = self.arena.get(*body) {
-                                    if !matches!(body_node, ASTNode::Empty) {
-                                        return self.lower_node(*body);
-                                    }
+                let n = self.arena.get(*name).ok()
+                    .and_then(|n| if let ASTNode::Ident(idx) = n { self.extract_ident_name(*idx) } else { None });
+                let val = self.lower_node(*value);
+                match (n, val) {
+                    (Some(name), Some(v)) => {
+                        self.vars.insert(name, v);
+                        if body.0 != u32::MAX && body.0 != 0 {
+                            if let Ok(body_node) = self.arena.get(*body) {
+                                if !matches!(body_node, ASTNode::Empty) {
+                                    self.lower_node(*body)
+                                } else {
+                                    Some(v)
                                 }
+                            } else {
+                                Some(v)
                             }
-                            return Some(val);
+                        } else {
+                            Some(v)
                         }
                     }
+                    _ => None
                 }
-                None
             }
-            // ForAll: ∀x ∈ S : body  — for simple ranges, lower as loop
             ASTNode::ForAll { var, set, body } => {
-                // For now, just lower the body (simplified)
-                // Full implementation would iterate over set
                 if let Ok(var_node) = self.arena.get(*var) {
                     if let ASTNode::Ident(var_idx) = var_node {
-                        // Initialize var to 0
-                        let zero = self.func.fresh_value(NIRValue::IntConst(0));
-                        self.vars.insert(*var_idx, zero);
-                    }
-                }
-                self.lower_node(*body)
-            }
-            // Lambda: λ(params). body — create as closure (simplified)
-            ASTNode::Lambda { params: _, body } => {
-                // For now, just return the body value (no closure capture)
-                self.lower_node(*body)
-            }
-            // Sequence: multiple statements (parser produces this for multi-line)
-            ASTNode::List { head, tail } => {
-                // Treat as sequence: lower all, return last value
-                let mut last_val = None;
-                let mut cur = *head;
-                loop {
-                    if cur.0 == u32::MAX { break; }
-                    if let Ok(node) = self.arena.get(cur) {
-                        match node {
-                            ASTNode::List { head: h, tail: t } => {
-                                last_val = self.lower_node(*h);
-                                cur = *t;
-                            }
-                            ASTNode::Empty => break,
-                            _ => {
-                                last_val = self.lower_node(cur);
-                                break;
-                            }
+                        if let Some(var_name) = self.extract_ident_name(*var_idx) {
+                            let zero = self.func.fresh_value(NIRValue::IntConst(0));
+                            self.vars.insert(var_name, zero);
                         }
-                    } else {
-                        break;
                     }
                 }
-                last_val
+                self.lower_node(*set);
+                self.lower_node(*body)
+            }
+            ASTNode::Lambda { params: _, body } => {
+                self.lower_node(*body)
+            }
+            // MULTI-STATEMENT LIST HANDLER - THE CORRECT FIX!
+            ASTNode::List { head, tail } => {
+                eprintln!("[LIST] Processing List node: head={}, tail={}", head.0, tail.0);
+                // Step 1: Lower head (first statement)
+                let head_val = self.lower_node(*head);
+                eprintln!("[LIST] Lowered head, value={:?}", head_val);
+                // Step 2: Lower tail recursively if it exists
+                if tail.0 != u32::MAX {
+                    eprintln!("[LIST] Lowering tail recursively...");
+                    let tail_val = self.lower_node(*tail);
+                    eprintln!("[LIST] Tail returned: {:?}", tail_val);
+                }
+                // Step 3: Return the last computed value
+                eprintln!("[LIST] Returning last_value: {:?}", self.last_value);
+                self.last_value
             }
             _ => None,
         };
@@ -273,19 +285,16 @@ impl<'a> ASTLowerer<'a> {
         result
     }
     fn ident_to_builtin(&self, idx: u32) -> Option<i64> {
-        // idx is byte offset in source
         let start = idx as usize;
         if start >= self.source.len() { return None; }
         let bytes = self.source.as_bytes();
         let mut end = start;
-        // Consume identifier chars (ASCII + Arabic UTF-8)
         while end < bytes.len() {
             let ch = bytes[end];
             if ch.is_ascii_alphanumeric() || ch == b'_' {
                 end += 1;
                 continue;
             }
-            // Arabic: 0xD8-0xDB followed by 0x80-0xBF
             if ch >= 0xD8 && ch <= 0xDB && end + 1 < bytes.len() {
                 let next = bytes[end + 1];
                 if next >= 0x80 && next <= 0xBF {
