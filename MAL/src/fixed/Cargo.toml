@@ -1,0 +1,9 @@
+[package]
+name = "mal_fixed"
+version = "1.0.0"
+edition = "2021"
+description = "MAL Fixed-Point — Deterministic Q32.32 math ported from Stages 40-44"
+license = "MIT"
+[lib]
+path = "src/lib.rs"
+crate-type = ["lib"]
