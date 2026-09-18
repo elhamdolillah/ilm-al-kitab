@@ -1,0 +1,13 @@
+[package]
+name = "malc-native"
+version = "0.1.0"
+edition = "2021"
+[[bin]]
+name = "malc-native"
+path = "src/main.rs"
+[dependencies]
+mal_arena = { path = "../../src/arena" }
+mal_parser = { path = "../../src/parser" }
+mal_nir = { path = "../../src/nir" }
+mal_native = { path = "../../src/native" }
+clap = { version = "4.0", features = ["derive"] }
