@@ -476,6 +476,8 @@ fn emit_builtin_call(
     Ok(())
 }
 fn load(a: &mut String, vid: ValueID, values: &HashMap<ValueID, NIRValue>, ctx: &CodeGenContext, reg: &str) {
+    // DEBUG: trace load
+    // (can't use format inside fn signature, so trace inside body)
     if let Some(nv) = values.get(&vid) {
         match nv {
             NIRValue::IntConst(n) => {
@@ -501,7 +503,11 @@ fn load(a: &mut String, vid: ValueID, values: &HashMap<ValueID, NIRValue>, ctx: 
 }
 fn store_result(a: &mut String, vid: ValueID, ctx: &CodeGenContext) {
     if let Some(&slot) = ctx.value_map.get(&vid) {
+        // DEBUG: comment in asm to trace
+        a.push_str(&format!("    ; store_result: vid={} -> slot={}, rax\n", vid.0, slot));
         a.push_str(&format!("    mov [vars + {}], rax\n", slot * 8));
+    } else {
+        a.push_str(&format!("    ; WARNING: store_result: vid={} has NO slot!\n", vid.0));
     }
 }
 fn emit_all_helpers() -> String {

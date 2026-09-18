@@ -14,6 +14,7 @@ pub struct ASTLowerer<'a> {
     // Loop support
     loop_break_target: Option<BlockID>,
     loop_continue_target: Option<BlockID>,
+    source: String,
 }
 impl<'a> ASTLowerer<'a> {
     pub fn new(arena: &'a Arena, source: &str) -> Self {
@@ -61,6 +62,7 @@ impl<'a> ASTLowerer<'a> {
             string_table: table,
             loop_break_target: None,
             loop_continue_target: None,
+            source: source.to_string(),
         }
     }
     pub fn lower(mut self, root: NodeID) -> NIRFunction {
@@ -246,14 +248,36 @@ impl<'a> ASTLowerer<'a> {
         result
     }
     fn ident_to_builtin(&self, idx: u32) -> Option<i64> {
-        let name = self.string_table.get(idx as usize)?;
-        match name.as_str() {
+        // idx is byte offset in source
+        let start = idx as usize;
+        if start >= self.source.len() { return None; }
+        let bytes = self.source.as_bytes();
+        let mut end = start;
+        // Consume identifier chars (ASCII + Arabic UTF-8)
+        while end < bytes.len() {
+            let ch = bytes[end];
+            if ch.is_ascii_alphanumeric() || ch == b'_' {
+                end += 1;
+                continue;
+            }
+            // Arabic: 0xD8-0xDB followed by 0x80-0xBF
+            if ch >= 0xD8 && ch <= 0xDB && end + 1 < bytes.len() {
+                let next = bytes[end + 1];
+                if next >= 0x80 && next <= 0xBF {
+                    end += 2;
+                    continue;
+                }
+            }
+            break;
+        }
+        let name = &self.source[start..end];
+        match name {
             "sqrt" | "جذر" => Some(100),
             "abs" | "مطلق" => Some(101),
             "floor" | "أرضية" => Some(102),
             "power" | "قوة" => Some(103),
             "exp" | "أسي" => Some(104),
-            "print_int" | "اطبع" | "⎕" => Some(105),
+            "print_int" | "اطبع" => Some(105),
             "print_str" | "اطبع_نص" => Some(106),
             "num_to_str" | "نص" => Some(107),
             "list_len" | "طول" => Some(113),
