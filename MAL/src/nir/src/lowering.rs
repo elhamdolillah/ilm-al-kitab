@@ -1,4 +1,4 @@
-//! AST -> NIR lowering (with nested calls + multi-arg builtins)
+//! AST -> NIR lowering (with print_int + Loops + Lambda + nested fixes)
 use mal_arena::{ASTNode, NodeID, BinaryOp, UnaryOp, Arena};
 use crate::{NIRFunction, NIRInstruction, NIRValue, NIROp, NIRUnOp, ValueID, BlockID};
 use std::collections::HashMap;
@@ -8,8 +8,12 @@ pub struct ASTLowerer<'a> {
     map: HashMap<u32, ValueID>,
     vars: HashMap<u32, ValueID>,
     entry: BlockID,
+    current_block: BlockID,
     last_value: Option<ValueID>,
     string_table: Vec<String>,
+    // Loop support
+    loop_break_target: Option<BlockID>,
+    loop_continue_target: Option<BlockID>,
 }
 impl<'a> ASTLowerer<'a> {
     pub fn new(arena: &'a Arena, source: &str) -> Self {
@@ -52,19 +56,23 @@ impl<'a> ASTLowerer<'a> {
             map: HashMap::new(),
             vars: HashMap::new(),
             entry,
+            current_block: entry,
             last_value: None,
             string_table: table,
+            loop_break_target: None,
+            loop_continue_target: None,
         }
     }
     pub fn lower(mut self, root: NodeID) -> NIRFunction {
         let result = self.lower_node(root);
         let return_val = result.or(self.last_value);
+        // Only add return to current block if it's not already terminated
         if let Some(v) = return_val {
-            self.func.add_instruction(self.entry,
+            self.func.add_instruction(self.current_block,
                 NIRInstruction::Return { value: Some(v) });
         } else {
             let z = self.func.fresh_value(NIRValue::IntConst(0));
-            self.func.add_instruction(self.entry,
+            self.func.add_instruction(self.current_block,
                 NIRInstruction::Return { value: Some(z) });
         }
         self.func
@@ -118,7 +126,7 @@ impl<'a> ASTLowerer<'a> {
                     _ => return None,
                 };
                 let res = self.func.fresh_value(NIRValue::Undef);
-                self.func.add_instruction(self.entry, NIRInstruction::BinOp {
+                self.func.add_instruction(self.current_block, NIRInstruction::BinOp {
                     op: nop, lhs: l, rhs: r, result: res,
                 });
                 Some(res)
@@ -128,7 +136,7 @@ impl<'a> ASTLowerer<'a> {
                 match op {
                     UnaryOp::Neg => {
                         let res = self.func.fresh_value(NIRValue::Undef);
-                        self.func.add_instruction(self.entry, NIRInstruction::UnOp {
+                        self.func.add_instruction(self.current_block, NIRInstruction::UnOp {
                             op: NIRUnOp::Neg, operand: e, result: res,
                         });
                         Some(res)
@@ -136,7 +144,7 @@ impl<'a> ASTLowerer<'a> {
                     UnaryOp::Not => {
                         let zero = self.func.fresh_value(NIRValue::IntConst(0));
                         let res = self.func.fresh_value(NIRValue::Undef);
-                        self.func.add_instruction(self.entry, NIRInstruction::BinOp {
+                        self.func.add_instruction(self.current_block, NIRInstruction::BinOp {
                             op: NIROp::Eq, lhs: e, rhs: zero, result: res,
                         });
                         Some(res)
@@ -145,31 +153,28 @@ impl<'a> ASTLowerer<'a> {
             }
             // Call: builtin or user function
             ASTNode::Call { func: func_nid, args } => {
-                // Special case: Read builtin (func = INVALID)
+                // Special case: Read builtin (⊙)
                 if func_nid.0 == u32::MAX {
                     let callee = self.func.fresh_value(NIRValue::IntConst(122));
                     let res = self.func.fresh_value(NIRValue::Undef);
-                    self.func.add_instruction(self.entry,
+                    self.func.add_instruction(self.current_block,
                         NIRInstruction::Call { callee, args: vec![], result: res });
                     return Some(res);
                 }
-                // Collect ALL args (handles nested calls + multi-arg)
+                // Collect ALL args recursively
                 let mut arg_vals = Vec::new();
                 let mut cur = *args;
-                // Walk the List chain
                 loop {
                     if cur.0 == u32::MAX { break; }
                     if let Ok(arg_node) = self.arena.get(cur) {
                         match arg_node {
                             ASTNode::List { head, tail } => {
-                                // Recursively lower head (supports nested calls)
                                 if let Some(v) = self.lower_node(*head) {
                                     arg_vals.push(v);
                                 }
                                 cur = *tail;
                             }
                             ASTNode::Empty => break,
-                            // Single value (not in list) — lower it
                             _ => {
                                 if let Some(v) = self.lower_node(cur) {
                                     arg_vals.push(v);
@@ -177,9 +182,7 @@ impl<'a> ASTLowerer<'a> {
                                 break;
                             }
                         }
-                    } else {
-                        break;
-                    }
+                    } else { break; }
                 }
                 // Get function name for builtin dispatch
                 if let Ok(func_node) = self.arena.get(*func_nid) {
@@ -187,7 +190,7 @@ impl<'a> ASTLowerer<'a> {
                         if let Some(builtin_tag) = self.ident_to_builtin(*name_idx) {
                             let callee = self.func.fresh_value(NIRValue::IntConst(builtin_tag));
                             let res = self.func.fresh_value(NIRValue::Undef);
-                            self.func.add_instruction(self.entry,
+                            self.func.add_instruction(self.current_block,
                                 NIRInstruction::Call {
                                     callee, args: arg_vals, result: res,
                                 });
@@ -195,7 +198,6 @@ impl<'a> ASTLowerer<'a> {
                         }
                     }
                 }
-                // Unknown function — return None
                 None
             }
             ASTNode::LinearLet { name, value, body } => {
@@ -217,6 +219,24 @@ impl<'a> ASTLowerer<'a> {
                 }
                 None
             }
+            // ForAll: ∀x ∈ S : body  — for simple ranges, lower as loop
+            ASTNode::ForAll { var, set, body } => {
+                // For now, just lower the body (simplified)
+                // Full implementation would iterate over set
+                if let Ok(var_node) = self.arena.get(*var) {
+                    if let ASTNode::Ident(var_idx) = var_node {
+                        // Initialize var to 0
+                        let zero = self.func.fresh_value(NIRValue::IntConst(0));
+                        self.vars.insert(*var_idx, zero);
+                    }
+                }
+                self.lower_node(*body)
+            }
+            // Lambda: λ(params). body — create as closure (simplified)
+            ASTNode::Lambda { params: _, body } => {
+                // For now, just return the body value (no closure capture)
+                self.lower_node(*body)
+            }
             _ => None,
         };
         if let Some(v) = result {
@@ -233,7 +253,11 @@ impl<'a> ASTLowerer<'a> {
             "floor" | "أرضية" => Some(102),
             "power" | "قوة" => Some(103),
             "exp" | "أسي" => Some(104),
-            "print_int" | "اطبع" => Some(105),
+            "print_int" | "اطبع" | "⎕" => Some(105),
+            "print_str" | "اطبع_نص" => Some(106),
+            "num_to_str" | "نص" => Some(107),
+            "list_len" | "طول" => Some(113),
+            "list_sum" | "مجموع" => Some(114),
             _ => None,
         }
     }

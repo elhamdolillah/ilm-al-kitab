@@ -14,6 +14,8 @@ struct Args {
     output: PathBuf,
     #[arg(long)]
     emit_nir: bool,
+    #[arg(long)]
+    emit_asm: bool,
 }
 fn main() {
     let args = Args::parse();
@@ -30,6 +32,11 @@ fn main() {
         }
     };
     let nir = mal_nir::lowering::lower_ast_to_nir_with_source(&arena, root, &source);
+    if args.emit_asm {
+        let asm = mal_native::emit_asm(&nir).unwrap();
+        println!("{}", asm);
+        return;
+    }
     if args.emit_nir {
         println!("{:#?}", nir);
         return;
