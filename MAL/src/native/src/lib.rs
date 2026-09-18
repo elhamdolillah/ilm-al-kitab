@@ -125,7 +125,17 @@ fn generate_assembly(func: &NIRFunction) -> Result<String> {
             asm.push_str(&emit_instr(instr, &func.values, &mut ctx)?);
         }
         if last_is_return {
-            asm.push_str("    mov rax, 60\n    syscall\n");
+            // Load the return value into rdi before sys_exit
+            if let Some(NIRInstruction::Return { value: Some(ret_val) }) = block.instructions.last() {
+                // Generate load instruction inline
+                let mut tmp = String::new();
+                load(&mut tmp, *ret_val, &func.values, &mut ctx, "rdi");
+                asm.push_str(&tmp);
+            } else {
+                asm.push_str("    xor rdi, rdi\n");
+            }
+            asm.push_str("    mov rax, 60\n");
+            asm.push_str("    syscall\n");
         }
     }
     // Fallback exit
