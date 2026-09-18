@@ -244,8 +244,7 @@ impl<'a> Parser<'a> {
             }
             TokenKind::Ident => {
                 // Plain identifier (call logic moved to parse_postfix)
-                let _name = &self.src[tok.start as usize..(tok.start + tok.len) as usize];
-                Ok(arena.allocate(ASTNode::Ident(0))?) // placeholder
+                                Ok(arena.allocate(ASTNode::Ident(tok.start))?)
             }
             TokenKind::LParen => {
                 // Grouped expression (call chaining moved to parse_postfix)
