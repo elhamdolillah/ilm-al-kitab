@@ -278,6 +278,7 @@ fn symbol_kind(c: char) -> Option<TokenKind> {
         '≤' => TokenKind::Le,
         '≥' => TokenKind::Ge,
         '¬' => TokenKind::Not,
+        '!' => TokenKind::Not,
         '∧' => TokenKind::And,
         '∨' => TokenKind::Or,
         '؟' => TokenKind::Question,

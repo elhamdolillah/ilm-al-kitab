@@ -1,4 +1,4 @@
-//! AST -> NIR lowering (FIXED: use lower_node result)
+//! AST -> NIR lowering (with Assign + string table + boolean Not)
 use mal_arena::{ASTNode, NodeID, BinaryOp, UnaryOp, Arena};
 use crate::{NIRFunction, NIRInstruction, NIRValue, NIROp, NIRUnOp, ValueID, BlockID};
 use std::collections::HashMap;
@@ -6,29 +6,71 @@ pub struct ASTLowerer<'a> {
     arena: &'a Arena,
     func: NIRFunction,
     map: HashMap<u32, ValueID>,
+    vars: HashMap<u32, ValueID>,
     entry: BlockID,
+    last_value: Option<ValueID>,
+    string_table: Vec<String>,
 }
 impl<'a> ASTLowerer<'a> {
-    pub fn new(arena: &'a Arena) -> Self {
+    pub fn new(arena: &'a Arena, source: &str) -> Self {
         let mut func = NIRFunction::new("main".to_string());
         let entry = func.fresh_block();
         func.entry_block = entry;
-        Self { arena, func, map: HashMap::new(), entry }
+        // Build string table using char_indices() (safe UTF-8 handling)
+        let mut table = Vec::new();
+        let chars: Vec<(usize, char)> = source.char_indices().collect();
+        let mut i = 0;
+        while i < chars.len() {
+            let (byte_idx, ch) = chars[i];
+            if ch.is_whitespace() { i += 1; continue; }
+            let is_ident_start = ch == '_' || ch.is_ascii_alphabetic() ||
+                ch >= '\u{0600}' && ch <= '\u{06FF}' ||
+                ch >= '\u{0750}' && ch <= '\u{077F}' ||
+                ch >= '\u{FB50}' && ch <= '\u{FDFF}' ||
+                ch >= '\u{FE70}' && ch <= '\u{FEFF}';
+            if is_ident_start {
+                let start_byte = byte_idx;
+                while i < chars.len() {
+                    let c = chars[i].1;
+                    let is_ident_cont = c == '_' || c.is_ascii_alphanumeric() ||
+                        c >= '\u{0600}' && c <= '\u{06FF}' ||
+                        c >= '\u{0750}' && c <= '\u{077F}' ||
+                        c >= '\u{FB50}' && c <= '\u{FDFF}' ||
+                        c >= '\u{FE70}' && c <= '\u{FEFF}';
+                    if is_ident_cont {
+                        i += 1;
+                    } else {
+                        break;
+                    }
+                }
+                let end_byte = if i < chars.len() { chars[i].0 } else { source.len() };
+                let s = &source[start_byte..end_byte];
+                if !table.contains(&s.to_string()) {
+                    table.push(s.to_string());
+                }
+            } else {
+                i += 1;
+            }
+        }
+        Self {
+            arena, func,
+            map: HashMap::new(),
+            vars: HashMap::new(),
+            entry,
+            last_value: None,
+            string_table: table,
+        }
     }
     pub fn lower(mut self, root: NodeID) -> NIRFunction {
-        // ✅ FIX: Use the result from lower_node as the return value
-        if let Some(result_val) = self.lower_node(root) {
-            self.func.add_instruction(
-                self.entry,
-                NIRInstruction::Return { value: Some(result_val) }
-            );
+        let result = self.lower_node(root);
+        let return_val = result.or(self.last_value);
+        if let Some(v) = return_val {
+            self.func.add_instruction(self.entry,
+                NIRInstruction::Return { value: Some(v) });
         } else {
-            // Fallback: return 0 if lowering failed
             let z = self.func.fresh_value(NIRValue::IntConst(0));
-            self.func.add_instruction(
-                self.entry,
-                NIRInstruction::Return { value: Some(z) }
-            );
+            self.func.add_instruction(self.entry,
+                NIRInstruction::Return { value: Some(z) });
         }
         self.func
     }
@@ -47,6 +89,23 @@ impl<'a> ASTLowerer<'a> {
             ASTNode::FixedPoint(q) => {
                 Some(self.func.fresh_value(NIRValue::IntConst(*q)))
             }
+            ASTNode::Ident(idx) => {
+                self.vars.get(idx).copied()
+            }
+            // Assignment: name ≔ value (BinOp with BinaryOp::Assign)
+            ASTNode::BinOp { op: BinaryOp::Assign, left, right } => {
+                if let Ok(name_node) = self.arena.get(*left) {
+                    if let ASTNode::Ident(name_idx) = name_node {
+                        if let Some(val) = self.lower_node(*right) {
+                            self.vars.insert(*name_idx, val);
+                            self.last_value = Some(val);
+                            return Some(val);
+                        }
+                    }
+                }
+                None
+            }
+            // Other binary ops
             ASTNode::BinOp { op, left, right } => {
                 let l = self.lower_node(*left)?;
                 let r = self.lower_node(*right)?;
@@ -73,32 +132,112 @@ impl<'a> ASTLowerer<'a> {
             }
             ASTNode::UnaryOp { op, expr } => {
                 let e = self.lower_node(*expr)?;
-                let nop = match op {
-                    UnaryOp::Neg => NIRUnOp::Neg,
-                    UnaryOp::Not => NIRUnOp::Not,
-                };
-                let res = self.func.fresh_value(NIRValue::Undef);
-                self.func.add_instruction(self.entry, NIRInstruction::UnOp {
-                    op: nop, operand: e, result: res,
-                });
-                Some(res)
+                match op {
+                    UnaryOp::Neg => {
+                        let res = self.func.fresh_value(NIRValue::Undef);
+                        self.func.add_instruction(self.entry, NIRInstruction::UnOp {
+                            op: NIRUnOp::Neg, operand: e, result: res,
+                        });
+                        Some(res)
+                    }
+                    UnaryOp::Not => {
+                        // Boolean NOT: not(x) == (x == 0)
+                        let zero = self.func.fresh_value(NIRValue::IntConst(0));
+                        let res = self.func.fresh_value(NIRValue::Undef);
+                        self.func.add_instruction(self.entry, NIRInstruction::BinOp {
+                            op: NIROp::Eq, lhs: e, rhs: zero, result: res,
+                        });
+                        Some(res)
+                    }
+                }
+            }
+            ASTNode::Call { func: func_nid, args } => {
+                if let Ok(func_node) = self.arena.get(*func_nid) {
+                    if let ASTNode::Ident(name_idx) = func_node {
+                        if let Some(builtin_tag) = self.ident_to_builtin(*name_idx) {
+                            let mut arg_vals = Vec::new();
+                            let mut cur = *args;
+                            for _ in 0..10 {
+                                if let Ok(arg_node) = self.arena.get(cur) {
+                                    match arg_node {
+                                        ASTNode::List { head, tail } => {
+                                            if let Some(v) = self.lower_node(*head) {
+                                                arg_vals.push(v);
+                                            }
+                                            cur = *tail;
+                                            if cur.0 == u32::MAX { break; }
+                                        }
+                                        ASTNode::Empty => break,
+                                        _ => {
+                                            if let Some(v) = self.lower_node(cur) {
+                                                arg_vals.push(v);
+                                            }
+                                            break;
+                                        }
+                                    }
+                                } else { break; }
+                            }
+                            let callee = self.func.fresh_value(NIRValue::IntConst(builtin_tag));
+                            let res = self.func.fresh_value(NIRValue::Undef);
+                            self.func.add_instruction(self.entry,
+                                NIRInstruction::Call {
+                                    callee, args: arg_vals, result: res,
+                                });
+                            return Some(res);
+                        }
+                    }
+                }
+                None
+            }
+            ASTNode::LinearLet { name, value, body } => {
+                if let Ok(name_node) = self.arena.get(*name) {
+                    if let ASTNode::Ident(name_idx) = name_node {
+                        if let Some(val) = self.lower_node(*value) {
+                            self.vars.insert(*name_idx, val);
+                            self.last_value = Some(val);
+                            if body.0 != u32::MAX && body.0 != 0 {
+                                if let Ok(body_node) = self.arena.get(*body) {
+                                    if !matches!(body_node, ASTNode::Empty) {
+                                        return self.lower_node(*body);
+                                    }
+                                }
+                            }
+                            return Some(val);
+                        }
+                    }
+                }
+                None
             }
             _ => None,
         };
         if let Some(v) = result {
             self.map.insert(nid.0, v);
+            self.last_value = Some(v);
         }
         result
     }
+    fn ident_to_builtin(&self, idx: u32) -> Option<i64> {
+        let name = self.string_table.get(idx as usize)?;
+        match name.as_str() {
+            "sqrt" | "جذر" => Some(100),
+            "abs" | "مطلق" => Some(101),
+            "floor" | "أرضية" => Some(102),
+            "power" | "قوة" => Some(103),
+            "exp" | "أسي" => Some(104),
+            _ => None,
+        }
+    }
 }
 pub fn lower_ast_to_nir(arena: &Arena, root: NodeID) -> NIRFunction {
-    ASTLowerer::new(arena).lower(root)
+    ASTLowerer::new(arena, "").lower(root)
+}
+pub fn lower_ast_to_nir_with_source(arena: &Arena, root: NodeID, source: &str) -> NIRFunction {
+    ASTLowerer::new(arena, source).lower(root)
 }
 #[cfg(test)]
 mod tests {
     use super::*;
-    #[test]
-    fn module_compiles() {
+    #[test] fn module_compiles() {
         let f = NIRFunction::new("t".to_string());
         assert_eq!(f.name, "t");
     }

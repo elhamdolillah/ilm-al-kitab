@@ -1,7 +1,7 @@
 //! malc-native: Arabic -> NIR -> x86-64 ELF (no libc)
 use clap::Parser;
 use mal_arena::Arena;
-use mal_nir::lowering::lower_ast_to_nir;
+use mal_nir::lowering::lower_ast_to_nir_with_source;
 use mal_native::compile_to_native;
 use std::fs;
 use std::path::PathBuf;
@@ -29,7 +29,7 @@ fn main() {
             std::process::exit(1);
         }
     };
-    let nir = lower_ast_to_nir(&arena, root);
+    let nir = mal_nir::lowering::lower_ast_to_nir_with_source(&arena, root, &source);
     if args.emit_nir {
         println!("{:#?}", nir);
         return;
