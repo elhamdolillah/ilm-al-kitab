@@ -186,11 +186,8 @@ fn generate_instruction(
                 NIROp::Sub => asm.push_str("    sub rax, rbx\n"),
                 NIROp::Mul => asm.push_str("    imul rax, rbx\n"),
                 NIROp::Div => {
-                    asm.push_str("    push rax\n");
-                    asm.push_str("    push rbx\n");
-                    asm.push_str("    pop rax\n");
+                    // rax=lhs, rbx=rhs after load; div rax by rbx
                     asm.push_str("    xor rdx, rdx\n");
-                    asm.push_str("    pop rbx\n");
                     asm.push_str("    div rbx\n");
                 }
                 _ => return Err(CompileError::Unsupported(format!("Op {:?}", op))),
