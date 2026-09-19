@@ -51,6 +51,12 @@ fn main() {
         return;
     }
 
+    // === Handle --check-only flag ===
+    if args.check_only {
+        eprintln!("✓ MAL: Type check passed (no compilation)");
+        return;
+    }
+
     // === Handle MAL_CHECK_ONLY (early exit) ===
     if !skip_typecheck && std::env::var("MAL_CHECK_ONLY").is_ok() {
         eprintln!("✓ MAL: Type check passed (no compilation)");
