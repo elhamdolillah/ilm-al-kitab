@@ -1,0 +1,15 @@
+fn power(base: i32, exp: i32) -> i32 {
+    let result: i32 = 1;
+    let i: i32 = 0;
+    while (i < exp) {
+        result = result * base;
+        i = i + 1;
+    }
+    return result;
+}
+fn main() -> i32 {
+    printf("2^10 = %d\n", power(2, 10));
+    printf("3^5 = %d\n", power(3, 5));
+    printf("5^3 = %d\n", power(5, 3));
+    return 0;
+}

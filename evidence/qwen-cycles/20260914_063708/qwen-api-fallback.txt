@@ -1,0 +1,1 @@
+CHAT_API_FAILED: using ollama CLI fallback

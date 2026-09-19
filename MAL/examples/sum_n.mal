@@ -1,0 +1,15 @@
+fn sum_n(n: i32) -> i32 {
+    let total: i32 = 0;
+    let i: i32 = 1;
+    while (i <= n) {
+        total = total + i;
+        i = i + 1;
+    }
+    return total;
+}
+fn main() -> i32 {
+    printf("Sum 1..10 = %d\n", sum_n(10));
+    printf("Sum 1..100 = %d\n", sum_n(100));
+    printf("Sum 1..1000 = %d\n", sum_n(1000));
+    return 0;
+}

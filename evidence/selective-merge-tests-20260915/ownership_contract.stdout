@@ -1,0 +1,6 @@
+PASS single transfer
+PASS second transfer rejected
+PASS already moved rejected
+PASS destination owns
+PASS source not owned
+SUMMARY: 5/5 PASS

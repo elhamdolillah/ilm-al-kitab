@@ -1,0 +1,14 @@
+fn abjad_mim() -> i32 {
+    return 40;
+}
+fn abjad_ha() -> i32 {
+    return 8;
+}
+fn abjad_dal() -> i32 {
+    return 4;
+}
+fn main() -> i32 {
+    let sum: i32 = abjad_mim() + abjad_ha() + abjad_mim() + abjad_dal();
+    printf("محمد = %d (Abjad)\n", sum);
+    return 0;
+}

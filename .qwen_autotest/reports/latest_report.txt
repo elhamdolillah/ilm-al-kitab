@@ -1,0 +1,209 @@
+===== RUNNING: env =====
+cargo 1.98.0-nightly (fbb61be30 2026-05-26)
+rustc 1.98.0-nightly (14210df0e 2026-05-31)
+===== EXIT_CODE: 0 =====
+
+===== RUNNING: git_status =====
+ M tools/qwen_json_helper.py
+?? .qwen_autotest/
+?? AGENT_CONTRACT.md
+?? MAL/src/parser/src/lib.rs.bak-read-double-bump-20260912_234801
+?? MAL/src/parser/tests/
+?? TASKS/ACTIVE/SYMBOLS_NEXT.md
+?? add_phase0_tests.sh
+?? evidence/MAL-PARSER-C2-CONCAT.sha256
+?? evidence/MAL-PARSER-C2-CONCAT.stdout
+?? evidence/MAL-PARSER-C2-READ.stdout
+?? evidence/qwen-cycles/
+?? inspect_parser.sh
+?? phase0.sh
+?? t39_basic
+?? t39_fib
+?? t39_loop
+?? t39_multi
+?? t42_id_int
+?? t42_id_str
+?? t42_swap
+?? t_fact
+?? t_foreach
+?? t_move_valid
+?? t_num2str
+?? tools/run_symbol_phase.sh
+?? "\331\205\331\204\331\201.txt"
+===== EXIT_CODE: 0 =====
+
+===== RUNNING: diff_check =====
+===== EXIT_CODE: 0 =====
+
+===== RUNNING: parser_lambda_apply =====
+warning: unused variable: `right`
+   --> src/lib.rs:521:43
+    |
+521 |         if let ASTNode::BinOp { op, left, right } = arena.get(root).unwrap() {
+    |                                           ^^^^^ help: try ignoring the field: `right: _`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `mal_parser` (lib test) generated 1 warning (run `cargo fix --lib -p mal_parser --tests` to apply 1 suggestion)
+    Finished `release` profile [optimized] target(s) in 0.02s
+     Running unittests src/lib.rs (target/release/deps/mal_parser-e96432f7d30f5de2)
+
+running 1 test
+test tests::test_parse_lambda_apply ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 34 filtered out; finished in 0.00s
+
+     Running tests/parser_stability.rs (target/release/deps/parser_stability-d55c346e608e8c9e)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 6 filtered out; finished in 0.00s
+
+===== EXIT_CODE: 0 =====
+
+===== RUNNING: parser_all =====
+warning: unused variable: `right`
+   --> src/lib.rs:521:43
+    |
+521 |         if let ASTNode::BinOp { op, left, right } = arena.get(root).unwrap() {
+    |                                           ^^^^^ help: try ignoring the field: `right: _`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `mal_parser` (lib test) generated 1 warning (run `cargo fix --lib -p mal_parser --tests` to apply 1 suggestion)
+    Finished `release` profile [optimized] target(s) in 0.02s
+     Running unittests src/lib.rs (target/release/deps/mal_parser-e96432f7d30f5de2)
+
+running 35 tests
+test tests::test_forall_type_tag ... ok
+test tests::test_linear_let_api ... ok
+test tests::test_parse_assignment ... ok
+test tests::test_parse_binary_add ... ok
+test tests::test_parse_binary_mul ... ok
+test tests::test_parse_block ... ok
+test tests::test_parse_concat_basic ... ok
+test tests::test_parse_concat_chain ... ok
+test tests::test_parse_concat_with_plus ... ok
+test tests::test_parse_error_expected_paren ... ok
+test tests::test_parse_error_unexpected_eof ... ok
+test tests::test_parse_exists_basic ... ok
+test tests::test_parse_exists_with_body ... ok
+test tests::test_parse_forall_basic ... ok
+test tests::test_parse_forall_nested ... ok
+test tests::test_linear_let_type_tag ... ok
+test tests::test_parse_lambda_apply ... ok
+test tests::test_parse_forall_with_body ... ok
+test tests::test_parse_lambda_two_params ... ok
+test tests::test_parse_lambda_simple ... ok
+test tests::test_parse_lambda_with_binop ... ok
+test tests::test_parse_mu_basic ... ok
+test tests::test_parse_mu_with_body ... ok
+test tests::test_parse_mu_with_condition ... ok
+test tests::test_parse_number ... ok
+test tests::test_parse_precedence ... ok
+test tests::test_parse_read_stdin_basic ... ok
+test tests::test_parse_read_stdin_in_assignment ... ok
+test tests::test_parse_read_stdin_with_print ... ok
+test tests::test_parse_set_literal_empty ... ok
+test tests::test_parse_set_literal_multi_elem ... ok
+test tests::test_parse_set_literal_one_elem ... ok
+test tests::test_set_membership_api ... ok
+test tests::test_set_type_tag ... ok
+test tests::test_parse_parens ... ok
+
+test result: ok. 35 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/parser_stability.rs (target/release/deps/parser_stability-d55c346e608e8c9e)
+
+running 6 tests
+test direct_call_parses ... ok
+test additive_multiplicative_expression_parses ... ok
+test multi_arg_call_parses ... ok
+test missing_call_paren_fails_closed ... ok
+test parenthesized_callee_is_future_feature ... ignored, postfix calls such as (f)(x) are a future parser feature
+test subtraction_chain_parses ... ok
+
+test result: ok. 5 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests mal_parser
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+===== EXIT_CODE: 0 =====
+
+===== RUNNING: workspace_release =====
+warning: unused variable: `right`
+   --> src/lib.rs:521:43
+    |
+521 |         if let ASTNode::BinOp { op, left, right } = arena.get(root).unwrap() {
+    |                                           ^^^^^ help: try ignoring the field: `right: _`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `mal_parser` (lib test) generated 1 warning (run `cargo fix --lib -p mal_parser --tests` to apply 1 suggestion)
+    Finished `release` profile [optimized] target(s) in 0.02s
+     Running unittests src/lib.rs (target/release/deps/mal_parser-e96432f7d30f5de2)
+
+running 35 tests
+test tests::test_forall_type_tag ... ok
+test tests::test_linear_let_type_tag ... ok
+test tests::test_parse_assignment ... ok
+test tests::test_parse_binary_add ... ok
+test tests::test_parse_binary_mul ... ok
+test tests::test_parse_block ... ok
+test tests::test_parse_concat_basic ... ok
+test tests::test_parse_concat_chain ... ok
+test tests::test_parse_concat_with_plus ... ok
+test tests::test_parse_error_expected_paren ... ok
+test tests::test_parse_error_unexpected_eof ... ok
+test tests::test_parse_exists_basic ... ok
+test tests::test_parse_exists_with_body ... ok
+test tests::test_parse_forall_basic ... ok
+test tests::test_parse_forall_nested ... ok
+test tests::test_parse_forall_with_body ... ok
+test tests::test_parse_lambda_apply ... ok
+test tests::test_parse_lambda_simple ... ok
+test tests::test_parse_lambda_two_params ... ok
+test tests::test_parse_lambda_with_binop ... ok
+test tests::test_parse_mu_basic ... ok
+test tests::test_parse_mu_with_body ... ok
+test tests::test_parse_mu_with_condition ... ok
+test tests::test_linear_let_api ... ok
+test tests::test_parse_number ... ok
+test tests::test_parse_parens ... ok
+test tests::test_parse_precedence ... ok
+test tests::test_parse_read_stdin_basic ... ok
+test tests::test_parse_read_stdin_in_assignment ... ok
+test tests::test_parse_read_stdin_with_print ... ok
+test tests::test_parse_set_literal_multi_elem ... ok
+test tests::test_parse_set_literal_one_elem ... ok
+test tests::test_set_membership_api ... ok
+test tests::test_set_type_tag ... ok
+test tests::test_parse_set_literal_empty ... ok
+
+test result: ok. 35 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/parser_stability.rs (target/release/deps/parser_stability-d55c346e608e8c9e)
+
+running 6 tests
+test direct_call_parses ... ok
+test additive_multiplicative_expression_parses ... ok
+test missing_call_paren_fails_closed ... ok
+test parenthesized_callee_is_future_feature ... ignored, postfix calls such as (f)(x) are a future parser feature
+test multi_arg_call_parses ... ok
+test subtraction_chain_parses ... ok
+
+test result: ok. 5 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests mal_parser
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+===== EXIT_CODE: 0 =====
+
+FINAL_STATUS: PASS
+ALL_WHITELISTED_TESTS_PASSED

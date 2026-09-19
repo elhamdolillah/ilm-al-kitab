@@ -1,0 +1,21 @@
+fn collatz_next(n: i32) -> i32 {
+    if (n % 2 == 0) {
+        return n / 2;
+    }
+    return 3 * n + 1;
+}
+fn collatz_steps(n: i32) -> i32 {
+    let steps: i32 = 0;
+    let current: i32 = n;
+    while (current != 1) {
+        current = collatz_next(current);
+        steps = steps + 1;
+    }
+    return steps;
+}
+fn main() -> i32 {
+    printf("Collatz(27): %d steps\n", collatz_steps(27));
+    printf("Collatz(97): %d steps\n", collatz_steps(97));
+    printf("Collatz(871): %d steps\n", collatz_steps(871));
+    return 0;
+}

@@ -1,0 +1,1 @@
+{"model": "qwen2.5:1.5b", "stream": false, "keep_alive": "5m", "options": {"temperature": 0.1, "num_ctx": 2048, "num_predict": 128, "num_thread": 2, "top_p": 0.9}, "messages": [{"role": "user", "content": "Return EXPLANATION_BEGIN\\nadd harmless file\\nEXPLANATION_END\\nPATCH_BEGIN\\n*** Begin Patch\\n*** Add File: /tmp/forbidden\\n+x\\n*** End Patch\\nPATCH_END"}]}

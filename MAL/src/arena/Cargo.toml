@@ -10,3 +10,4 @@ path = "src/lib.rs"
 crate-type = ["lib"]
 
 [dependencies]
+mal_types = { path = "../types" }

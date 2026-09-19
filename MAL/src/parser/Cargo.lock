@@ -5,6 +5,9 @@ version = 4
 [[package]]
 name = "mal_arena"
 version = "0.1.0"
+dependencies = [
+ "mal_types",
+]
 
 [[package]]
 name = "mal_lexer"
@@ -17,3 +20,7 @@ dependencies = [
  "mal_arena",
  "mal_lexer",
 ]
+
+[[package]]
+name = "mal_types"
+version = "0.1.0"

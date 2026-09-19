@@ -499,7 +499,7 @@ impl<'a> Parser<'a> {
                 if self.peek().map_or(false, |t| t.kind == TokenKind::Assign) {
                     self.bump(); // consume ≔
                     let value = self.parse_expr(arena)?;
-                    let left_ident = arena.allocate(ASTNode::Ident(0))?;
+                    let left_ident = arena.allocate(ASTNode::Ident(_ident.start))?;
                     Ok(arena.allocate(ASTNode::BinOp {
                         op: BinaryOp::Assign,
                         left: left_ident,

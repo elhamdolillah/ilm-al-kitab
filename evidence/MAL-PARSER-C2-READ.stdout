@@ -1,0 +1,77 @@
+   Compiling mal_parser v0.1.0 (/root/ilm-al-kitab/MAL/src/parser)
+warning: unused variable: `right`
+   --> src/lib.rs:522:43
+    |
+522 |         if let ASTNode::BinOp { op, left, right } = arena.get(root).unwrap() {
+    |                                           ^^^^^ help: try ignoring the field: `right: _`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `mal_parser` (lib test) generated 1 warning (run `cargo fix --lib -p mal_parser --tests` to apply 1 suggestion)
+    Finished `release` profile [optimized] target(s) in 1.41s
+     Running unittests src/lib.rs (target/release/deps/mal_parser-e96432f7d30f5de2)
+
+running 35 tests
+test tests::test_linear_let_api ... ok
+test tests::test_forall_type_tag ... ok
+test tests::test_linear_let_type_tag ... ok
+test tests::test_parse_assignment ... ok
+test tests::test_parse_binary_add ... ok
+test tests::test_parse_binary_mul ... ok
+test tests::test_parse_concat_basic ... ok
+test tests::test_parse_block ... ok
+test tests::test_parse_concat_with_plus ... ok
+test tests::test_parse_concat_chain ... ok
+test tests::test_parse_error_expected_paren ... ok
+test tests::test_parse_exists_basic ... ok
+test tests::test_parse_error_unexpected_eof ... ok
+test tests::test_parse_exists_with_body ... ok
+test tests::test_parse_forall_nested ... ok
+test tests::test_parse_forall_basic ... ok
+test tests::test_parse_forall_with_body ... ok
+test tests::test_parse_lambda_apply ... ok
+test tests::test_parse_lambda_simple ... ok
+test tests::test_parse_lambda_two_params ... ok
+test tests::test_parse_lambda_with_binop ... ok
+test tests::test_parse_mu_basic ... ok
+test tests::test_parse_mu_with_condition ... ok
+test tests::test_parse_mu_with_body ... ok
+test tests::test_parse_number ... ok
+test tests::test_parse_parens ... ok
+test tests::test_parse_precedence ... ok
+test tests::test_parse_read_stdin_basic ... FAILED
+test tests::test_parse_read_stdin_in_assignment ... FAILED
+test tests::test_parse_read_stdin_with_print ... FAILED
+test tests::test_parse_set_literal_empty ... ok
+test tests::test_parse_set_literal_multi_elem ... ok
+test tests::test_parse_set_literal_one_elem ... ok
+test tests::test_set_membership_api ... ok
+test tests::test_set_type_tag ... ok
+
+failures:
+
+---- tests::test_parse_read_stdin_basic stdout ----
+
+thread 'tests::test_parse_read_stdin_basic' (3151757) panicked at src/lib.rs:710:43:
+called `Result::unwrap()` on an `Err` value: UnexpectedEof
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- tests::test_parse_read_stdin_in_assignment stdout ----
+
+thread 'tests::test_parse_read_stdin_in_assignment' (3151758) panicked at src/lib.rs:721:47:
+called `Result::unwrap()` on an `Err` value: UnexpectedEof
+
+---- tests::test_parse_read_stdin_with_print stdout ----
+
+thread 'tests::test_parse_read_stdin_with_print' (3151759) panicked at src/lib.rs:740:43:
+called `Result::unwrap()` on an `Err` value: UnexpectedEof
+
+
+failures:
+    tests::test_parse_read_stdin_basic
+    tests::test_parse_read_stdin_in_assignment
+    tests::test_parse_read_stdin_with_print
+
+test result: FAILED. 32 passed; 3 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `--lib`

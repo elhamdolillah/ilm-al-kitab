@@ -1,0 +1,10 @@
+[package]
+name = "mal_types"
+version = "0.1.0"
+edition = "2021"
+description = "MAL Types: Mathematical foundation types for the Mathematical Arabic Language"
+license = "MIT"
+[lib]
+path = "src/lib.rs"
+crate-type = ["lib"]
+[dependencies]
