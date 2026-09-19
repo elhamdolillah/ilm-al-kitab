@@ -104,3 +104,6 @@ impl NIRFunction {
     }
 }
 pub mod lowering;
+
+pub mod type_inference;
+pub use type_inference::*;

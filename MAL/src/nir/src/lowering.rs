@@ -1,67 +1,32 @@
-//! AST -> NIR lowering with CORRECT multi-statement support
 use mal_arena::{ASTNode, NodeID, BinaryOp, UnaryOp, Arena};
 use crate::{NIRFunction, NIRInstruction, NIRValue, NIROp, NIRUnOp, ValueID, BlockID};
 use std::collections::HashMap;
+use crate::TypeEnv;
 pub struct ASTLowerer<'a> {
     arena: &'a Arena,
     func: NIRFunction,
     map: HashMap<u32, ValueID>,
     vars: HashMap<String, ValueID>,
+    type_env: TypeEnv,  // NEW: track types
     entry: BlockID,
     current_block: BlockID,
     last_value: Option<ValueID>,
     source: String,
-    string_table: Vec<String>,
-    loop_break_target: Option<BlockID>,
-    loop_continue_target: Option<BlockID>,
 }
 impl<'a> ASTLowerer<'a> {
     pub fn new(arena: &'a Arena, source: &str) -> Self {
         let mut func = NIRFunction::new("main".to_string());
         let entry = func.fresh_block();
         func.entry_block = entry;
-        let mut table = Vec::new();
-        let chars: Vec<(usize, char)> = source.char_indices().collect();
-        let mut i = 0;
-        while i < chars.len() {
-            let (byte_idx, ch) = chars[i];
-            if ch.is_whitespace() { i += 1; continue; }
-            let is_ident_start = ch == '_' || ch.is_ascii_alphabetic() ||
-                ch >= '\u{0600}' && ch <= '\u{06FF}' ||
-                ch >= '\u{0750}' && ch <= '\u{077F}' ||
-                ch >= '\u{FB50}' && ch <= '\u{FDFF}' ||
-                ch >= '\u{FE70}' && ch <= '\u{FEFF}';
-            if is_ident_start {
-                let start_byte = byte_idx;
-                while i < chars.len() {
-                    let c = chars[i].1;
-                    let is_ident_cont = c == '_' || c.is_ascii_alphanumeric() ||
-                        c >= '\u{0600}' && c <= '\u{06FF}' ||
-                        c >= '\u{0750}' && c <= '\u{077F}' ||
-                        c >= '\u{FB50}' && c <= '\u{FDFF}' ||
-                        c >= '\u{FE70}' && c <= '\u{FEFF}';
-                    if is_ident_cont { i += 1; } else { break; }
-                }
-                let end_byte = if i < chars.len() { chars[i].0 } else { source.len() };
-                let s = &source[start_byte..end_byte];
-                if !table.contains(&s.to_string()) {
-                    table.push(s.to_string());
-                }
-            } else {
-                i += 1;
-            }
-        }
         Self {
             arena, func,
             map: HashMap::new(),
             vars: HashMap::new(),
+            type_env: TypeEnv::new(),  // NEW
             entry,
             current_block: entry,
             last_value: None,
             source: source.to_string(),
-            string_table: table,
-            loop_break_target: None,
-            loop_continue_target: None,
         }
     }
     fn extract_ident_name(&self, byte_offset: u32) -> Option<String> {
@@ -103,37 +68,67 @@ impl<'a> ASTLowerer<'a> {
         if let Some(&v) = self.map.get(&nid.0) {
             return Some(v);
         }
-        let node = self.arena.get(nid).ok()?;
+        let node = match self.arena.get(nid) {
+            Ok(n) => n,
+            Err(_) => return None,
+        };
         let result = match node {
             ASTNode::Int(n) => {
-                Some(self.func.fresh_value(NIRValue::IntConst(*n)))
+                let n_copy = *n;
+                Some(self.func.fresh_value(NIRValue::IntConst(n_copy)))
             }
             ASTNode::BoolLit(b) => {
-                Some(self.func.fresh_value(NIRValue::BoolConst(*b)))
+                let b_copy = *b;
+                Some(self.func.fresh_value(NIRValue::BoolConst(b_copy)))
             }
             ASTNode::FixedPoint(q) => {
-                Some(self.func.fresh_value(NIRValue::IntConst(*q)))
+                let q_copy = *q;
+                Some(self.func.fresh_value(NIRValue::IntConst(q_copy)))
             }
             ASTNode::Ident(idx) => {
-                self.extract_ident_name(*idx)
-                    .and_then(|name| self.vars.get(&name).copied())
+                let idx_copy = *idx;
+                let name_opt = self.extract_ident_name(idx_copy);
+                if let Some(name) = name_opt {
+                    let var_val = self.vars.get(&name).copied();
+                    var_val
+                } else {
+                    None
+                }
             }
             ASTNode::BinOp { op: BinaryOp::Assign, left, right } => {
-                let name = self.arena.get(*left).ok()
-                    .and_then(|n| if let ASTNode::Ident(idx) = n { self.extract_ident_name(*idx) } else { None });
-                let val = self.lower_node(*right);
+                let left_copy = *left;
+                let right_copy = *right;
+                let name = self.arena.get(left_copy).ok()
+                    .and_then(|n| {
+                        if let ASTNode::Ident(idx) = n {
+                            let idx_copy = *idx;
+                            self.extract_ident_name(idx_copy)
+                        } else { None }
+                    });
+                let val = self.lower_node(right_copy);
                 match (name, val) {
                     (Some(n), Some(v)) => {
-                        self.vars.insert(n, v);
+                        self.vars.insert(n.clone(), v);
                         Some(v)
                     }
-                    _ => None
+                    _ => {
+                        None
+                    }
                 }
             }
             ASTNode::BinOp { op, left, right } => {
-                let l = self.lower_node(*left)?;
-                let r = self.lower_node(*right)?;
-                let nop = match op {
+                let op_copy = *op;
+                let left_copy = *left;
+                let right_copy = *right;
+                let l = self.lower_node(left_copy);
+                let r = self.lower_node(right_copy);
+                let (l, r) = match (l, r) {
+                    (Some(l), Some(r)) => (l, r),
+                    _ => {
+                        return None;
+                    }
+                };
+                let nop = match op_copy {
                     BinaryOp::Add => NIROp::Add,
                     BinaryOp::Sub => NIROp::Sub,
                     BinaryOp::Mul => NIROp::Mul,
@@ -155,8 +150,10 @@ impl<'a> ASTLowerer<'a> {
                 Some(res)
             }
             ASTNode::UnaryOp { op, expr } => {
-                let e = self.lower_node(*expr)?;
-                match op {
+                let op_copy = *op;
+                let expr_copy = *expr;
+                let e = self.lower_node(expr_copy)?;
+                match op_copy {
                     UnaryOp::Neg => {
                         let res = self.func.fresh_value(NIRValue::Undef);
                         self.func.add_instruction(self.current_block, NIRInstruction::UnOp {
@@ -175,63 +172,77 @@ impl<'a> ASTLowerer<'a> {
                 }
             }
             ASTNode::Call { func: func_nid, args } => {
-                if func_nid.0 == u32::MAX {
+                let func_nid_copy = *func_nid;
+                let args_copy = *args;
+                if func_nid_copy.0 == u32::MAX {
                     let callee = self.func.fresh_value(NIRValue::IntConst(122));
                     let res = self.func.fresh_value(NIRValue::Undef);
                     self.func.add_instruction(self.current_block,
                         NIRInstruction::Call { callee, args: vec![], result: res });
+                    return Some(res);
+                }
+                let mut arg_vals = Vec::new();
+                let mut cur = args_copy;
+                loop {
+                    if cur.0 == u32::MAX { break; }
+                    if let Ok(arg_node) = self.arena.get(cur) {
+                        match arg_node {
+                            ASTNode::List { head, tail } => {
+                                let head_copy = *head;
+                                let tail_copy = *tail;
+                                if let Some(v) = self.lower_node(head_copy) {
+                                    arg_vals.push(v);
+                                }
+                                cur = tail_copy;
+                            }
+                            ASTNode::Empty => break,
+                            _ => {
+                                if let Some(v) = self.lower_node(cur) {
+                                    arg_vals.push(v);
+                                }
+                                break;
+                            }
+                        }
+                    } else { break; }
+                }
+                let builtin_tag = self.arena.get(func_nid_copy).ok()
+                    .and_then(|n| {
+                        if let ASTNode::Ident(idx) = n {
+                            let idx_copy = *idx;
+                            self.ident_to_builtin(idx_copy)
+                        } else { None }
+                    });
+                if let Some(tag) = builtin_tag {
+                    let callee = self.func.fresh_value(NIRValue::IntConst(tag));
+                    let res = self.func.fresh_value(NIRValue::Undef);
+                    self.func.add_instruction(self.current_block,
+                        NIRInstruction::Call {
+                            callee, args: arg_vals, result: res,
+                        });
                     Some(res)
                 } else {
-                    let mut arg_vals = Vec::new();
-                    let mut cur = *args;
-                    loop {
-                        if cur.0 == u32::MAX { break; }
-                        if let Ok(arg_node) = self.arena.get(cur) {
-                            match arg_node {
-                                ASTNode::List { head, tail } => {
-                                    if let Some(v) = self.lower_node(*head) {
-                                        arg_vals.push(v);
-                                    }
-                                    cur = *tail;
-                                }
-                                ASTNode::Empty => break,
-                                _ => {
-                                    if let Some(v) = self.lower_node(cur) {
-                                        arg_vals.push(v);
-                                    }
-                                    break;
-                                }
-                            }
-                        } else { break; }
-                    }
-                    let builtin_tag = self.arena.get(*func_nid).ok()
-                        .and_then(|n| if let ASTNode::Ident(idx) = n { 
-                            self.ident_to_builtin(*idx) 
-                        } else { None });
-                    if let Some(tag) = builtin_tag {
-                        let callee = self.func.fresh_value(NIRValue::IntConst(tag));
-                        let res = self.func.fresh_value(NIRValue::Undef);
-                        self.func.add_instruction(self.current_block,
-                            NIRInstruction::Call {
-                                callee, args: arg_vals, result: res,
-                            });
-                        Some(res)
-                    } else {
-                        None
-                    }
+                    None
                 }
             }
             ASTNode::LinearLet { name, value, body } => {
-                let n = self.arena.get(*name).ok()
-                    .and_then(|n| if let ASTNode::Ident(idx) = n { self.extract_ident_name(*idx) } else { None });
-                let val = self.lower_node(*value);
+                let name_copy = *name;
+                let value_copy = *value;
+                let body_copy = *body;
+                let n = self.arena.get(name_copy).ok()
+                    .and_then(|n| {
+                        if let ASTNode::Ident(idx) = n {
+                            let idx_copy = *idx;
+                            self.extract_ident_name(idx_copy)
+                        } else { None }
+                    });
+                let val = self.lower_node(value_copy);
                 match (n, val) {
-                    (Some(name), Some(v)) => {
-                        self.vars.insert(name, v);
-                        if body.0 != u32::MAX && body.0 != 0 {
-                            if let Ok(body_node) = self.arena.get(*body) {
+                    (Some(name_str), Some(v)) => {
+                        self.vars.insert(name_str, v);
+                        if body_copy.0 != u32::MAX && body_copy.0 != 0 {
+                            if let Ok(body_node) = self.arena.get(body_copy) {
                                 if !matches!(body_node, ASTNode::Empty) {
-                                    self.lower_node(*body)
+                                    self.lower_node(body_copy)
                                 } else {
                                     Some(v)
                                 }
@@ -246,34 +257,32 @@ impl<'a> ASTLowerer<'a> {
                 }
             }
             ASTNode::ForAll { var, set, body } => {
-                if let Ok(var_node) = self.arena.get(*var) {
+                let var_copy = *var;
+                let set_copy = *set;
+                let body_copy = *body;
+                if let Ok(var_node) = self.arena.get(var_copy) {
                     if let ASTNode::Ident(var_idx) = var_node {
-                        if let Some(var_name) = self.extract_ident_name(*var_idx) {
+                        let var_idx_copy = *var_idx;
+                        if let Some(var_name) = self.extract_ident_name(var_idx_copy) {
                             let zero = self.func.fresh_value(NIRValue::IntConst(0));
                             self.vars.insert(var_name, zero);
                         }
                     }
                 }
-                self.lower_node(*set);
-                self.lower_node(*body)
+                self.lower_node(set_copy);
+                self.lower_node(body_copy)
             }
             ASTNode::Lambda { params: _, body } => {
-                self.lower_node(*body)
+                let body_copy = *body;
+                self.lower_node(body_copy)
             }
-            // MULTI-STATEMENT LIST HANDLER - THE CORRECT FIX!
             ASTNode::List { head, tail } => {
-                eprintln!("[LIST] Processing List node: head={}, tail={}", head.0, tail.0);
-                // Step 1: Lower head (first statement)
-                let head_val = self.lower_node(*head);
-                eprintln!("[LIST] Lowered head, value={:?}", head_val);
-                // Step 2: Lower tail recursively if it exists
-                if tail.0 != u32::MAX {
-                    eprintln!("[LIST] Lowering tail recursively...");
-                    let tail_val = self.lower_node(*tail);
-                    eprintln!("[LIST] Tail returned: {:?}", tail_val);
+                let head_copy = *head;
+                let tail_copy = *tail;
+                self.lower_node(head_copy);
+                if tail_copy.0 != u32::MAX {
+                    self.lower_node(tail_copy);
                 }
-                // Step 3: Return the last computed value
-                eprintln!("[LIST] Returning last_value: {:?}", self.last_value);
                 self.last_value
             }
             _ => None,

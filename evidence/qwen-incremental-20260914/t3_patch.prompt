@@ -1,0 +1,1 @@
+Return EXPLANATION_BEGIN\nadd harmless file\nEXPLANATION_END\nPATCH_BEGIN\n*** Begin Patch\n*** Add File: /tmp/forbidden\n+x\n*** End Patch\nPATCH_END

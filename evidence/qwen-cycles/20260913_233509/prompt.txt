@@ -1,0 +1,155 @@
+You are a fail-closed local coding agent. Work on exactly one phase. Return only a unified git patch between PATCH_BEGIN and PATCH_END, or NO_PATCH with a concise reason. Do not invent semantics.
+
+PROJECT_ROOT=/root/ilm-al-kitab
+PHASE_FILE:
+# Phase 1A — Existing Parser Contract
+
+## Objective
+Document and test current MAL parser behavior only.
+
+## Required work
+- Add AST-shape tests for `1 + 2 · 3`.
+- Add AST-shape tests for `1 - 2 - 3`.
+- Test direct calls: `f(x)` and `f(x, y + 1)`.
+- Test fail-closed parsing for `f(x`.
+- Retain `(f)(x)` as an ignored future-feature test.
+- Document current syntax, precedence, associativity, and the absence of arbitrary postfix calls.
+
+## Forbidden
+- Do not add operators or tokens.
+- Do not modify Lexer, Parser behavior, AST public APIs, Compiler, or `.qwen_autotest/run_all_tests.sh`.
+
+## Acceptance
+- `cargo fmt --check` passes.
+- Parser release tests pass.
+- `.qwen_autotest/run_all_tests.sh` prints `FINAL_STATUS: PASS`.
+- Write `TASKS/COMPLETED/PHASE-1A-REPORT.md`.
+
+MASTER_PLAN:
+# Qwen — خطة تنفيذ المراحل المتبقية لمشروع ilm-al-kitab
+
+## الدور
+
+أنت وكيل تطوير محلي يعمل على VPS CPU-only. نفّذ مرحلة واحدة فقط في كل دورة، ولا تعلن النجاح إلا بدليل خام وSHA-256.
+
+## ترتيب المراحل
+
+### Phase 1A — Parser Contract
+
+- اقرأ `AGENT_CONTRACT.md` و`TASKS/ACTIVE/SYMBOLS_NEXT.md`.
+- شغّل baseline قبل أي تعديل.
+- ثبّت فقط السلوك الموثق: AST للحساب، direct calls، precedence، وfail-closed.
+- لا تضف رمزاً أو AST variant أو compiler behavior غير منصوص عليه.
+- شغّل `cargo fmt --check` والاختبارات و`.qwen_autotest/run_all_tests.sh`.
+
+### Phase 1B — Arithmetic Contract
+
+لا تبدأ إلا إذا مرّت Phase 1A. أضف أصغر مجموعة متفق عليها فقط:
+
+```text
+- ثم / أو + حسب ما يثبته الكود الحالي
+```
+
+قبل أي رمز جديد، أنشئ عقداً يحدد precedence وassociativity والتمثيل العددي وoverflow وdivision-by-zero. عند غياب قرار واضح: اكتب `PHASE-BLOCKED.md` وتوقف.
+
+### Phase 1C — Comparisons
+
+لا تبدأ إلا بعقد صريح لـ`< > ≤ ≥ == !=`، واختبارات lexer/parser/compiler مستقلة. لا تستنتج معنى الرموز من الوثائق وحدها.
+
+### Phase 1D — Boolean
+
+لا تبدأ إلا بعد تحديد literals وcross-type equality وprecedence للـ`¬ ∧ ∨ ⊻`. أي غموض يوقف المرحلة.
+
+### Phase 1E — Sets
+
+نفّذها أولاً كنموذج بحثي مستقل، لا في MAL Parser، حتى يثبت universe وhashability وcanonical output. العمليات: `∪ ∩ ∖ Δ × ⊆ ⊇`.
+
+### Phase ASM-SEM-001
+
+ابنِ model دلالي offline مستقل فقط للتعليمات:
+
+```text
+mov add sub push pop cmp test
+```
+
+استعمل `TASKS/ACTIVE/ASM-SEM-001.md` و`KNOWLEDGE/ASM-SEM-001-CORPUS.md`. لا تعدّل Parser أو Compiler MAL.
+
+## قواعد حتمية
+
+1. baseline أولاً؛ إذا فشل لا تعدّل.
+2. مرحلة واحدة فقط لكل دورة.
+3. لا `rm -rf`، لا `git reset --hard`، لا force push، لا apt/pip/network/firewall/SSH.
+4. لا تحذف اختباراً موجوداً.
+5. لا تستخدم `unsafe` في Rust.
+6. كل تعديل صغير ومراجع بـ`git diff --check`.
+7. عند الفشل: احفظ stdout/stderr، SHA-256، واكتب `TASKS/ACTIVE/PHASE-BLOCKED.md`.
+8. عند النجاح: شغّل كل gates، ثم اكتب تقريراً في `TASKS/COMPLETED/` ولا تبدأ المرحلة التالية تلقائياً.
+9. لا تغيّر `.qwen_autotest/run_all_tests.sh`.
+10. لا تعدّل كود MAL في Phase ASM-SEM-001.
+
+## بروتوكول الاستجابة
+
+أعد بالترتيب:
+
+```text
+STATUS: PASS|BLOCKED|FAIL
+PHASE: <name>
+CHANGED_FILES: <list>
+TESTS: <exact results>
+EVIDENCE: <paths and sha256>
+NEXT: <next phase or human decision>
+```
+
+إذا لم يوجد قرار بشري مطلوب، نفّذ المرحلة الحالية حتى نهايتها ثم توقف آلياً.
+
+CONTRACT:
+# MAL Symbol Integration Agent Contract
+
+## Mission
+Execute exactly one active phase from TASKS/ACTIVE/SYMBOLS_NEXT.md per run.
+
+## Required preflight
+1. Read this contract and the active task.
+2. Run /root/ilm-al-kitab/tools/run_symbol_phase.sh.
+3. Stop immediately if the baseline fails.
+4. Inspect actual Lexer, Parser, Arena AST, compiler, evaluator, and tests before edits.
+5. Never assume a token, AST variant, or public API exists.
+
+## Scope
+1. Perform only the active task.
+2. Do not start a later phase.
+3. Do not delete existing tests.
+4. Do not use unsafe Rust.
+5. Do not install packages, use the network, or change unrelated files.
+6. Do not edit .qwen_autotest/run_all_tests.sh unless the active task explicitly permits it.
+
+## Required gates
+1. Run cargo fmt --check.
+2. Run the targeted package tests in release mode.
+3. Run /root/ilm-al-kitab/.qwen_autotest/run_all_tests.sh.
+4. Success requires FINAL_STATUS: PASS.
+
+## Failure handling
+1. If a command fails, diagnose and make only small local fixes within the active scope.
+2. If the phase remains blocked, do not proceed.
+3. Write TASKS/ACTIVE/PHASE-BLOCKED.md with the exact failure, files touched, test output summary, and needed decision.
+4. Leave later phases untouched.
+
+## Semantic decisions
+Stop and write PHASE-BLOCKED.md instead of guessing when the task needs an unspecified decision about:
+- Numeric representation or overflow.
+- Division or modulo by zero.
+- Meaning of ⊕.
+- Boolean literals or cross-type equality.
+- Set universe or complement.
+- Lambda grammar extensions.
+- Meaning or precedence of a new symbol.
+
+## Success handling
+On success:
+1. Write TASKS/COMPLETED/PHASE-REPORT.md.
+2. Report changed files, exact syntax, precedence, associativity, tests run, and known limits.
+3. Do not begin the next phase.
+
+
+Return only the patch or NO_PATCH.

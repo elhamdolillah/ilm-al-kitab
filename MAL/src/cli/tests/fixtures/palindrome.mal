@@ -1,0 +1,14 @@
+fn is_palindrome(s: string) -> i32 {
+    let len: i32 = strlen(s);
+    let i: i32 = 0;
+    while (i < len / 2) {
+        if (s[i] != s[len - 1 - i]) return 0;
+        i = i + 1;
+    }
+    return 1;
+}
+fn main() -> i32 {
+    printf("racecar: %s\n", is_palindrome("racecar") ? "palindrome" : "not palindrome");
+    printf("hello: %s\n", is_palindrome("hello") ? "palindrome" : "not palindrome");
+    return 0;
+}
