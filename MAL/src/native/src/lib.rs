@@ -799,3 +799,20 @@ fn emit_generic_call(func_name: &str, args: &[String], result_reg: &str) -> Stri
     code
 }
 }
+// ═════ Feature 11: Trait VTable for runtime dispatch ═════
+#[allow(dead_code)]
+pub struct TraitVTable {
+    pub name: String,
+    pub methods: std::collections::HashMap<String, u32>,
+}
+impl TraitVTable {
+    pub fn new(name: &str) -> Self {
+        TraitVTable {
+            name: name.to_string(),
+            methods: std::collections::HashMap::new(),
+        }
+    }
+    pub fn register_method(&mut self, method: &str, tag: u32) {
+        self.methods.insert(method.to_string(), tag);
+    }
+}

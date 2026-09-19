@@ -604,3 +604,18 @@ mod tests {
 //   ∀ invalid token t: raise LexerError(t.span, t.value)
 //   No silent failures (fail-closed)
 // ═══════════════════════════════════════════════════════════════
+// ═════ Comment support helper ═════
+/// Check if current position starts with //
+#[allow(dead_code)]
+pub fn is_line_comment(source: &str, pos: usize) -> bool {
+    source.as_bytes().get(pos) == Some(&b'/') &&
+    source.as_bytes().get(pos + 1) == Some(&b'/')
+}
+/// Skip to end of line
+#[allow(dead_code)]
+pub fn skip_to_eol(source: &str, mut pos: usize) -> usize {
+    while pos < source.len() && source.as_bytes().get(pos) != Some(&b'\n') {
+        pos += 1;
+    }
+    pos
+}
