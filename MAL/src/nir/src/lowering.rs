@@ -315,7 +315,7 @@ impl<'a> ASTLowerer<'a> {
         }
         let name = &self.source[start..end];
         match name {
-            "sqrt" | "جذر" => Some(100),
+                        "sqrt" | "جذر" => Some(100),
             "abs" | "مطلق" => Some(101),
             "floor" | "أرضية" => Some(102),
             "power" | "قوة" => Some(103),
@@ -325,6 +325,13 @@ impl<'a> ASTLowerer<'a> {
             "num_to_str" | "نص" => Some(107),
             "list_len" | "طول" => Some(113),
             "list_sum" | "مجموع" => Some(114),
+            // === NEW: Extended builtins (features 6-7) ===
+            "min" | "أدنى" => Some(120),
+            "max" | "أقصى" => Some(121),
+            "ceil" | "سقف" => Some(122),
+            "round" | "قرّب" => Some(123),
+            "str_len" | "طول_نص" => Some(130),
+            "str_concat" | "اربط" => Some(131),
             _ => None,
         }
     }

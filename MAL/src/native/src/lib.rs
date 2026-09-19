@@ -753,4 +753,49 @@ mod tests {
         // 2^10 = 1024, exit code = 1024 mod 256 = 0
         run(&f, 0, "power");
     }
+
+// === Union Types Runtime Support (Feature 8) ===
+// Union types are represented as tagged values: (tag, data)
+// Tag 0 = first variant, Tag 1 = second variant, etc.
+fn emit_union_create(tag: u32, value_reg: &str, result_reg: &str) -> String {
+    // Pack tag and value into a single 64-bit value
+    // High 32 bits = tag, Low 32 bits = value
+    format!("    shl rax, 32
+    or rax, {}
+    mov {}, rax
+",
+            value_reg, result_reg)
+}
+fn emit_union_extract_tag(union_reg: &str, result_reg: &str) -> String {
+    // Extract tag (high 32 bits)
+    format!("    mov {}, {}
+    shr {}, 32
+",
+            result_reg, union_reg, result_reg)
+}
+fn emit_union_extract_value(union_reg: &str, result_reg: &str) -> String {
+    // Extract value (low 32 bits)
+    format!("    mov {}, {}
+    mov eax, eax
+",
+            result_reg, union_reg)
+}
+
+// === Generics Runtime Support (Feature 9) ===
+// Generics are monomorphized at compile time
+// At runtime, generic functions are just regular functions
+fn emit_generic_call(func_name: &str, args: &[String], result_reg: &str) -> String {
+    // Generic calls are lowered to specific instantiations
+    // e.g., identity<Int> becomes identity_Int
+    let mut code = String::new();
+    for (i, arg) in args.iter().enumerate() {
+        code.push_str(&format!("    mov r{}, {}
+", i + 1, arg));
+    }
+    code.push_str(&format!("    call {}
+", func_name));
+    code.push_str(&format!("    mov {}, rax
+", result_reg));
+    code
+}
 }

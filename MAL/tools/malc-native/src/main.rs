@@ -15,7 +15,10 @@ struct Args {
     #[arg(long)]
     emit_nir: bool,
     #[arg(long)]
-    emit_asm: bool,
+    emit_asm: bool,    /// Only check types, don't compile
+    #[arg(long)]
+    check_only: bool,
+
 }
 fn main() {
     let args = Args::parse();
@@ -44,4 +47,31 @@ fn main() {
             std::process::exit(1);
         }
     }
+}
+// ═══════════════════════════════════════════════
+// Type Checker Integration (Phase 2)
+// ═══════════════════════════════════════════════
+use mal_nir::type_inference::{TypeChecker, Type, SourceLoc};
+/// Check types before compilation
+fn check_types(source: &str, filename: &str) -> Result<(), String> {
+    let mut checker = TypeChecker::with_file(filename);
+    // For now, do a simple literal check on each line
+    for (line_num, line) in source.lines().enumerate() {
+        let line = line.trim();
+        if line.is_empty() { continue; }
+        // Skip assignments, comments, etc.
+        if line.contains('≔') || line.contains('←') { continue; }
+        // Try to infer type of standalone expression
+        let ty = checker.infer_source(line);
+        // If unknown, we might have a type issue
+        if matches!(ty, Type::Unknown) && !line.starts_with("//") {
+            // This is not an error - just skip for now
+            // Real integration would need full AST analysis
+        }
+    }
+    let errors = checker.format_errors();
+    if !errors.is_empty() {
+        return Err(errors);
+    }
+    Ok(())
 }
