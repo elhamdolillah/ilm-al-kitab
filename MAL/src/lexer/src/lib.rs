@@ -97,6 +97,16 @@ pub enum TokenKind {
     Diamond,
     /// `⊸` move.
     Move,
+    /// `[`
+    LBracket,
+    /// `]`
+    RBracket,
+    /// `==`
+    EqEq,
+    /// `=>`
+    FatArrow,
+    /// `|`
+    Pipe,
     /// `⊙` read stdin.
     Read,
     /// `⎕` print.
@@ -253,6 +263,9 @@ pub enum LexerError {
 
 fn symbol_kind(c: char) -> Option<TokenKind> {
     Some(match c {
+        '[' => TokenKind::LBracket,
+        ']' => TokenKind::RBracket,
+        '|' => TokenKind::Pipe,
         '≔' => TokenKind::Assign,
         '≡' => TokenKind::Define,
         '+' => TokenKind::Plus,
@@ -269,6 +282,7 @@ fn symbol_kind(c: char) -> Option<TokenKind> {
         '<' => TokenKind::Lt,
         '>' => TokenKind::Gt,
         '=' => TokenKind::Eq,
+        // Note: == and => are handled in tokenize() with lookahead
         // Note: == is treated as two = tokens (each is Eq)
         // For explicit == support, add multi-char tokenization later
         '≠' => TokenKind::Neq,
@@ -392,6 +406,68 @@ impl<'a> Lexer<'a> {
                     }
                 }
                 out.push(Token { kind: TokenKind::Str, start, len: self.offset() - start, num: 0, line, col });
+                continue;
+            }
+            if c == '=' {
+                self.bump();
+                if let Some(next) = self.peek() {
+                    if next == '=' {
+                        self.bump();
+                        out.push(Token { kind: TokenKind::EqEq, start, len: self.offset() - start, num: 0, line, col });
+                        continue;
+                    } else if next == '>' {
+                        self.bump();
+                        out.push(Token { kind: TokenKind::FatArrow, start, len: self.offset() - start, num: 0, line, col });
+                        continue;
+                    }
+                }
+                out.push(Token { kind: TokenKind::Eq, start, len: self.offset() - start, num: 0, line, col });
+                continue;
+            }
+            if c == '/' {
+                self.bump();
+                if let Some(next) = self.peek() {
+                    if next == '/' {
+                        self.bump();
+                        while let Some(d) = self.peek() {
+                            if d == '\n' {
+                                break;
+                            }
+                            self.bump();
+                        }
+                        continue;
+                    } else if next == '*' {
+                        self.bump();
+                        let mut depth = 1;
+                        while depth > 0 {
+                            if let Some(d) = self.peek() {
+                                if d == '*' {
+                                    self.bump();
+                                    if let Some(e) = self.peek() {
+                                        if e == '/' {
+                                            self.bump();
+                                            depth -= 1;
+                                        }
+                                    }
+                                } else if d == '/' {
+                                    self.bump();
+                                    if let Some(e) = self.peek() {
+                                        if e == '*' {
+                                            self.bump();
+                                            depth += 1;
+                                        }
+                                    }
+                                } else {
+                                    self.bump();
+                                }
+                            } else {
+                                return Err(LexerError::UnterminatedString { line, col });
+                            }
+                        }
+                        continue;
+                    }
+                }
+                out.push(Token { kind: TokenKind::Div, start, len: self.offset() - start, num: 0, line, col });
                 continue;
             }
             if let Some(kind) = symbol_kind(c) {
