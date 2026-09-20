@@ -26,6 +26,7 @@ const BUILTINS: &[&str] = &[
     "channel_create", "channel_send", "channel_recv",
     "thread_spawn", "thread_join",
     "print_int", "print_str", "str_eq", "num_to_str",
+    "min", "max", "ceil", "round",
     "list_len", "list_sum", "list_head", "list_tail", "list_append",
     "file_open", "file_close", "file_write", "file_read",
     "stdin_read",
@@ -286,10 +287,10 @@ fn get_builtin_name(callee: ValueID, values: &HashMap<ValueID, NIRValue>) -> Opt
             117 => Some("list_append".into()),
             118 => Some("file_open".into()),
             119 => Some("file_close".into()),
-            120 => Some("file_write".into()),
-            121 => Some("file_read".into()),
-            122 => Some("stdin_read".into()),
-            123 => Some("str_eq".into()),
+            120 => Some("min".into()),
+            121 => Some("max".into()),
+            122 => Some("ceil".into()),
+            123 => Some("round".into()),
             _ => None,
         }
     } else {
@@ -321,6 +322,30 @@ fn emit_builtin_call(
             if args.len() != 1 { return Err(CompileError::Unsupported("floor needs 1 arg".into())); }
             load(a, args[0], values, ctx, "rax");
             a.push_str("    call floor_fixed\n");
+            store_result(a, result, ctx);
+        }
+        "min" => {
+            if args.len() != 2 { return Err(CompileError::Unsupported("min needs 2 args".into())); }
+            load(a, args[0], values, ctx, "rax");
+            load(a, args[1], values, ctx, "rbx");
+            a.push_str("    cmp rax, rbx\n    cmovg rax, rbx\n");
+            store_result(a, result, ctx);
+        }
+        "max" => {
+            if args.len() != 2 { return Err(CompileError::Unsupported("max needs 2 args".into())); }
+            load(a, args[0], values, ctx, "rax");
+            load(a, args[1], values, ctx, "rbx");
+            a.push_str("    cmp rax, rbx\n    cmovl rax, rbx\n");
+            store_result(a, result, ctx);
+        }
+        "ceil" => {
+            if args.len() != 1 { return Err(CompileError::Unsupported("ceil needs 1 arg".into())); }
+            load(a, args[0], values, ctx, "rax");
+            store_result(a, result, ctx);
+        }
+        "round" => {
+            if args.len() != 1 { return Err(CompileError::Unsupported("round needs 1 arg".into())); }
+            load(a, args[0], values, ctx, "rax");
             store_result(a, result, ctx);
         }
         "power" => {
