@@ -279,11 +279,38 @@ impl<'a> ASTLowerer<'a> {
             ASTNode::List { head, tail } => {
                 let head_copy = *head;
                 let tail_copy = *tail;
-                self.lower_node(head_copy);
-                if tail_copy.0 != u32::MAX {
-                    self.lower_node(tail_copy);
+                let is_seq = matches!(
+                    self.arena.get(head_copy),
+                    Ok(ASTNode::LinearLet { .. }) |
+                    Ok(ASTNode::Call { .. }) |
+                    Ok(ASTNode::BinOp { op: BinaryOp::Assign, .. })
+                );
+                if is_seq {
+                    let mut last_val = self.lower_node(head_copy);
+                    let mut cur = tail_copy;
+                    while cur.0 != u32::MAX && cur.0 != 0 {
+                        if let Ok(ASTNode::List { head, tail }) = self.arena.get(cur) {
+                            let h = *head;
+                            let t = *tail;
+                            if let Some(v) = self.lower_node(h) {
+                                last_val = Some(v);
+                            }
+                            cur = t;
+                        } else {
+                            if let Some(v) = self.lower_node(cur) {
+                                last_val = Some(v);
+                            }
+                            break;
+                        }
+                    }
+                    last_val
+                } else {
+                    self.lower_node(head_copy);
+                    if tail_copy.0 != u32::MAX {
+                        self.lower_node(tail_copy);
+                    }
+                    self.last_value
                 }
-                self.last_value
             }
             _ => None,
         };
