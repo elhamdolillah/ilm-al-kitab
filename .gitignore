@@ -1,34 +1,20 @@
-# أسرار — لا تُرفع أبداً
-*.key
-*.pem
-*.env
-.env
-secrets/
-*.db
-*.sqlite3
-__pycache__/
+# Python virtual environments (أكبر مشكلة!)
+**/venv/
+**/.venv/
+**/__pycache__/
 *.pyc
 *.pyo
-target/
-node_modules/
+# Training logs
 *.log
+# Large checkpoint files
+**/checkpoints/
+**/sweet_spot_v2/
+**/sweet_spot_ckpts/
+**/mal-tiny-ckpt/ckpt_ep*.pt
+**/comparison/*/checkpoints/
+**/comparison/*/final.pt
+# Temporary files
+*.bin
+# OS files
 .DS_Store
-.aider*
-
-# Compiled artifacts (should not be in git)
-*.o
-*.asm
-*.out
-MAL/src/compiler/t_*
-MAL/src/compiler/calc
-!MAL/src/compiler/math_complete.py
-!MAL/src/compiler/*.md
-# Local backups
-*.bak
-*.bak2
-*.bak_before_fix
-*.bak_*
-target/
-
-# Qwen runner generated logs
-.qwen_runner/
+Thumbs.db

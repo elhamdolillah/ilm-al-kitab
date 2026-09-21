@@ -1,0 +1,23 @@
+[
+  {
+    "name": "Baseline (20 epochs)",
+    "correct": 7,
+    "compile_fail": 0,
+    "wrong_exit": 3,
+    "total": 10
+  },
+  {
+    "name": "C: Inheritance (20+30)",
+    "correct": 4,
+    "compile_fail": 3,
+    "wrong_exit": 3,
+    "total": 10
+  },
+  {
+    "name": "D: Multi-Round (100)",
+    "correct": 0,
+    "compile_fail": 8,
+    "wrong_exit": 2,
+    "total": 10
+  }
+]
