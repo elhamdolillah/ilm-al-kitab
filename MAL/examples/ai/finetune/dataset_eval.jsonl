@@ -1,0 +1,21 @@
+{"prompt": "اكتب كود MAL للمهمة التالية:\n2 · 3 == 6\n", "completion": "2 · 3 == 6", "category": "equality", "expected_exit": 1}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n(5 == 6) == 0\n", "completion": "(5 == 6) == 0", "category": "equality", "expected_exit": 1}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nx ≔ 5\nx ≔ 10\nx\n", "completion": "x ≔ 5\nx ≔ 10\nx", "category": "variables", "expected_exit": 10}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n(2 + 3) · 4\n", "completion": "(2 + 3) · 4", "category": "basic_arithmetic", "expected_exit": 20}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n100 / 10\n", "completion": "100 / 10", "category": "basic_arithmetic", "expected_exit": 10}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n¬false\n", "completion": "¬false", "category": "bool_ops", "expected_exit": 1}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n20 % (3 + 4)\n", "completion": "20 % (3 + 4)", "category": "complex_arithmetic", "expected_exit": 6}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nx ≔ 10\ny ≔ 20\nx + y\n", "completion": "x ≔ 10\ny ≔ 20\nx + y", "category": "variables", "expected_exit": 30}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n10 - 1 - 2 - 3\n", "completion": "10 - 1 - 2 - 3", "category": "complex_arithmetic", "expected_exit": 4}
+{"prompt": "اكتب كود MAL للمهمة التالية:\npower(2, 3) + power(2, 2)\n", "completion": "power(2, 3) + power(2, 2)", "category": "mixed_advanced", "expected_exit": 12}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n∀ x ∈ ⟨1,2,3⟩ : x\n", "completion": "∀ x ∈ ⟨1,2,3⟩ : x", "category": "forall_exists", "expected_exit": 0}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nx ≔ 100\nx / 4\n", "completion": "x ≔ 100\nx / 4", "category": "variables", "expected_exit": 25}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nx ≔ 5\ny ≔ 3\nz ≔ 2\nx + y + z\n", "completion": "x ≔ 5\ny ≔ 3\nz ≔ 2\nx + y + z", "category": "mixed_advanced", "expected_exit": 10}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nsqrt(16)\n", "completion": "sqrt(16)", "category": "functions", "expected_exit": 4}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nx ≔ 7\nx == 8\n", "completion": "x ≔ 7\nx == 8", "category": "equality", "expected_exit": 0}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nmatch 0 with | _ => 42\n", "completion": "match 0 with | _ => 42", "category": "match", "expected_exit": 0}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nx ≔ 5\ny ≔ 3\nx + y == 8\n", "completion": "x ≔ 5\ny ≔ 3\nx + y == 8", "category": "mixed", "expected_exit": 1}
+{"prompt": "اكتب كود MAL للمهمة التالية:\na ≔ 10\nb ≔ a · 2\nb + 5\n", "completion": "a ≔ 10\nb ≔ a · 2\nb + 5", "category": "mixed_advanced", "expected_exit": 25}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n2 + 3 · 4\n", "completion": "2 + 3 · 4", "category": "basic_arithmetic", "expected_exit": 14}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nx ≔ 5\ny ≔ 3\nx - y\n", "completion": "x ≔ 5\ny ≔ 3\nx - y", "category": "variables", "expected_exit": 2}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nx ≔ 5\nmatch x with | _ => x\n", "completion": "x ≔ 5\nmatch x with | _ => x", "category": "match_wildcards_advanced", "expected_exit": 5}

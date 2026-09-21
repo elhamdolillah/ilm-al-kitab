@@ -281,7 +281,6 @@ impl<'a> Parser<'a> {
                     Ok(arena.allocate(ASTNode::Lambda { params: params_list, body })?)
                 } else {
                     self.pos = save_pos;
-                    self.bump();
                     let expr = self.parse_expr(arena)?;
                     self.expect(TokenKind::RParen)?;
                     Ok(expr)

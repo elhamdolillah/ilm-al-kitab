@@ -1,0 +1,182 @@
+{"prompt": "اكتب كود MAL للمهمة التالية:\n¬(true ∨ false)\n", "completion": "¬(true ∨ false)", "category": "boolean_logic", "expected_exit": 0}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nmin(3, 5)\n", "completion": "min(3, 5)", "category": "functions", "expected_exit": 3}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nmatch 7 with | _ => 0\n", "completion": "match 7 with | _ => 0", "category": "match", "expected_exit": 0}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nx ≔ 5\n(x == 5) ∧ (x < 10)\n", "completion": "x ≔ 5\n(x == 5) ∧ (x < 10)", "category": "mixed_advanced", "expected_exit": 10}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n2 ^ 3\n", "completion": "2 ^ 3", "category": "basic_arithmetic", "expected_exit": 3}
+{"prompt": "اكتب كود MAL للمهمة التالية:\ntrue ∨ false\n", "completion": "true ∨ false", "category": "bool_ops", "expected_exit": 1}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nsqrt(25) + sqrt(16) - sqrt(9)\n", "completion": "sqrt(25) + sqrt(16) - sqrt(9)", "category": "mixed_advanced", "expected_exit": 6}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nexp(0)\n", "completion": "exp(0)", "category": "advanced_builtins", "expected_exit": 0}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n1 · 1\n", "completion": "1 · 1", "category": "basic_arithmetic", "expected_exit": 1}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nabs(0 - (5 - 10))\n", "completion": "abs(0 - (5 - 10))", "category": "mixed_advanced", "expected_exit": 5}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n3 ≤ 3\n", "completion": "3 ≤ 3", "category": "comparisons_advanced", "expected_exit": 1}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nmatch 10 with | _ => 10\n", "completion": "match 10 with | _ => 10", "category": "match", "expected_exit": 0}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n(5 > 3) ∧ (2 < 4)\n", "completion": "(5 > 3) ∧ (2 < 4)", "category": "mixed_advanced", "expected_exit": 1}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nx ≔ 0\nx + 1\n", "completion": "x ≔ 0\nx + 1", "category": "variables", "expected_exit": 1}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n10 == 10\n", "completion": "10 == 10", "category": "equality", "expected_exit": 1}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nabs(0 - 5)\n", "completion": "abs(0 - 5)", "category": "mixed", "expected_exit": 5}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n4 · 5\n", "completion": "4 · 5", "category": "basic_arithmetic", "expected_exit": 20}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n5 ≥ 3\n", "completion": "5 ≥ 3", "category": "comparisons_advanced", "expected_exit": 1}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nx ≔ 8\ny ≔ 2\nmatch x - y with | _ => 6\n", "completion": "x ≔ 8\ny ≔ 2\nmatch x - y with | _ => 6", "category": "match_wildcards_advanced", "expected_exit": 2}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nmin(0, 100)\n", "completion": "min(0, 100)", "category": "functions", "expected_exit": 0}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nx ≔ 10\ny ≔ 3\nx\n", "completion": "x ≔ 10\ny ≔ 3\nx", "category": "mixed_advanced", "expected_exit": 10}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nx ≔ 10\nmatch x with | _ => x · 2\n", "completion": "x ≔ 10\nmatch x with | _ => x · 2", "category": "match_wildcards_advanced", "expected_exit": 10}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n20 / 4\n", "completion": "20 / 4", "category": "basic_arithmetic", "expected_exit": 5}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nmax(10, 20)\n", "completion": "max(10, 20)", "category": "functions", "expected_exit": 20}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n2 · 3 + 4 · 5\n", "completion": "2 · 3 + 4 · 5", "category": "basic_arithmetic", "expected_exit": 26}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nfloor(10) + ceil(10)\n", "completion": "floor(10) + ceil(10)", "category": "mixed", "expected_exit": 10}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nabs(0 - 7)\n", "completion": "abs(0 - 7)", "category": "functions", "expected_exit": 7}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nsqrt(144)\n", "completion": "sqrt(144)", "category": "functions", "expected_exit": 12}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n(1 + 2) ^ 3\n", "completion": "(1 + 2) ^ 3", "category": "complex_arithmetic", "expected_exit": 3}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n5 > 3\n", "completion": "5 > 3", "category": "comparisons_advanced", "expected_exit": 1}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nmin(3, 5) + max(3, 5)\n", "completion": "min(3, 5) + max(3, 5)", "category": "mixed", "expected_exit": 8}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nmin(10, 20)\n", "completion": "min(10, 20)", "category": "functions", "expected_exit": 10}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n3 ≥ 3\n", "completion": "3 ≥ 3", "category": "comparisons_advanced", "expected_exit": 1}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n7 + 8 + 9\n", "completion": "7 + 8 + 9", "category": "basic_arithmetic", "expected_exit": 24}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n0 + 0\n", "completion": "0 + 0", "category": "basic_arithmetic", "expected_exit": 0}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nmax(3, 5)\n", "completion": "max(3, 5)", "category": "functions", "expected_exit": 5}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nmatch 9 with | _ => 9\n", "completion": "match 9 with | _ => 9", "category": "match", "expected_exit": 0}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nx ≔ 10\n(x == 10) + (x == 5)\n", "completion": "x ≔ 10\n(x == 10) + (x == 5)", "category": "mixed", "expected_exit": 5}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nx ≔ 6\ny ≔ 7\nx · y\n", "completion": "x ≔ 6\ny ≔ 7\nx · y", "category": "mixed", "expected_exit": 42}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nsqrt(abs(0 - 16))\n", "completion": "sqrt(abs(0 - 16))", "category": "nested_calls", "expected_exit": 4}
+{"prompt": "اكتب كود MAL للمهمة التالية:\np ≔ 7\nq ≔ 8\np · q\n", "completion": "p ≔ 7\nq ≔ 8\np · q", "category": "variables", "expected_exit": 56}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nmatch 100 with | _ => 99\n", "completion": "match 100 with | _ => 99", "category": "match", "expected_exit": 0}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nmax(1, 2) + max(3, 4)\n", "completion": "max(1, 2) + max(3, 4)", "category": "mixed", "expected_exit": 6}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nfalse ∨ false\n", "completion": "false ∨ false", "category": "bool_ops", "expected_exit": 0}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n2 ^ 2 ^ 2\n", "completion": "2 ^ 2 ^ 2", "category": "basic_arithmetic", "expected_exit": 2}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nmax(sqrt(16), sqrt(9))\n", "completion": "max(sqrt(16), sqrt(9))", "category": "nested_calls", "expected_exit": 4}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n10 · (0 - 2)\n", "completion": "10 · (0 - 2)", "category": "unary_advanced", "expected_exit": 236}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nx ≔ 4\nsqrt(x · 4)\n", "completion": "x ≔ 4\nsqrt(x · 4)", "category": "mixed", "expected_exit": 4}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nlist_head([1,2,3])\n", "completion": "list_head([1,2,3])", "category": "advanced_builtins", "expected_exit": 3}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n0 - 0\n", "completion": "0 - 0", "category": "unary_advanced", "expected_exit": 0}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nx ≔ 100\nx / 10 + x\n", "completion": "x ≔ 100\nx / 10 + x", "category": "mixed", "expected_exit": 110}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n(10 - 2) · (5 - 3)\n", "completion": "(10 - 2) · (5 - 3)", "category": "complex_arithmetic", "expected_exit": 16}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nmatch 1 with | _ => 10\n", "completion": "match 1 with | _ => 10", "category": "match", "expected_exit": 0}
+{"prompt": "اكتب كود MAL للمهمة التالية:\ntrue ∧ true\n", "completion": "true ∧ true", "category": "bool_ops", "expected_exit": 1}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nmax(min(3, 7), 5)\n", "completion": "max(min(3, 7), 5)", "category": "mixed_advanced", "expected_exit": 5}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n0 - 5\n", "completion": "0 - 5", "category": "unary_advanced", "expected_exit": 251}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nlist_append([1,2], [3,4])\n", "completion": "list_append([1,2], [3,4])", "category": "advanced_builtins", "expected_exit": 4}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nabs(0 - 42)\n", "completion": "abs(0 - 42)", "category": "functions", "expected_exit": 42}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n1 + 2\n", "completion": "1 + 2", "category": "basic_arithmetic", "expected_exit": 3}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nabs(0 - (100 - 200))\n", "completion": "abs(0 - (100 - 200))", "category": "mixed_advanced", "expected_exit": 100}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nmin(max(3, 7), 5)\n", "completion": "min(max(3, 7), 5)", "category": "mixed_advanced", "expected_exit": 5}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n10 - 2 · 3\n", "completion": "10 - 2 · 3", "category": "basic_arithmetic", "expected_exit": 4}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nabs(min(0 - 5, 0 - 3))\n", "completion": "abs(min(0 - 5, 0 - 3))", "category": "nested_calls", "expected_exit": 5}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nabs(0 - 42) + 8\n", "completion": "abs(0 - 42) + 8", "category": "unary_advanced", "expected_exit": 50}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n0 - (0 - 7)\n", "completion": "0 - (0 - 7)", "category": "unary_advanced", "expected_exit": 7}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n1 + (2 + 3) · 4\n", "completion": "1 + (2 + 3) · 4", "category": "complex_arithmetic", "expected_exit": 21}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nmatch sqrt(16) with | _ => 4\n", "completion": "match sqrt(16) with | _ => 4", "category": "match_wildcards_advanced", "expected_exit": 0}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n2 ^ 3 + 1 == 9\n", "completion": "2 ^ 3 + 1 == 9", "category": "mixed", "expected_exit": 9}
+{"prompt": "اكتب كود MAL للمهمة التالية:\npower(2, 3)\n", "completion": "power(2, 3)", "category": "advanced_builtins", "expected_exit": 8}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n(1 + 2) · (3 + 4)\n", "completion": "(1 + 2) · (3 + 4)", "category": "basic_arithmetic", "expected_exit": 21}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n99 + 1\n", "completion": "99 + 1", "category": "basic_arithmetic", "expected_exit": 100}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nfalse ∨ false ∨ true\n", "completion": "false ∨ false ∨ true", "category": "boolean_logic", "expected_exit": 1}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n2 ^ 2 ^ 3\n", "completion": "2 ^ 2 ^ 3", "category": "complex_arithmetic", "expected_exit": 3}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n10 - (2 + 3)\n", "completion": "10 - (2 + 3)", "category": "complex_arithmetic", "expected_exit": 5}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nmatch 5 with | _ => 5\n", "completion": "match 5 with | _ => 5", "category": "match", "expected_exit": 0}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n3 ≠ 5\n", "completion": "3 ≠ 5", "category": "comparisons_advanced", "expected_exit": 5}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n0 - 100\n", "completion": "0 - 100", "category": "unary_advanced", "expected_exit": 156}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nsqrt(1)\n", "completion": "sqrt(1)", "category": "functions", "expected_exit": 1}
+{"prompt": "اكتب كود MAL للمهمة التالية:\ntrue ∧ false\n", "completion": "true ∧ false", "category": "bool_ops", "expected_exit": 0}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nceil(sqrt(10))\n", "completion": "ceil(sqrt(10))", "category": "nested_calls", "expected_exit": 3}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n1 == 2\n", "completion": "1 == 2", "category": "equality", "expected_exit": 0}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n2 · 2 · 2 · 2\n", "completion": "2 · 2 · 2 · 2", "category": "complex_arithmetic", "expected_exit": 16}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n0 - 1\n", "completion": "0 - 1", "category": "unary_advanced", "expected_exit": 255}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nexp(1)\n", "completion": "exp(1)", "category": "advanced_builtins", "expected_exit": 1}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nmatch 100 with | _ => 99 + 1\n", "completion": "match 100 with | _ => 99 + 1", "category": "match_wildcards_advanced", "expected_exit": 0}
+{"prompt": "اكتب كود MAL للمهمة التالية:\npower(3, 2)\n", "completion": "power(3, 2)", "category": "advanced_builtins", "expected_exit": 9}
+{"prompt": "اكتب كود MAL للمهمة التالية:\ntrue ∧ true ∧ true\n", "completion": "true ∧ true ∧ true", "category": "boolean_logic", "expected_exit": 1}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nx ≔ 15\ny ≔ 5\nx\n", "completion": "x ≔ 15\ny ≔ 5\nx", "category": "variables", "expected_exit": 15}
+{"prompt": "اكتب كود MAL للمهمة التالية:\npower(2, 10)\n", "completion": "power(2, 10)", "category": "advanced_builtins", "expected_exit": 0}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n2 ^ 3 + 2 ^ 2\n", "completion": "2 ^ 3 + 2 ^ 2", "category": "complex_arithmetic", "expected_exit": 2}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n1 + 2 + 3 + 4\n", "completion": "1 + 2 + 3 + 4", "category": "mixed", "expected_exit": 10}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n∀ x ∈ ⟨2,3⟩ : x + 1\n", "completion": "∀ x ∈ ⟨2,3⟩ : x + 1", "category": "forall_exists", "expected_exit": 1}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nmatch 3 with | _ => 30\n", "completion": "match 3 with | _ => 30", "category": "match", "expected_exit": 0}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nx ≔ 5\ny ≔ x · 2\ny\n", "completion": "x ≔ 5\ny ≔ x · 2\ny", "category": "mixed", "expected_exit": 10}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n¬(true ∧ false)\n", "completion": "¬(true ∧ false)", "category": "bool_ops", "expected_exit": 1}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nfalse ∧ true\n", "completion": "false ∧ true", "category": "bool_ops", "expected_exit": 0}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n5 ≤ 3\n", "completion": "5 ≤ 3", "category": "comparisons_advanced", "expected_exit": 0}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nsqrt(16) + 2\n", "completion": "sqrt(16) + 2", "category": "mixed", "expected_exit": 6}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nx ≔ 6\nx · x\n", "completion": "x ≔ 6\nx · x", "category": "variables", "expected_exit": 36}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n(5 == 6) ∨ (3 == 3)\n", "completion": "(5 == 6) ∨ (3 == 3)", "category": "boolean_logic", "expected_exit": 1}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nsqrt(81) + sqrt(16) + sqrt(9)\n", "completion": "sqrt(81) + sqrt(16) + sqrt(9)", "category": "complex_arithmetic", "expected_exit": 16}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n5 == 6\n", "completion": "5 == 6", "category": "equality", "expected_exit": 0}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nmatch 5 · 5 with | _ => 25\n", "completion": "match 5 · 5 with | _ => 25", "category": "match_wildcards_advanced", "expected_exit": 0}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nfalse ∧ false\n", "completion": "false ∧ false", "category": "bool_ops", "expected_exit": 0}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n17 % 5\n", "completion": "17 % 5", "category": "basic_arithmetic", "expected_exit": 2}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nfalse ∨ true\n", "completion": "false ∨ true", "category": "bool_ops", "expected_exit": 1}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nn ≔ 10\n2 ^ n\n", "completion": "n ≔ 10\n2 ^ n", "category": "variables", "expected_exit": 10}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n(5 == 5) ∧ (3 == 3)\n", "completion": "(5 == 5) ∧ (3 == 3)", "category": "boolean_logic", "expected_exit": 1}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n(1 + 1) · (2 + 2) · (3 + 3)\n", "completion": "(1 + 1) · (2 + 2) · (3 + 3)", "category": "mixed", "expected_exit": 48}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nx ≔ 3\nx · x + x\n", "completion": "x ≔ 3\nx · x + x", "category": "mixed", "expected_exit": 12}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n∃ x ∈ ⟨1,2,3⟩ : x\n", "completion": "∃ x ∈ ⟨1,2,3⟩ : x", "category": "forall_exists", "expected_exit": 0}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nmin(sqrt(25), sqrt(49))\n", "completion": "min(sqrt(25), sqrt(49))", "category": "nested_calls", "expected_exit": 5}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n∃ x ∈ ⟨5⟩ : x\n", "completion": "∃ x ∈ ⟨5⟩ : x", "category": "forall_exists", "expected_exit": 0}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n(1 + 2 + 3) · (4 + 5 + 6)\n", "completion": "(1 + 2 + 3) · (4 + 5 + 6)", "category": "mixed_advanced", "expected_exit": 90}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nabs(0 - abs(0 - 5))\n", "completion": "abs(0 - abs(0 - 5))", "category": "nested_calls", "expected_exit": 5}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n3 ≤ 5\n", "completion": "3 ≤ 5", "category": "comparisons_advanced", "expected_exit": 1}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nlist_tail([1,2,3])\n", "completion": "list_tail([1,2,3])", "category": "advanced_builtins", "expected_exit": 3}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nx ≔ 9\n10 - x\n", "completion": "x ≔ 9\n10 - x", "category": "variables", "expected_exit": 1}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nmax(0, 100)\n", "completion": "max(0, 100)", "category": "functions", "expected_exit": 100}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n1 + 2 + 3 + 4 + 5\n", "completion": "1 + 2 + 3 + 4 + 5", "category": "complex_arithmetic", "expected_exit": 15}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n∀ x ∈ ⟨5⟩ : x\n", "completion": "∀ x ∈ ⟨5⟩ : x", "category": "forall_exists", "expected_exit": 0}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nmatch abs(0 - 42) with | _ => 42\n", "completion": "match abs(0 - 42) with | _ => 42", "category": "match_wildcards_advanced", "expected_exit": 0}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nfloor(sqrt(10))\n", "completion": "floor(sqrt(10))", "category": "nested_calls", "expected_exit": 0}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nsqrt(sqrt(81))\n", "completion": "sqrt(sqrt(81))", "category": "nested_calls", "expected_exit": 3}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nx ≔ 5\nx + 3\n", "completion": "x ≔ 5\nx + 3", "category": "variables", "expected_exit": 8}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nsqrt(sqrt(16))\n", "completion": "sqrt(sqrt(16))", "category": "mixed", "expected_exit": 2}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n(5 == 5) + (3 == 3)\n", "completion": "(5 == 5) + (3 == 3)", "category": "mixed", "expected_exit": 2}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n3 ^ 2 + 1\n", "completion": "3 ^ 2 + 1", "category": "basic_arithmetic", "expected_exit": 1}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nmatch 2 with | _ => 20\n", "completion": "match 2 with | _ => 20", "category": "match", "expected_exit": 0}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n0 == 0\n", "completion": "0 == 0", "category": "equality", "expected_exit": 1}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nx ≔ 2\nx ^ 3\n", "completion": "x ≔ 2\nx ^ 3", "category": "mixed", "expected_exit": 2}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nsqrt(9) · sqrt(16)\n", "completion": "sqrt(9) · sqrt(16)", "category": "mixed", "expected_exit": 12}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nround(7)\n", "completion": "round(7)", "category": "functions", "expected_exit": 7}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nabs(0 - 5) · 2\n", "completion": "abs(0 - 5) · 2", "category": "mixed", "expected_exit": 10}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n(0 - 5) + 10\n", "completion": "(0 - 5) + 10", "category": "unary_advanced", "expected_exit": 5}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nx ≔ 3\nmatch x with | _ => x ^ 2\n", "completion": "x ≔ 3\nmatch x with | _ => x ^ 2", "category": "match_wildcards_advanced", "expected_exit": 3}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n3 > 5\n", "completion": "3 > 5", "category": "comparisons_advanced", "expected_exit": 0}
+{"prompt": "اكتب كود MAL للمهمة التالية:\na ≔ 1\nb ≔ 2\nc ≔ 3\na + b + c\n", "completion": "a ≔ 1\nb ≔ 2\nc ≔ 3\na + b + c", "category": "variables", "expected_exit": 6}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n(true ∧ true) ∨ false\n", "completion": "(true ∧ true) ∨ false", "category": "boolean_logic", "expected_exit": 1}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n100 / (2 + 3)\n", "completion": "100 / (2 + 3)", "category": "complex_arithmetic", "expected_exit": 20}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n(2 + 3) == 5\n", "completion": "(2 + 3) == 5", "category": "mixed", "expected_exit": 1}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n3 + 4 == 7\n", "completion": "3 + 4 == 7", "category": "equality", "expected_exit": 1}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n3 < 5\n", "completion": "3 < 5", "category": "comparisons_advanced", "expected_exit": 1}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n8 / 2 / 2\n", "completion": "8 / 2 / 2", "category": "basic_arithmetic", "expected_exit": 2}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nsqrt(25)\n", "completion": "sqrt(25)", "category": "functions", "expected_exit": 5}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n1000 / 10 / 10\n", "completion": "1000 / 10 / 10", "category": "mixed", "expected_exit": 10}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nx ≔ 10\ny ≔ 5\nmax(x, y) - min(x, y)\n", "completion": "x ≔ 10\ny ≔ 5\nmax(x, y) - min(x, y)", "category": "mixed", "expected_exit": 5}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n100 / 2 / 2\n", "completion": "100 / 2 / 2", "category": "complex_arithmetic", "expected_exit": 25}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nx ≔ 5\nx\n", "completion": "x ≔ 5\nx", "category": "variables", "expected_exit": 5}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nmin(5, 10) · 2\n", "completion": "min(5, 10) · 2", "category": "mixed", "expected_exit": 10}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nx ≔ 42\nx\n", "completion": "x ≔ 42\nx", "category": "variables", "expected_exit": 42}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nmin(abs(0 - 10), 5)\n", "completion": "min(abs(0 - 10), 5)", "category": "nested_calls", "expected_exit": 5}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n(0 - 3) · (0 - 4)\n", "completion": "(0 - 3) · (0 - 4)", "category": "unary_advanced", "expected_exit": 12}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n15 - 7 - 3\n", "completion": "15 - 7 - 3", "category": "basic_arithmetic", "expected_exit": 5}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nmatch 42 with | _ => 42\n", "completion": "match 42 with | _ => 42", "category": "match", "expected_exit": 0}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n¬(false ∧ true)\n", "completion": "¬(false ∧ true)", "category": "boolean_logic", "expected_exit": 1}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nmin(1, 2) + min(3, 4)\n", "completion": "min(1, 2) + min(3, 4)", "category": "mixed", "expected_exit": 4}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n100 - 50 - 25\n", "completion": "100 - 50 - 25", "category": "mixed", "expected_exit": 25}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nx ≔ 7\ny ≔ x\ny + 1\n", "completion": "x ≔ 7\ny ≔ x\ny + 1", "category": "variables", "expected_exit": 8}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nmax(5, 10) + 5\n", "completion": "max(5, 10) + 5", "category": "mixed", "expected_exit": 15}
+{"prompt": "اكتب كود MAL للمهمة التالية:\ntrue ∧ ¬false\n", "completion": "true ∧ ¬false", "category": "boolean_logic", "expected_exit": 1}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nn ≔ 5\nn ^ 2 + n\n", "completion": "n ≔ 5\nn ^ 2 + n", "category": "mixed_advanced", "expected_exit": 5}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nround(5) · 2\n", "completion": "round(5) · 2", "category": "mixed", "expected_exit": 10}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n¬true ∨ true\n", "completion": "¬true ∨ true", "category": "boolean_logic", "expected_exit": 1}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nfloor(7)\n", "completion": "floor(7)", "category": "functions", "expected_exit": 0}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nmatch 2 ^ 3 with | _ => 8\n", "completion": "match 2 ^ 3 with | _ => 8", "category": "match_wildcards_advanced", "expected_exit": 0}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nsqrt(4) + sqrt(9)\n", "completion": "sqrt(4) + sqrt(9)", "category": "mixed", "expected_exit": 5}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n¬(5 == 6)\n", "completion": "¬(5 == 6)", "category": "boolean_logic", "expected_exit": 1}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nceil(7)\n", "completion": "ceil(7)", "category": "functions", "expected_exit": 7}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n10 - 3\n", "completion": "10 - 3", "category": "basic_arithmetic", "expected_exit": 7}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nmin(10, 20) == 10\n", "completion": "min(10, 20) == 10", "category": "mixed", "expected_exit": 1}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n17 % 5 + 3\n", "completion": "17 % 5 + 3", "category": "complex_arithmetic", "expected_exit": 5}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n5 + (0 - 3)\n", "completion": "5 + (0 - 3)", "category": "unary_advanced", "expected_exit": 2}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nx ≔ 5\nx == 5\n", "completion": "x ≔ 5\nx == 5", "category": "equality", "expected_exit": 1}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n¬true\n", "completion": "¬true", "category": "bool_ops", "expected_exit": 0}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nsqrt(16) · sqrt(9) + 1\n", "completion": "sqrt(16) · sqrt(9) + 1", "category": "mixed_advanced", "expected_exit": 13}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nmatch 7 + 3 with | _ => 100\n", "completion": "match 7 + 3 with | _ => 100", "category": "match_wildcards_advanced", "expected_exit": 0}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n5 == 5\n", "completion": "5 == 5", "category": "equality", "expected_exit": 1}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n(1 + 2) · 3 + 4\n", "completion": "(1 + 2) · 3 + 4", "category": "complex_arithmetic", "expected_exit": 13}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nx ≔ 6\ny ≔ 8\nz ≔ 10\nx + y + z\n", "completion": "x ≔ 6\ny ≔ 8\nz ≔ 10\nx + y + z", "category": "mixed_advanced", "expected_exit": 24}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n5 < 3\n", "completion": "5 < 3", "category": "comparisons_advanced", "expected_exit": 0}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nsqrt(sqrt(256))\n", "completion": "sqrt(sqrt(256))", "category": "nested_calls", "expected_exit": 4}

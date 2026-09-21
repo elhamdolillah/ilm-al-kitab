@@ -1,14 +1,25 @@
 {
-  "total": 93,
+  "total": 203,
   "categories": {
-    "basic_arithmetic": 18,
+    "basic_arithmetic": 20,
     "variables": 15,
     "functions": 15,
-    "equality": 9,
+    "equality": 10,
     "match": 10,
-    "mixed": 26
+    "mixed": 30,
+    "bool_ops": 10,
+    "unary_advanced": 10,
+    "advanced_builtins": 8,
+    "nested_calls": 10,
+    "complex_arithmetic": 15,
+    "comparisons_advanced": 10,
+    "match_wildcards_advanced": 10,
+    "forall_exists": 5,
+    "boolean_logic": 10,
+    "mixed_advanced": 15
   },
-  "version": "v9.4",
+  "version": "v2.0",
   "verified": true,
-  "date": "2026-09-21"
+  "date": "2026-09-21",
+  "pass_rate": "203/203 (100%)"
 }

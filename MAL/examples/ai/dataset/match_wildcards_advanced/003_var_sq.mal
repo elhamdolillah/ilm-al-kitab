@@ -1,0 +1,2 @@
+x ≔ 3
+match x with | _ => x ^ 2

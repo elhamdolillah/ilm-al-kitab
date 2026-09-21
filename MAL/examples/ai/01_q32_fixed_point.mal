@@ -1,0 +1,68 @@
+// ═════ كسور Q32.32 (32 bits صحيحة + 32 bits كسرية) ═════
+// دقة: ~9 أرقام عشرية، حتمي 100%، لا NaN/Infinity
+// ثابت 2^32
+fn q32_scale() -> i64 {
+    return 4294967296;
+}
+// تحويل من عدد صحيح إلى Q32.32
+fn from_int(x: i32) -> i64 {
+    return x * q32_scale();
+}
+// تحويل من Q32.32 إلى عدد صحيح
+fn to_int(x: i64) -> i64 {
+    return x / q32_scale();
+}
+// ضرب كسور Q32.32
+fn mul_frac(a: i64, b: i64) -> i64 {
+    return (a * b) / q32_scale();
+}
+// قسمة كسور Q32.32
+fn div_frac(a: i64, b: i64) -> i64 {
+    if (b == 0) {
+        return 0;  // رفض القسمة على صفر
+    }
+    return (a * q32_scale()) / b;
+}
+// القيمة المطلقة
+fn abs_q32(x: i64) -> i64 {
+    if (x >= 0) {
+        return x;
+    }
+    return -x;
+}
+// جذر تقريبي (Newton's method)
+fn sqrt_q32(x: i64) -> i64 {
+    if (x < 0) {
+        return 0;  // رفض الأعداد السالبة
+    }
+    if (x == 0) {
+        return 0;
+    }
+    let guess: i64 = x / 2;
+    let i: i32 = 0;
+    while (i < 10) {
+        guess = (guess + div_frac(x, guess)) / 2;
+        i = i + 1;
+    }
+    return guess;
+}
+fn main() -> i32 {
+    // اختبار الضرب
+    let a: i64 = from_int(3);
+    let b: i64 = from_int(4);
+    let c: i64 = mul_frac(a, b);
+    printf("3 * 4 = %lld\n", to_int(c));
+    // اختبار الجذر
+    let d: i64 = sqrt_q32(from_int(16));
+    printf("sqrt(16) = %lld\n", to_int(d));
+    // اختبار القسمة
+    let e: i64 = div_frac(from_int(10), from_int(2));
+    printf("10 / 2 = %lld\n", to_int(e));
+    // اختبار كسور
+    let half: i64 = div_frac(from_int(1), from_int(2));
+    let quarter: i64 = div_frac(half, from_int(2));
+    let sum: i64 = half + quarter;
+    printf("1/2 + 1/4 = %lld (as int)\n", to_int(sum));
+    printf("1/2 + 1/4 = raw Q32.32 value\n");
+    return 0;
+}
