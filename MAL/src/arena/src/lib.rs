@@ -210,7 +210,7 @@ pub enum Pattern {
     /// Wildcard: matches anything, binds nothing.
     Wildcard,
     /// Literal pattern: matches a literal value.
-    Literal(NodeID),
+    Literal(i64),
     /// Variable binding: matches anything, binds to name.
     Binding(u32),
 }

@@ -15,7 +15,7 @@
 #![forbid(unsafe_code)]
 #![deny(missing_docs)]
 
-use mal_arena::{Arena, NodeID, ASTNode, ArenaError, BinaryOp, UnaryOp};
+use mal_arena::{Arena, NodeID, ASTNode, ArenaError, BinaryOp, UnaryOp, Pattern};
 use mal_lexer::{Lexer, Token, TokenKind, LexerError};
 
 /// Parser failure modes (fail-closed).
@@ -247,10 +247,45 @@ impl<'a> Parser<'a> {
                                 Ok(arena.allocate(ASTNode::Ident(tok.start))?)
             }
             TokenKind::LParen => {
-                // Grouped expression (call chaining moved to parse_postfix)
-                let expr = self.parse_expr(arena)?;
-                self.expect(TokenKind::RParen)?;
-                Ok(expr)
+                let save_pos = self.pos;
+                let mut params = Vec::new();
+                let mut is_lambda = false;
+                while self.peek().map_or(false, |t| t.kind == TokenKind::Ident) {
+                    let tok = self.bump().unwrap();
+                    let ident = arena.allocate(ASTNode::Ident(tok.start))?;
+                    params.push(ident);
+                    if self.peek().map_or(false, |t| t.kind == TokenKind::Comma) {
+                        self.bump();
+                    } else {
+                        break;
+                    }
+                }
+                if self.peek().map_or(false, |t| t.kind == TokenKind::RParen) {
+                    self.bump();
+                    if self.peek().map_or(false, |t| t.kind == TokenKind::FatArrow) {
+                        self.bump();
+                        is_lambda = true;
+                    }
+                }
+                if is_lambda && !params.is_empty() {
+                    let body = self.parse_expr(arena)?;
+                    let params_list = if params.len() == 1 {
+                        params[0]
+                    } else {
+                        let mut list = arena.allocate(ASTNode::List { head: params[params.len() - 1], tail: NodeID::INVALID })?;
+                        for i in (0..params.len() - 1).rev() {
+                            list = arena.allocate(ASTNode::List { head: params[i], tail: list })?;
+                        }
+                        list
+                    };
+                    Ok(arena.allocate(ASTNode::Lambda { params: params_list, body })?)
+                } else {
+                    self.pos = save_pos;
+                    self.bump();
+                    let expr = self.parse_expr(arena)?;
+                    self.expect(TokenKind::RParen)?;
+                    Ok(expr)
+                }
             }
             TokenKind::Forall => {
                 self.parse_forall(arena)
@@ -263,6 +298,12 @@ impl<'a> Parser<'a> {
             }
             TokenKind::LAngle => {
                 self.parse_set_literal(arena)
+            }
+            TokenKind::LBracket => {
+                self.parse_list_literal(arena)
+            }
+            TokenKind::MatchKeyword => {
+                self.parse_match(arena)
             }
             TokenKind::Read => {
                 // ⊙ read stdin — zero-argument builtin call (already consumed by parse_primary)
@@ -345,7 +386,7 @@ impl<'a> Parser<'a> {
                 TokenKind::Lt => BinaryOp::Lt,
                 TokenKind::Gt => BinaryOp::Gt,
                 TokenKind::Le => BinaryOp::Le,
-                TokenKind::Eq => BinaryOp::Eq,
+                TokenKind::EqEq => BinaryOp::Eq,
                 TokenKind::Neq => BinaryOp::Neq,
                 TokenKind::Ge => BinaryOp::Ge,
                 _ => return Ok(left),
@@ -444,6 +485,56 @@ impl<'a> Parser<'a> {
         self.expect(TokenKind::Colon)?;
         let body = self.parse_expr(arena)?;
         Ok(arena.allocate(ASTNode::Exists { var, set, body })?)
+    }
+
+    fn parse_list_literal(&mut self, arena: &mut Arena) -> Result<NodeID, ParserError> {
+        if self.peek().map_or(false, |t| t.kind == TokenKind::RBracket) {
+            self.bump();
+            return Ok(NodeID::INVALID);
+        }
+        let mut elements = vec![];
+        elements.push(self.parse_expr(arena)?);
+        while self.peek().map_or(false, |t| t.kind == TokenKind::Comma) {
+            self.bump();
+            elements.push(self.parse_expr(arena)?);
+        }
+        self.expect(TokenKind::RBracket)?;
+        let mut list = NodeID::INVALID;
+        for elem in elements.into_iter().rev() {
+            list = arena.allocate(ASTNode::List { head: elem, tail: list })?;
+        }
+        Ok(list)
+    }
+    fn parse_match(&mut self, arena: &mut Arena) -> Result<NodeID, ParserError> {
+        let scrutinee = self.parse_expr(arena)?;
+        self.expect(TokenKind::WithKeyword)?;
+        let mut arms = Vec::new();
+        while self.peek().map_or(false, |t| t.kind == TokenKind::Pipe) {
+            self.bump();
+            let pattern = self.parse_pattern()?;
+            self.expect(TokenKind::FatArrow)?;
+            let body = self.parse_expr(arena)?;
+            arms.push(arena.allocate(ASTNode::MatchArm { pattern, body })?);
+        }
+        if arms.is_empty() {
+            return Err(ParserError::Expected { expected: "at least one match arm", found: "none".to_string(), line: 0, col: 0 });
+        }
+        let mut arms_list = NodeID::INVALID;
+        for arm in arms.into_iter().rev() {
+            arms_list = arena.allocate(ASTNode::List { head: arm, tail: arms_list })?;
+        }
+        Ok(arena.allocate(ASTNode::Match { scrutinee, arms: arms_list })?)
+    }
+    fn parse_pattern(&mut self) -> Result<Pattern, ParserError> {
+        let tok = self.bump().ok_or(ParserError::UnexpectedEof)?;
+        match tok.kind {
+            TokenKind::Ident => {
+                let text = &self.src[tok.start as usize..(tok.start + tok.len) as usize];
+                if text == "_" { Ok(Pattern::Wildcard) } else { Ok(Pattern::Binding(tok.start)) }
+            }
+            TokenKind::Num => Ok(Pattern::Literal(tok.num)),
+            _ => Err(ParserError::Expected { expected: "pattern", found: format!("{:?}", tok.kind), line: tok.line, col: tok.col }),
+        }
     }
     fn parse_set_literal(&mut self, arena: &mut Arena) -> Result<NodeID, ParserError> {
         // ⟨ already consumed by parse_primary
