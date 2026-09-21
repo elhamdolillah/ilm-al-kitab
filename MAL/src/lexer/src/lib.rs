@@ -107,6 +107,10 @@ pub enum TokenKind {
     FatArrow,
     /// `|`
     Pipe,
+    /// `match` keyword
+    MatchKeyword,
+    /// `with` keyword
+    WithKeyword,
     /// `⊙` read stdin.
     Read,
     /// `⎕` print.
@@ -490,6 +494,8 @@ impl<'a> Lexer<'a> {
                     "false" => TokenKind::FalseLit,
                     // Three-valued logic
                     "unknown" | "UNKNOWN" => TokenKind::Unknown,
+                    "match" => TokenKind::MatchKeyword,
+                    "with" => TokenKind::WithKeyword,
                     // SQL keywords (reserved, case-insensitive)
                     "select" | "SELECT" => TokenKind::Select,
                     "from" | "FROM" => TokenKind::From,
