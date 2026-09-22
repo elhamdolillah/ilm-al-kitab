@@ -1,0 +1,147 @@
+{
+  "generation": 1,
+  "total_candidates": 20,
+  "successful": 19,
+  "all_results": [
+    {
+      "id": "extract_email_javascript_v0",
+      "language": "javascript",
+      "accuracy": 1.0,
+      "ops_per_sec": 15.231787802238253,
+      "error": null
+    },
+    {
+      "id": "extract_email_python_v0",
+      "language": "python",
+      "accuracy": 1.0,
+      "ops_per_sec": 24.13249260280653,
+      "error": null
+    },
+    {
+      "id": "extract_email_javascript_v1",
+      "language": "javascript",
+      "accuracy": 1.0,
+      "ops_per_sec": 15.937379941170024,
+      "error": null
+    },
+    {
+      "id": "extract_email_python_v1",
+      "language": "python",
+      "accuracy": 1.0,
+      "ops_per_sec": 26.151485845848587,
+      "error": null
+    },
+    {
+      "id": "extract_url_javascript_v0",
+      "language": "javascript",
+      "accuracy": 1.0,
+      "ops_per_sec": 15.57091170520482,
+      "error": null
+    },
+    {
+      "id": "extract_url_python_v0",
+      "language": "python",
+      "accuracy": 1.0,
+      "ops_per_sec": 23.42703169367597,
+      "error": null
+    },
+    {
+      "id": "extract_url_javascript_v1",
+      "language": "javascript",
+      "accuracy": 0.8,
+      "ops_per_sec": 15.439001716437238,
+      "error": null
+    },
+    {
+      "id": "extract_url_python_v1",
+      "language": "python",
+      "accuracy": 1.0,
+      "ops_per_sec": 24.511634287034035,
+      "error": null
+    },
+    {
+      "id": "extract_attrs_javascript_v0",
+      "language": "javascript",
+      "accuracy": 1.0,
+      "ops_per_sec": 15.420042118406181,
+      "error": null
+    },
+    {
+      "id": "extract_attrs_python_v0",
+      "language": "python",
+      "accuracy": 1.0,
+      "ops_per_sec": 23.502550848724493,
+      "error": null
+    },
+    {
+      "id": "extract_attrs_javascript_v1",
+      "language": "javascript",
+      "accuracy": 1.0,
+      "ops_per_sec": 15.378606989414331,
+      "error": null
+    },
+    {
+      "id": "extract_attrs_python_v1",
+      "language": "python",
+      "accuracy": 1.0,
+      "ops_per_sec": 22.412940457632708,
+      "error": null
+    },
+    {
+      "id": "sum_numbers_javascript_v0",
+      "language": "javascript",
+      "accuracy": 1.0,
+      "ops_per_sec": 15.052257612599067,
+      "error": null
+    },
+    {
+      "id": "sum_numbers_python_v0",
+      "language": "python",
+      "accuracy": 1.0,
+      "ops_per_sec": 24.844507036331954,
+      "error": null
+    },
+    {
+      "id": "sum_numbers_javascript_v1",
+      "language": "javascript",
+      "accuracy": 1.0,
+      "ops_per_sec": 14.94734312236133,
+      "error": null
+    },
+    {
+      "id": "sum_numbers_python_v1",
+      "language": "python",
+      "accuracy": 1.0,
+      "ops_per_sec": 24.056363032165034,
+      "error": null
+    },
+    {
+      "id": "count_words_javascript_v0",
+      "language": "javascript",
+      "accuracy": 1.0,
+      "ops_per_sec": 15.390252513054374,
+      "error": null
+    },
+    {
+      "id": "count_words_python_v0",
+      "language": "python",
+      "accuracy": 1.0,
+      "ops_per_sec": 23.822367959333647,
+      "error": null
+    },
+    {
+      "id": "count_words_javascript_v1",
+      "language": "javascript",
+      "accuracy": 1.0,
+      "ops_per_sec": 15.679098086190466,
+      "error": null
+    },
+    {
+      "id": "count_words_python_v1",
+      "language": "python",
+      "accuracy": 1.0,
+      "ops_per_sec": 27.35417760415387,
+      "error": null
+    }
+  ]
+}
