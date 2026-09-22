@@ -1,0 +1,90 @@
+{
+  "model": "MAL-Tiny v2.0",
+  "params": 212864,
+  "best_epoch": 35,
+  "best_eval_loss": 1.3573,
+  "training_time_min": 2.6,
+  "dataset_v3": {
+    "total": 293,
+    "train": 263,
+    "eval": 30
+  },
+  "overall_accuracy": 66.7,
+  "per_category": {
+    "advanced_builtins": {
+      "correct": 0,
+      "total": 1,
+      "pct": 0.0
+    },
+    "basic_arithmetic": {
+      "correct": 5,
+      "total": 5,
+      "pct": 100.0
+    },
+    "bool_ops": {
+      "correct": 1,
+      "total": 1,
+      "pct": 100.0
+    },
+    "complex_arithmetic": {
+      "correct": 2,
+      "total": 2,
+      "pct": 100.0
+    },
+    "css_parsing": {
+      "correct": 0,
+      "total": 2,
+      "pct": 0.0
+    },
+    "equality": {
+      "correct": 2,
+      "total": 2,
+      "pct": 100.0
+    },
+    "forall_exists": {
+      "correct": 0,
+      "total": 1,
+      "pct": 0.0
+    },
+    "functions": {
+      "correct": 2,
+      "total": 2,
+      "pct": 100.0
+    },
+    "html_extraction": {
+      "correct": 0,
+      "total": 1,
+      "pct": 0.0
+    },
+    "language_detection": {
+      "correct": 0,
+      "total": 1,
+      "pct": 0.0
+    },
+    "match_wildcards_advanced": {
+      "correct": 0,
+      "total": 1,
+      "pct": 0.0
+    },
+    "mixed": {
+      "correct": 3,
+      "total": 3,
+      "pct": 100.0
+    },
+    "unary_advanced": {
+      "correct": 5,
+      "total": 5,
+      "pct": 100.0
+    },
+    "unit_conversion": {
+      "correct": 0,
+      "total": 2,
+      "pct": 0.0
+    },
+    "url_validation": {
+      "correct": 0,
+      "total": 1,
+      "pct": 0.0
+    }
+  }
+}

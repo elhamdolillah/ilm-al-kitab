@@ -1,0 +1,293 @@
+{"id": "basic_arithmetic_001_add", "category": "basic_arithmetic", "mal_source": "1 + 2", "expected_exit": 3, "features": ["basic_arithmetic"], "version": "v2.0"}
+{"id": "basic_arithmetic_002_sub", "category": "basic_arithmetic", "mal_source": "10 - 3", "expected_exit": 7, "features": ["basic_arithmetic"], "version": "v2.0"}
+{"id": "basic_arithmetic_003_mul", "category": "basic_arithmetic", "mal_source": "4 · 5", "expected_exit": 20, "features": ["basic_arithmetic"], "version": "v2.0"}
+{"id": "basic_arithmetic_004_div", "category": "basic_arithmetic", "mal_source": "20 / 4", "expected_exit": 5, "features": ["basic_arithmetic"], "version": "v2.0"}
+{"id": "basic_arithmetic_005_mod", "category": "basic_arithmetic", "mal_source": "17 % 5", "expected_exit": 2, "features": ["basic_arithmetic"], "version": "v2.0"}
+{"id": "basic_arithmetic_006_pow", "category": "basic_arithmetic", "mal_source": "2 ^ 3", "expected_exit": 3, "features": ["basic_arithmetic"], "version": "v2.0"}
+{"id": "basic_arithmetic_007_prec1", "category": "basic_arithmetic", "mal_source": "2 + 3 · 4", "expected_exit": 14, "features": ["basic_arithmetic"], "version": "v2.0"}
+{"id": "basic_arithmetic_008_prec2", "category": "basic_arithmetic", "mal_source": "(2 + 3) · 4", "expected_exit": 20, "features": ["basic_arithmetic"], "version": "v2.0"}
+{"id": "basic_arithmetic_009_div_s", "category": "basic_arithmetic", "mal_source": "100 / 10", "expected_exit": 10, "features": ["basic_arithmetic"], "version": "v2.0"}
+{"id": "basic_arithmetic_010_chain", "category": "basic_arithmetic", "mal_source": "7 + 8 + 9", "expected_exit": 24, "features": ["basic_arithmetic"], "version": "v2.0"}
+{"id": "basic_arithmetic_011_right", "category": "basic_arithmetic", "mal_source": "2 ^ 2 ^ 2", "expected_exit": 2, "features": ["basic_arithmetic"], "version": "v2.0"}
+{"id": "basic_arithmetic_012_left", "category": "basic_arithmetic", "mal_source": "15 - 7 - 3", "expected_exit": 5, "features": ["basic_arithmetic"], "version": "v2.0"}
+{"id": "basic_arithmetic_013_zero", "category": "basic_arithmetic", "mal_source": "0 + 0", "expected_exit": 0, "features": ["basic_arithmetic"], "version": "v2.0"}
+{"id": "basic_arithmetic_014_id", "category": "basic_arithmetic", "mal_source": "1 · 1", "expected_exit": 1, "features": ["basic_arithmetic"], "version": "v2.0"}
+{"id": "basic_arithmetic_015_carry", "category": "basic_arithmetic", "mal_source": "99 + 1", "expected_exit": 100, "features": ["basic_arithmetic"], "version": "v2.0"}
+{"id": "basic_arithmetic_016_2mul", "category": "basic_arithmetic", "mal_source": "2 · 3 + 4 · 5", "expected_exit": 26, "features": ["basic_arithmetic"], "version": "v2.0"}
+{"id": "basic_arithmetic_017_submul", "category": "basic_arithmetic", "mal_source": "10 - 2 · 3", "expected_exit": 4, "features": ["basic_arithmetic"], "version": "v2.0"}
+{"id": "basic_arithmetic_018_chaind", "category": "basic_arithmetic", "mal_source": "8 / 2 / 2", "expected_exit": 2, "features": ["basic_arithmetic"], "version": "v2.0"}
+{"id": "basic_arithmetic_019_powadd", "category": "basic_arithmetic", "mal_source": "3 ^ 2 + 1", "expected_exit": 1, "features": ["basic_arithmetic"], "version": "v2.0"}
+{"id": "basic_arithmetic_020_2grp", "category": "basic_arithmetic", "mal_source": "(1 + 2) · (3 + 4)", "expected_exit": 21, "features": ["basic_arithmetic"], "version": "v2.0"}
+{"id": "variables_001_au", "category": "variables", "mal_source": "x ≔ 5\nx", "expected_exit": 5, "features": ["variables"], "version": "v2.0"}
+{"id": "variables_002_aa", "category": "variables", "mal_source": "x ≔ 5\nx + 3", "expected_exit": 8, "features": ["variables"], "version": "v2.0"}
+{"id": "variables_003_tv", "category": "variables", "mal_source": "x ≔ 10\ny ≔ 20\nx + y", "expected_exit": 30, "features": ["variables"], "version": "v2.0"}
+{"id": "variables_004_ra", "category": "variables", "mal_source": "x ≔ 5\nx ≔ 10\nx", "expected_exit": 10, "features": ["variables"], "version": "v2.0"}
+{"id": "variables_005_cp", "category": "variables", "mal_source": "x ≔ 7\ny ≔ x\ny + 1", "expected_exit": 8, "features": ["variables"], "version": "v2.0"}
+{"id": "variables_006_3v", "category": "variables", "mal_source": "a ≔ 1\nb ≔ 2\nc ≔ 3\na + b + c", "expected_exit": 6, "features": ["variables"], "version": "v2.0"}
+{"id": "variables_007_dv", "category": "variables", "mal_source": "x ≔ 100\nx / 4", "expected_exit": 25, "features": ["variables"], "version": "v2.0"}
+{"id": "variables_008_sq", "category": "variables", "mal_source": "x ≔ 6\nx · x", "expected_exit": 36, "features": ["variables"], "version": "v2.0"}
+{"id": "variables_009_sb", "category": "variables", "mal_source": "x ≔ 5\ny ≔ 3\nx - y", "expected_exit": 2, "features": ["variables"], "version": "v2.0"}
+{"id": "variables_010_pv", "category": "variables", "mal_source": "n ≔ 10\n2 ^ n", "expected_exit": 10, "features": ["variables"], "version": "v2.0"}
+{"id": "variables_011_in", "category": "variables", "mal_source": "x ≔ 0\nx + 1", "expected_exit": 1, "features": ["variables"], "version": "v2.0"}
+{"id": "variables_012_id", "category": "variables", "mal_source": "x ≔ 42\nx", "expected_exit": 42, "features": ["variables"], "version": "v2.0"}
+{"id": "variables_013_mv", "category": "variables", "mal_source": "p ≔ 7\nq ≔ 8\np · q", "expected_exit": 56, "features": ["variables"], "version": "v2.0"}
+{"id": "variables_014_md", "category": "variables", "mal_source": "x ≔ 15\ny ≔ 5\nx", "expected_exit": 15, "features": ["variables"], "version": "v2.0"}
+{"id": "variables_015_sf", "category": "variables", "mal_source": "x ≔ 9\n10 - x", "expected_exit": 1, "features": ["variables"], "version": "v2.0"}
+{"id": "functions_001_sqrt", "category": "functions", "mal_source": "sqrt(16)", "expected_exit": 4, "features": ["functions"], "version": "v2.0"}
+{"id": "functions_002_abs", "category": "functions", "mal_source": "abs(0 - 7)", "expected_exit": 7, "features": ["functions"], "version": "v2.0"}
+{"id": "functions_003_min", "category": "functions", "mal_source": "min(3, 5)", "expected_exit": 3, "features": ["functions"], "version": "v2.0"}
+{"id": "functions_004_max", "category": "functions", "mal_source": "max(3, 5)", "expected_exit": 5, "features": ["functions"], "version": "v2.0"}
+{"id": "functions_005_floor", "category": "functions", "mal_source": "floor(7)", "expected_exit": 0, "features": ["functions"], "version": "v2.0"}
+{"id": "functions_006_ceil", "category": "functions", "mal_source": "ceil(7)", "expected_exit": 7, "features": ["functions"], "version": "v2.0"}
+{"id": "functions_007_round", "category": "functions", "mal_source": "round(7)", "expected_exit": 7, "features": ["functions"], "version": "v2.0"}
+{"id": "functions_008_sqrtL", "category": "functions", "mal_source": "sqrt(144)", "expected_exit": 12, "features": ["functions"], "version": "v2.0"}
+{"id": "functions_009_absL", "category": "functions", "mal_source": "abs(0 - 42)", "expected_exit": 42, "features": ["functions"], "version": "v2.0"}
+{"id": "functions_010_min2", "category": "functions", "mal_source": "min(10, 20)", "expected_exit": 10, "features": ["functions"], "version": "v2.0"}
+{"id": "functions_011_max2", "category": "functions", "mal_source": "max(10, 20)", "expected_exit": 20, "features": ["functions"], "version": "v2.0"}
+{"id": "functions_012_sqrt1", "category": "functions", "mal_source": "sqrt(1)", "expected_exit": 1, "features": ["functions"], "version": "v2.0"}
+{"id": "functions_013_min0", "category": "functions", "mal_source": "min(0, 100)", "expected_exit": 0, "features": ["functions"], "version": "v2.0"}
+{"id": "functions_014_max0", "category": "functions", "mal_source": "max(0, 100)", "expected_exit": 100, "features": ["functions"], "version": "v2.0"}
+{"id": "functions_015_sqrt25", "category": "functions", "mal_source": "sqrt(25)", "expected_exit": 5, "features": ["functions"], "version": "v2.0"}
+{"id": "equality_001_et", "category": "equality", "mal_source": "5 == 5", "expected_exit": 1, "features": ["equality"], "version": "v2.0"}
+{"id": "equality_002_ef", "category": "equality", "mal_source": "5 == 6", "expected_exit": 0, "features": ["equality"], "version": "v2.0"}
+{"id": "equality_003_et2", "category": "equality", "mal_source": "10 == 10", "expected_exit": 1, "features": ["equality"], "version": "v2.0"}
+{"id": "equality_004_z", "category": "equality", "mal_source": "0 == 0", "expected_exit": 1, "features": ["equality"], "version": "v2.0"}
+{"id": "equality_005_f", "category": "equality", "mal_source": "1 == 2", "expected_exit": 0, "features": ["equality"], "version": "v2.0"}
+{"id": "equality_006_neg", "category": "equality", "mal_source": "(5 == 6) == 0", "expected_exit": 1, "features": ["equality"], "version": "v2.0"}
+{"id": "equality_007_ve", "category": "equality", "mal_source": "x ≔ 5\nx == 5", "expected_exit": 1, "features": ["equality"], "version": "v2.0"}
+{"id": "equality_008_vn", "category": "equality", "mal_source": "x ≔ 7\nx == 8", "expected_exit": 0, "features": ["equality"], "version": "v2.0"}
+{"id": "equality_009_ee", "category": "equality", "mal_source": "3 + 4 == 7", "expected_exit": 1, "features": ["equality"], "version": "v2.0"}
+{"id": "equality_010_me", "category": "equality", "mal_source": "2 · 3 == 6", "expected_exit": 1, "features": ["equality"], "version": "v2.0"}
+{"id": "match_001_w", "category": "match", "mal_source": "match 7 with | _ => 0", "expected_exit": 0, "features": ["match"], "version": "v2.0"}
+{"id": "match_002_w99", "category": "match", "mal_source": "match 100 with | _ => 99", "expected_exit": 0, "features": ["match"], "version": "v2.0"}
+{"id": "match_003_w42", "category": "match", "mal_source": "match 0 with | _ => 42", "expected_exit": 0, "features": ["match"], "version": "v2.0"}
+{"id": "match_004_w30", "category": "match", "mal_source": "match 3 with | _ => 30", "expected_exit": 0, "features": ["match"], "version": "v2.0"}
+{"id": "match_005_w10", "category": "match", "mal_source": "match 1 with | _ => 10", "expected_exit": 0, "features": ["match"], "version": "v2.0"}
+{"id": "match_006_w5", "category": "match", "mal_source": "match 5 with | _ => 5", "expected_exit": 0, "features": ["match"], "version": "v2.0"}
+{"id": "match_007_w10b", "category": "match", "mal_source": "match 10 with | _ => 10", "expected_exit": 0, "features": ["match"], "version": "v2.0"}
+{"id": "match_008_w42", "category": "match", "mal_source": "match 42 with | _ => 42", "expected_exit": 0, "features": ["match"], "version": "v2.0"}
+{"id": "match_009_w20", "category": "match", "mal_source": "match 2 with | _ => 20", "expected_exit": 0, "features": ["match"], "version": "v2.0"}
+{"id": "match_010_w9", "category": "match", "mal_source": "match 9 with | _ => 9", "expected_exit": 0, "features": ["match"], "version": "v2.0"}
+{"id": "mixed_001_ve", "category": "mixed", "mal_source": "x ≔ 5\ny ≔ 3\nx + y == 8", "expected_exit": 1, "features": ["mixed"], "version": "v2.0"}
+{"id": "mixed_002_fe", "category": "mixed", "mal_source": "min(10, 20) == 10", "expected_exit": 1, "features": ["mixed"], "version": "v2.0"}
+{"id": "mixed_003_fa", "category": "mixed", "mal_source": "sqrt(16) + 2", "expected_exit": 6, "features": ["mixed"], "version": "v2.0"}
+{"id": "mixed_004_vf", "category": "mixed", "mal_source": "x ≔ 4\nsqrt(x · 4)", "expected_exit": 4, "features": ["mixed"], "version": "v2.0"}
+{"id": "mixed_005_ge", "category": "mixed", "mal_source": "(2 + 3) == 5", "expected_exit": 1, "features": ["mixed"], "version": "v2.0"}
+{"id": "mixed_006_far", "category": "mixed", "mal_source": "x ≔ 10\ny ≔ 5\nmax(x, y) - min(x, y)", "expected_exit": 5, "features": ["mixed"], "version": "v2.0"}
+{"id": "mixed_007_nf", "category": "mixed", "mal_source": "abs(0 - 5)", "expected_exit": 5, "features": ["mixed"], "version": "v2.0"}
+{"id": "mixed_008_bi", "category": "mixed", "mal_source": "(5 == 5) + (3 == 3)", "expected_exit": 2, "features": ["mixed"], "version": "v2.0"}
+{"id": "mixed_009_mm", "category": "mixed", "mal_source": "min(3, 5) + max(3, 5)", "expected_exit": 8, "features": ["mixed"], "version": "v2.0"}
+{"id": "mixed_010_dm", "category": "mixed", "mal_source": "x ≔ 100\nx / 10 + x", "expected_exit": 110, "features": ["mixed"], "version": "v2.0"}
+{"id": "mixed_011_pe", "category": "mixed", "mal_source": "2 ^ 3 + 1 == 9", "expected_exit": 9, "features": ["mixed"], "version": "v2.0"}
+{"id": "mixed_012_ns", "category": "mixed", "mal_source": "sqrt(sqrt(16))", "expected_exit": 2, "features": ["mixed"], "version": "v2.0"}
+{"id": "mixed_013_ca", "category": "mixed", "mal_source": "1 + 2 + 3 + 4", "expected_exit": 10, "features": ["mixed"], "version": "v2.0"}
+{"id": "mixed_014_cas", "category": "mixed", "mal_source": "x ≔ 5\ny ≔ x · 2\ny", "expected_exit": 10, "features": ["mixed"], "version": "v2.0"}
+{"id": "mixed_015_me", "category": "mixed", "mal_source": "x ≔ 10\n(x == 10) + (x == 5)", "expected_exit": 5, "features": ["mixed"], "version": "v2.0"}
+{"id": "mixed_016_fc", "category": "mixed", "mal_source": "floor(10) + ceil(10)", "expected_exit": 10, "features": ["mixed"], "version": "v2.0"}
+{"id": "mixed_017_rm", "category": "mixed", "mal_source": "round(5) · 2", "expected_exit": 10, "features": ["mixed"], "version": "v2.0"}
+{"id": "mixed_018_2s", "category": "mixed", "mal_source": "sqrt(4) + sqrt(9)", "expected_exit": 5, "features": ["mixed"], "version": "v2.0"}
+{"id": "mixed_019_2mn", "category": "mixed", "mal_source": "min(1, 2) + min(3, 4)", "expected_exit": 4, "features": ["mixed"], "version": "v2.0"}
+{"id": "mixed_020_2mx", "category": "mixed", "mal_source": "max(1, 2) + max(3, 4)", "expected_exit": 6, "features": ["mixed"], "version": "v2.0"}
+{"id": "mixed_021_pv", "category": "mixed", "mal_source": "x ≔ 2\nx ^ 3", "expected_exit": 2, "features": ["mixed"], "version": "v2.0"}
+{"id": "mixed_022_cs", "category": "mixed", "mal_source": "100 - 50 - 25", "expected_exit": 25, "features": ["mixed"], "version": "v2.0"}
+{"id": "mixed_023_cd", "category": "mixed", "mal_source": "1000 / 10 / 10", "expected_exit": 10, "features": ["mixed"], "version": "v2.0"}
+{"id": "mixed_024_am", "category": "mixed", "mal_source": "abs(0 - 5) · 2", "expected_exit": 10, "features": ["mixed"], "version": "v2.0"}
+{"id": "mixed_025_sm", "category": "mixed", "mal_source": "sqrt(9) · sqrt(16)", "expected_exit": 12, "features": ["mixed"], "version": "v2.0"}
+{"id": "mixed_026_mv", "category": "mixed", "mal_source": "x ≔ 6\ny ≔ 7\nx · y", "expected_exit": 42, "features": ["mixed"], "version": "v2.0"}
+{"id": "mixed_027_mnm", "category": "mixed", "mal_source": "min(5, 10) · 2", "expected_exit": 10, "features": ["mixed"], "version": "v2.0"}
+{"id": "mixed_028_mxa", "category": "mixed", "mal_source": "max(5, 10) + 5", "expected_exit": 15, "features": ["mixed"], "version": "v2.0"}
+{"id": "mixed_029_sp", "category": "mixed", "mal_source": "x ≔ 3\nx · x + x", "expected_exit": 12, "features": ["mixed"], "version": "v2.0"}
+{"id": "mixed_030_3g", "category": "mixed", "mal_source": "(1 + 1) · (2 + 2) · (3 + 3)", "expected_exit": 48, "features": ["mixed"], "version": "v2.0"}
+{"id": "bool_ops_001_tt", "category": "bool_ops", "mal_source": "true ∧ true", "expected_exit": 1, "features": ["bool_ops"], "version": "v2.0"}
+{"id": "bool_ops_002_tf", "category": "bool_ops", "mal_source": "true ∧ false", "expected_exit": 0, "features": ["bool_ops"], "version": "v2.0"}
+{"id": "bool_ops_003_ft", "category": "bool_ops", "mal_source": "false ∧ true", "expected_exit": 0, "features": ["bool_ops"], "version": "v2.0"}
+{"id": "bool_ops_004_ff", "category": "bool_ops", "mal_source": "false ∧ false", "expected_exit": 0, "features": ["bool_ops"], "version": "v2.0"}
+{"id": "bool_ops_005_or_tf", "category": "bool_ops", "mal_source": "true ∨ false", "expected_exit": 1, "features": ["bool_ops"], "version": "v2.0"}
+{"id": "bool_ops_006_or_ft", "category": "bool_ops", "mal_source": "false ∨ true", "expected_exit": 1, "features": ["bool_ops"], "version": "v2.0"}
+{"id": "bool_ops_007_or_ff", "category": "bool_ops", "mal_source": "false ∨ false", "expected_exit": 0, "features": ["bool_ops"], "version": "v2.0"}
+{"id": "bool_ops_008_not_t", "category": "bool_ops", "mal_source": "¬true", "expected_exit": 0, "features": ["bool_ops"], "version": "v2.0"}
+{"id": "bool_ops_009_not_f", "category": "bool_ops", "mal_source": "¬false", "expected_exit": 1, "features": ["bool_ops"], "version": "v2.0"}
+{"id": "bool_ops_010_nand", "category": "bool_ops", "mal_source": "¬(true ∧ false)", "expected_exit": 1, "features": ["bool_ops"], "version": "v2.0"}
+{"id": "unary_advanced_001_neg", "category": "unary_advanced", "mal_source": "0 - 5", "expected_exit": 251, "features": ["unary_advanced"], "version": "v2.0"}
+{"id": "unary_advanced_002_neg0", "category": "unary_advanced", "mal_source": "0 - 0", "expected_exit": 0, "features": ["unary_advanced"], "version": "v2.0"}
+{"id": "unary_advanced_003_neg1", "category": "unary_advanced", "mal_source": "0 - 1", "expected_exit": 255, "features": ["unary_advanced"], "version": "v2.0"}
+{"id": "unary_advanced_004_neg100", "category": "unary_advanced", "mal_source": "0 - 100", "expected_exit": 156, "features": ["unary_advanced"], "version": "v2.0"}
+{"id": "unary_advanced_005_add_neg", "category": "unary_advanced", "mal_source": "5 + (0 - 3)", "expected_exit": 2, "features": ["unary_advanced"], "version": "v2.0"}
+{"id": "unary_advanced_006_mul_neg", "category": "unary_advanced", "mal_source": "10 · (0 - 2)", "expected_exit": 236, "features": ["unary_advanced"], "version": "v2.0"}
+{"id": "unary_advanced_007_neg_add", "category": "unary_advanced", "mal_source": "(0 - 5) + 10", "expected_exit": 5, "features": ["unary_advanced"], "version": "v2.0"}
+{"id": "unary_advanced_008_neg_mul", "category": "unary_advanced", "mal_source": "(0 - 3) · (0 - 4)", "expected_exit": 12, "features": ["unary_advanced"], "version": "v2.0"}
+{"id": "unary_advanced_009_dbl_neg", "category": "unary_advanced", "mal_source": "0 - (0 - 7)", "expected_exit": 7, "features": ["unary_advanced"], "version": "v2.0"}
+{"id": "unary_advanced_010_abs_neg", "category": "unary_advanced", "mal_source": "abs(0 - 42) + 8", "expected_exit": 50, "features": ["unary_advanced"], "version": "v2.0"}
+{"id": "advanced_builtins_001_pow", "category": "advanced_builtins", "mal_source": "power(2, 3)", "expected_exit": 8, "features": ["advanced_builtins"], "version": "v2.0"}
+{"id": "advanced_builtins_002_pow2", "category": "advanced_builtins", "mal_source": "power(3, 2)", "expected_exit": 9, "features": ["advanced_builtins"], "version": "v2.0"}
+{"id": "advanced_builtins_003_exp0", "category": "advanced_builtins", "mal_source": "exp(0)", "expected_exit": 0, "features": ["advanced_builtins"], "version": "v2.0"}
+{"id": "advanced_builtins_004_exp1", "category": "advanced_builtins", "mal_source": "exp(1)", "expected_exit": 1, "features": ["advanced_builtins"], "version": "v2.0"}
+{"id": "advanced_builtins_005_head", "category": "advanced_builtins", "mal_source": "list_head([1,2,3])", "expected_exit": 3, "features": ["advanced_builtins"], "version": "v2.0"}
+{"id": "advanced_builtins_006_tail", "category": "advanced_builtins", "mal_source": "list_tail([1,2,3])", "expected_exit": 3, "features": ["advanced_builtins"], "version": "v2.0"}
+{"id": "advanced_builtins_007_append", "category": "advanced_builtins", "mal_source": "list_append([1,2], [3,4])", "expected_exit": 4, "features": ["advanced_builtins"], "version": "v2.0"}
+{"id": "advanced_builtins_010_pow10", "category": "advanced_builtins", "mal_source": "power(2, 10)", "expected_exit": 0, "features": ["advanced_builtins"], "version": "v2.0"}
+{"id": "nested_calls_001_sqrt2", "category": "nested_calls", "mal_source": "sqrt(sqrt(81))", "expected_exit": 3, "features": ["nested_calls"], "version": "v2.0"}
+{"id": "nested_calls_002_sqrt2b", "category": "nested_calls", "mal_source": "sqrt(sqrt(256))", "expected_exit": 4, "features": ["nested_calls"], "version": "v2.0"}
+{"id": "nested_calls_003_abs_min", "category": "nested_calls", "mal_source": "abs(min(0 - 5, 0 - 3))", "expected_exit": 5, "features": ["nested_calls"], "version": "v2.0"}
+{"id": "nested_calls_004_max_sqrt", "category": "nested_calls", "mal_source": "max(sqrt(16), sqrt(9))", "expected_exit": 4, "features": ["nested_calls"], "version": "v2.0"}
+{"id": "nested_calls_005_min_sqrt", "category": "nested_calls", "mal_source": "min(sqrt(25), sqrt(49))", "expected_exit": 5, "features": ["nested_calls"], "version": "v2.0"}
+{"id": "nested_calls_006_floor_sqrt", "category": "nested_calls", "mal_source": "floor(sqrt(10))", "expected_exit": 0, "features": ["nested_calls"], "version": "v2.0"}
+{"id": "nested_calls_007_ceil_sqrt", "category": "nested_calls", "mal_source": "ceil(sqrt(10))", "expected_exit": 3, "features": ["nested_calls"], "version": "v2.0"}
+{"id": "nested_calls_008_dbl_abs", "category": "nested_calls", "mal_source": "abs(0 - abs(0 - 5))", "expected_exit": 5, "features": ["nested_calls"], "version": "v2.0"}
+{"id": "nested_calls_009_sqrt_abs", "category": "nested_calls", "mal_source": "sqrt(abs(0 - 16))", "expected_exit": 4, "features": ["nested_calls"], "version": "v2.0"}
+{"id": "nested_calls_010_min_abs", "category": "nested_calls", "mal_source": "min(abs(0 - 10), 5)", "expected_exit": 5, "features": ["nested_calls"], "version": "v2.0"}
+{"id": "complex_arithmetic_001_ch5", "category": "complex_arithmetic", "mal_source": "1 + 2 + 3 + 4 + 5", "expected_exit": 15, "features": ["complex_arithmetic"], "version": "v2.0"}
+{"id": "complex_arithmetic_002_sub_ch", "category": "complex_arithmetic", "mal_source": "10 - 1 - 2 - 3", "expected_exit": 4, "features": ["complex_arithmetic"], "version": "v2.0"}
+{"id": "complex_arithmetic_003_mul_ch", "category": "complex_arithmetic", "mal_source": "2 · 2 · 2 · 2", "expected_exit": 16, "features": ["complex_arithmetic"], "version": "v2.0"}
+{"id": "complex_arithmetic_004_div_ch", "category": "complex_arithmetic", "mal_source": "100 / 2 / 2", "expected_exit": 25, "features": ["complex_arithmetic"], "version": "v2.0"}
+{"id": "complex_arithmetic_005_pow_ch", "category": "complex_arithmetic", "mal_source": "2 ^ 2 ^ 3", "expected_exit": 3, "features": ["complex_arithmetic"], "version": "v2.0"}
+{"id": "complex_arithmetic_006_mix1", "category": "complex_arithmetic", "mal_source": "(1 + 2) · 3 + 4", "expected_exit": 13, "features": ["complex_arithmetic"], "version": "v2.0"}
+{"id": "complex_arithmetic_007_mix2", "category": "complex_arithmetic", "mal_source": "1 + (2 + 3) · 4", "expected_exit": 21, "features": ["complex_arithmetic"], "version": "v2.0"}
+{"id": "complex_arithmetic_008_mix3", "category": "complex_arithmetic", "mal_source": "10 - (2 + 3)", "expected_exit": 5, "features": ["complex_arithmetic"], "version": "v2.0"}
+{"id": "complex_arithmetic_009_mix4", "category": "complex_arithmetic", "mal_source": "(10 - 2) · (5 - 3)", "expected_exit": 16, "features": ["complex_arithmetic"], "version": "v2.0"}
+{"id": "complex_arithmetic_010_pow_add", "category": "complex_arithmetic", "mal_source": "2 ^ 3 + 2 ^ 2", "expected_exit": 2, "features": ["complex_arithmetic"], "version": "v2.0"}
+{"id": "complex_arithmetic_011_div_sum", "category": "complex_arithmetic", "mal_source": "100 / (2 + 3)", "expected_exit": 20, "features": ["complex_arithmetic"], "version": "v2.0"}
+{"id": "complex_arithmetic_012_sum_pow", "category": "complex_arithmetic", "mal_source": "(1 + 2) ^ 3", "expected_exit": 3, "features": ["complex_arithmetic"], "version": "v2.0"}
+{"id": "complex_arithmetic_013_mod_add", "category": "complex_arithmetic", "mal_source": "17 % 5 + 3", "expected_exit": 5, "features": ["complex_arithmetic"], "version": "v2.0"}
+{"id": "complex_arithmetic_014_mod_sum", "category": "complex_arithmetic", "mal_source": "20 % (3 + 4)", "expected_exit": 6, "features": ["complex_arithmetic"], "version": "v2.0"}
+{"id": "complex_arithmetic_015_3sqrt", "category": "complex_arithmetic", "mal_source": "sqrt(81) + sqrt(16) + sqrt(9)", "expected_exit": 16, "features": ["complex_arithmetic"], "version": "v2.0"}
+{"id": "comparisons_advanced_001_lt", "category": "comparisons_advanced", "mal_source": "3 < 5", "expected_exit": 1, "features": ["comparisons_advanced"], "version": "v2.0"}
+{"id": "comparisons_advanced_002_lt_f", "category": "comparisons_advanced", "mal_source": "5 < 3", "expected_exit": 0, "features": ["comparisons_advanced"], "version": "v2.0"}
+{"id": "comparisons_advanced_003_le_eq", "category": "comparisons_advanced", "mal_source": "3 ≤ 3", "expected_exit": 1, "features": ["comparisons_advanced"], "version": "v2.0"}
+{"id": "comparisons_advanced_004_le_lt", "category": "comparisons_advanced", "mal_source": "3 ≤ 5", "expected_exit": 1, "features": ["comparisons_advanced"], "version": "v2.0"}
+{"id": "comparisons_advanced_005_le_f", "category": "comparisons_advanced", "mal_source": "5 ≤ 3", "expected_exit": 0, "features": ["comparisons_advanced"], "version": "v2.0"}
+{"id": "comparisons_advanced_006_gt", "category": "comparisons_advanced", "mal_source": "5 > 3", "expected_exit": 1, "features": ["comparisons_advanced"], "version": "v2.0"}
+{"id": "comparisons_advanced_007_gt_f", "category": "comparisons_advanced", "mal_source": "3 > 5", "expected_exit": 0, "features": ["comparisons_advanced"], "version": "v2.0"}
+{"id": "comparisons_advanced_008_ge_eq", "category": "comparisons_advanced", "mal_source": "3 ≥ 3", "expected_exit": 1, "features": ["comparisons_advanced"], "version": "v2.0"}
+{"id": "comparisons_advanced_009_ge_gt", "category": "comparisons_advanced", "mal_source": "5 ≥ 3", "expected_exit": 1, "features": ["comparisons_advanced"], "version": "v2.0"}
+{"id": "comparisons_advanced_010_neq", "category": "comparisons_advanced", "mal_source": "3 ≠ 5", "expected_exit": 5, "features": ["comparisons_advanced"], "version": "v2.0"}
+{"id": "match_wildcards_advanced_001_var_id", "category": "match_wildcards_advanced", "mal_source": "x ≔ 5\nmatch x with | _ => x", "expected_exit": 5, "features": ["match_wildcards_advanced"], "version": "v2.0"}
+{"id": "match_wildcards_advanced_002_var_mul", "category": "match_wildcards_advanced", "mal_source": "x ≔ 10\nmatch x with | _ => x · 2", "expected_exit": 10, "features": ["match_wildcards_advanced"], "version": "v2.0"}
+{"id": "match_wildcards_advanced_003_var_sq", "category": "match_wildcards_advanced", "mal_source": "x ≔ 3\nmatch x with | _ => x ^ 2", "expected_exit": 3, "features": ["match_wildcards_advanced"], "version": "v2.0"}
+{"id": "match_wildcards_advanced_004_expr", "category": "match_wildcards_advanced", "mal_source": "match 7 + 3 with | _ => 100", "expected_exit": 0, "features": ["match_wildcards_advanced"], "version": "v2.0"}
+{"id": "match_wildcards_advanced_005_func", "category": "match_wildcards_advanced", "mal_source": "match sqrt(16) with | _ => 4", "expected_exit": 0, "features": ["match_wildcards_advanced"], "version": "v2.0"}
+{"id": "match_wildcards_advanced_006_mul", "category": "match_wildcards_advanced", "mal_source": "match 5 · 5 with | _ => 25", "expected_exit": 0, "features": ["match_wildcards_advanced"], "version": "v2.0"}
+{"id": "match_wildcards_advanced_007_vars", "category": "match_wildcards_advanced", "mal_source": "x ≔ 8\ny ≔ 2\nmatch x - y with | _ => 6", "expected_exit": 2, "features": ["match_wildcards_advanced"], "version": "v2.0"}
+{"id": "match_wildcards_advanced_008_pow", "category": "match_wildcards_advanced", "mal_source": "match 2 ^ 3 with | _ => 8", "expected_exit": 0, "features": ["match_wildcards_advanced"], "version": "v2.0"}
+{"id": "match_wildcards_advanced_009_abs", "category": "match_wildcards_advanced", "mal_source": "match abs(0 - 42) with | _ => 42", "expected_exit": 0, "features": ["match_wildcards_advanced"], "version": "v2.0"}
+{"id": "match_wildcards_advanced_010_expr_body", "category": "match_wildcards_advanced", "mal_source": "match 100 with | _ => 99 + 1", "expected_exit": 0, "features": ["match_wildcards_advanced"], "version": "v2.0"}
+{"id": "forall_exists_001_basic", "category": "forall_exists", "mal_source": "∀ x ∈ ⟨1,2,3⟩ : x", "expected_exit": 0, "features": ["forall_exists"], "version": "v2.0"}
+{"id": "forall_exists_002_exists", "category": "forall_exists", "mal_source": "∃ x ∈ ⟨1,2,3⟩ : x", "expected_exit": 0, "features": ["forall_exists"], "version": "v2.0"}
+{"id": "forall_exists_003_single", "category": "forall_exists", "mal_source": "∀ x ∈ ⟨5⟩ : x", "expected_exit": 0, "features": ["forall_exists"], "version": "v2.0"}
+{"id": "forall_exists_004_ex_single", "category": "forall_exists", "mal_source": "∃ x ∈ ⟨5⟩ : x", "expected_exit": 0, "features": ["forall_exists"], "version": "v2.0"}
+{"id": "forall_exists_005_body", "category": "forall_exists", "mal_source": "∀ x ∈ ⟨2,3⟩ : x + 1", "expected_exit": 1, "features": ["forall_exists"], "version": "v2.0"}
+{"id": "boolean_logic_001_chain_and", "category": "boolean_logic", "mal_source": "true ∧ true ∧ true", "expected_exit": 1, "features": ["boolean_logic"], "version": "v2.0"}
+{"id": "boolean_logic_002_chain_or", "category": "boolean_logic", "mal_source": "false ∨ false ∨ true", "expected_exit": 1, "features": ["boolean_logic"], "version": "v2.0"}
+{"id": "boolean_logic_003_not_and", "category": "boolean_logic", "mal_source": "¬(false ∧ true)", "expected_exit": 1, "features": ["boolean_logic"], "version": "v2.0"}
+{"id": "boolean_logic_004_not_or", "category": "boolean_logic", "mal_source": "¬(true ∨ false)", "expected_exit": 0, "features": ["boolean_logic"], "version": "v2.0"}
+{"id": "boolean_logic_005_mix", "category": "boolean_logic", "mal_source": "(true ∧ true) ∨ false", "expected_exit": 1, "features": ["boolean_logic"], "version": "v2.0"}
+{"id": "boolean_logic_006_taut", "category": "boolean_logic", "mal_source": "¬true ∨ true", "expected_exit": 1, "features": ["boolean_logic"], "version": "v2.0"}
+{"id": "boolean_logic_007_double", "category": "boolean_logic", "mal_source": "true ∧ ¬false", "expected_exit": 1, "features": ["boolean_logic"], "version": "v2.0"}
+{"id": "boolean_logic_008_eq_and", "category": "boolean_logic", "mal_source": "(5 == 5) ∧ (3 == 3)", "expected_exit": 1, "features": ["boolean_logic"], "version": "v2.0"}
+{"id": "boolean_logic_009_eq_or", "category": "boolean_logic", "mal_source": "(5 == 6) ∨ (3 == 3)", "expected_exit": 1, "features": ["boolean_logic"], "version": "v2.0"}
+{"id": "boolean_logic_010_eq_not", "category": "boolean_logic", "mal_source": "¬(5 == 6)", "expected_exit": 1, "features": ["boolean_logic"], "version": "v2.0"}
+{"id": "mixed_advanced_001_3vars", "category": "mixed_advanced", "mal_source": "x ≔ 5\ny ≔ 3\nz ≔ 2\nx + y + z", "expected_exit": 10, "features": ["mixed_advanced"], "version": "v2.0"}
+{"id": "mixed_advanced_002_chain", "category": "mixed_advanced", "mal_source": "a ≔ 10\nb ≔ a · 2\nb + 5", "expected_exit": 25, "features": ["mixed_advanced"], "version": "v2.0"}
+{"id": "mixed_advanced_003_complex", "category": "mixed_advanced", "mal_source": "sqrt(16) · sqrt(9) + 1", "expected_exit": 13, "features": ["mixed_advanced"], "version": "v2.0"}
+{"id": "mixed_advanced_004_bool_var", "category": "mixed_advanced", "mal_source": "x ≔ 5\n(x == 5) ∧ (x < 10)", "expected_exit": 10, "features": ["mixed_advanced"], "version": "v2.0"}
+{"id": "mixed_advanced_005_bool_cmp", "category": "mixed_advanced", "mal_source": "(5 > 3) ∧ (2 < 4)", "expected_exit": 1, "features": ["mixed_advanced"], "version": "v2.0"}
+{"id": "mixed_advanced_006_formula", "category": "mixed_advanced", "mal_source": "n ≔ 5\nn ^ 2 + n", "expected_exit": 5, "features": ["mixed_advanced"], "version": "v2.0"}
+{"id": "mixed_advanced_007_nested", "category": "mixed_advanced", "mal_source": "abs(0 - (5 - 10))", "expected_exit": 5, "features": ["mixed_advanced"], "version": "v2.0"}
+{"id": "mixed_advanced_008_min_max", "category": "mixed_advanced", "mal_source": "min(max(3, 7), 5)", "expected_exit": 5, "features": ["mixed_advanced"], "version": "v2.0"}
+{"id": "mixed_advanced_009_max_min", "category": "mixed_advanced", "mal_source": "max(min(3, 7), 5)", "expected_exit": 5, "features": ["mixed_advanced"], "version": "v2.0"}
+{"id": "mixed_advanced_010_div_mod", "category": "mixed_advanced", "mal_source": "x ≔ 10\ny ≔ 3\nx", "expected_exit": 10, "features": ["mixed_advanced"], "version": "v2.0"}
+{"id": "mixed_advanced_011_3sqrt", "category": "mixed_advanced", "mal_source": "sqrt(25) + sqrt(16) - sqrt(9)", "expected_exit": 6, "features": ["mixed_advanced"], "version": "v2.0"}
+{"id": "mixed_advanced_012_2pow", "category": "mixed_advanced", "mal_source": "power(2, 3) + power(2, 2)", "expected_exit": 12, "features": ["mixed_advanced"], "version": "v2.0"}
+{"id": "mixed_advanced_013_pyth", "category": "mixed_advanced", "mal_source": "x ≔ 6\ny ≔ 8\nz ≔ 10\nx + y + z", "expected_exit": 24, "features": ["mixed_advanced"], "version": "v2.0"}
+{"id": "mixed_advanced_014_sums_mul", "category": "mixed_advanced", "mal_source": "(1 + 2 + 3) · (4 + 5 + 6)", "expected_exit": 90, "features": ["mixed_advanced"], "version": "v2.0"}
+{"id": "mixed_advanced_015_abs_diff", "category": "mixed_advanced", "mal_source": "abs(0 - (100 - 200))", "expected_exit": 100, "features": ["mixed_advanced"], "version": "v2.0"}
+{"id": "browser_001", "category": "css_parsing", "mal_source": "div", "expected_output": "{tag: \"div\"}", "expected_exit": 0, "features": ["css_parsing", "css"], "version": "v3.0"}
+{"id": "browser_002", "category": "css_parsing", "mal_source": "a.link", "expected_output": "{tag: \"a\", class: [\"link\"]}", "expected_exit": 0, "features": ["css_parsing", "css"], "version": "v3.0"}
+{"id": "browser_003", "category": "css_parsing", "mal_source": "#main", "expected_output": "{id: \"main\"}", "expected_exit": 0, "features": ["css_parsing", "css"], "version": "v3.0"}
+{"id": "browser_004", "category": "css_parsing", "mal_source": "input.email", "expected_output": "{tag: \"input\", class: [\"email\"]}", "expected_exit": 0, "features": ["css_parsing", "css"], "version": "v3.0"}
+{"id": "browser_005", "category": "css_parsing", "mal_source": "div.container p", "expected_output": "{tag: \"p\", ancestor: \"div.container\"}", "expected_exit": 0, "features": ["css_parsing", "css"], "version": "v3.0"}
+{"id": "browser_006", "category": "css_parsing", "mal_source": "ul > li", "expected_output": "{tag: \"li\", parent: \"ul\"}", "expected_exit": 0, "features": ["css_parsing", "css"], "version": "v3.0"}
+{"id": "browser_007", "category": "css_parsing", "mal_source": "h1.title", "expected_output": "{tag: \"h1\", class: [\"title\"]}", "expected_exit": 0, "features": ["css_parsing", "css"], "version": "v3.0"}
+{"id": "browser_008", "category": "css_parsing", "mal_source": "button.btn-primary", "expected_output": "{tag: \"button\", class: [\"btn-primary\"]}", "expected_exit": 0, "features": ["css_parsing", "css"], "version": "v3.0"}
+{"id": "browser_009", "category": "css_parsing", "mal_source": "a#logo", "expected_output": "{tag: \"a\", id: \"logo\"}", "expected_exit": 0, "features": ["css_parsing", "css"], "version": "v3.0"}
+{"id": "browser_010", "category": "css_parsing", "mal_source": "span.highlight", "expected_output": "{tag: \"span\", class: [\"highlight\"]}", "expected_exit": 0, "features": ["css_parsing", "css"], "version": "v3.0"}
+{"id": "browser_011", "category": "css_parsing", "mal_source": "div.row div.col", "expected_output": "{tag: \"div\", class: [\"col\"], ancestor: \"div.row\"}", "expected_exit": 0, "features": ["css_parsing", "css"], "version": "v3.0"}
+{"id": "browser_012", "category": "css_parsing", "mal_source": "form input", "expected_output": "{tag: \"input\", ancestor: \"form\"}", "expected_exit": 0, "features": ["css_parsing", "css"], "version": "v3.0"}
+{"id": "browser_013", "category": "css_parsing", "mal_source": "table tr td", "expected_output": "{tag: \"td\", ancestor: \"table tr\"}", "expected_exit": 0, "features": ["css_parsing", "css"], "version": "v3.0"}
+{"id": "browser_014", "category": "css_parsing", "mal_source": "nav a.active", "expected_output": "{tag: \"a\", class: [\"active\"], ancestor: \"nav\"}", "expected_exit": 0, "features": ["css_parsing", "css"], "version": "v3.0"}
+{"id": "browser_015", "category": "css_parsing", "mal_source": "footer p", "expected_output": "{tag: \"p\", ancestor: \"footer\"}", "expected_exit": 0, "features": ["css_parsing", "css"], "version": "v3.0"}
+{"id": "browser_016", "category": "css_parsing", "mal_source": "header h2", "expected_output": "{tag: \"h2\", ancestor: \"header\"}", "expected_exit": 0, "features": ["css_parsing", "css"], "version": "v3.0"}
+{"id": "browser_017", "category": "css_parsing", "mal_source": "div#content", "expected_output": "{tag: \"div\", id: \"content\"}", "expected_exit": 0, "features": ["css_parsing", "css"], "version": "v3.0"}
+{"id": "browser_018", "category": "css_parsing", "mal_source": "img.thumbnail", "expected_output": "{tag: \"img\", class: [\"thumbnail\"]}", "expected_exit": 0, "features": ["css_parsing", "css"], "version": "v3.0"}
+{"id": "browser_019", "category": "css_parsing", "mal_source": "select.dropdown", "expected_output": "{tag: \"select\", class: [\"dropdown\"]}", "expected_exit": 0, "features": ["css_parsing", "css"], "version": "v3.0"}
+{"id": "browser_020", "category": "css_parsing", "mal_source": "textarea.comment", "expected_output": "{tag: \"textarea\", class: [\"comment\"]}", "expected_exit": 0, "features": ["css_parsing", "css"], "version": "v3.0"}
+{"id": "browser_021", "category": "html_extraction", "mal_source": "<input name=\"email\" type=\"email\">", "expected_output": "{tag: \"input\", name: \"email\", type: \"email\"}", "expected_exit": 0, "features": ["html_extraction", "html"], "version": "v3.0"}
+{"id": "browser_022", "category": "html_extraction", "mal_source": "<input type=\"password\" required>", "expected_output": "{tag: \"input\", type: \"password\", required: true}", "expected_exit": 0, "features": ["html_extraction", "html"], "version": "v3.0"}
+{"id": "browser_023", "category": "html_extraction", "mal_source": "<a href=\"/about\" target=\"_blank\">", "expected_output": "{tag: \"a\", href: \"/about\", target: \"_blank\"}", "expected_exit": 0, "features": ["html_extraction", "html"], "version": "v3.0"}
+{"id": "browser_024", "category": "html_extraction", "mal_source": "<img src=\"photo.jpg\" alt=\"Photo\">", "expected_output": "{tag: \"img\", src: \"photo.jpg\", alt: \"Photo\"}", "expected_exit": 0, "features": ["html_extraction", "html"], "version": "v3.0"}
+{"id": "browser_025", "category": "html_extraction", "mal_source": "<button type=\"submit\" disabled>", "expected_output": "{tag: \"button\", type: \"submit\", disabled: true}", "expected_exit": 0, "features": ["html_extraction", "html"], "version": "v3.0"}
+{"id": "browser_026", "category": "html_extraction", "mal_source": "<select name=\"country\" multiple>", "expected_output": "{tag: \"select\", name: \"country\", multiple: true}", "expected_exit": 0, "features": ["html_extraction", "html"], "version": "v3.0"}
+{"id": "browser_027", "category": "html_extraction", "mal_source": "<textarea rows=\"5\" cols=\"40\">", "expected_output": "{tag: \"textarea\", rows: 5, cols: 40}", "expected_exit": 0, "features": ["html_extraction", "html"], "version": "v3.0"}
+{"id": "browser_028", "category": "html_extraction", "mal_source": "<input type=\"checkbox\" checked>", "expected_output": "{tag: \"input\", type: \"checkbox\", checked: true}", "expected_exit": 0, "features": ["html_extraction", "html"], "version": "v3.0"}
+{"id": "browser_029", "category": "html_extraction", "mal_source": "<input type=\"radio\" value=\"yes\">", "expected_output": "{tag: \"input\", type: \"radio\", value: \"yes\"}", "expected_exit": 0, "features": ["html_extraction", "html"], "version": "v3.0"}
+{"id": "browser_030", "category": "html_extraction", "mal_source": "<div class=\"container\" id=\"main\">", "expected_output": "{tag: \"div\", class: [\"container\"], id: \"main\"}", "expected_exit": 0, "features": ["html_extraction", "html"], "version": "v3.0"}
+{"id": "browser_031", "category": "html_extraction", "mal_source": "<a href=\"https://test.com\" rel=\"nofollow\">", "expected_output": "{tag: \"a\", href: \"https://test.com\", rel: \"nofollow\"}", "expected_exit": 0, "features": ["html_extraction", "html"], "version": "v3.0"}
+{"id": "browser_032", "category": "html_extraction", "mal_source": "<input placeholder=\"Enter name\">", "expected_output": "{tag: \"input\", placeholder: \"Enter name\"}", "expected_exit": 0, "features": ["html_extraction", "html"], "version": "v3.0"}
+{"id": "browser_033", "category": "html_extraction", "mal_source": "<form action=\"/login\" method=\"post\">", "expected_output": "{tag: \"form\", action: \"/login\", method: \"post\"}", "expected_exit": 0, "features": ["html_extraction", "html"], "version": "v3.0"}
+{"id": "browser_034", "category": "html_extraction", "mal_source": "<video src=\"movie.mp4\" controls>", "expected_output": "{tag: \"video\", src: \"movie.mp4\", controls: true}", "expected_exit": 0, "features": ["html_extraction", "html"], "version": "v3.0"}
+{"id": "browser_035", "category": "html_extraction", "mal_source": "<input type=\"number\" min=\"0\" max=\"100\">", "expected_output": "{tag: \"input\", type: \"number\", min: 0, max: 100}", "expected_exit": 0, "features": ["html_extraction", "html"], "version": "v3.0"}
+{"id": "browser_036", "category": "html_extraction", "mal_source": "<label for=\"email\">Email</label>", "expected_output": "{tag: \"label\", for: \"email\", text: \"Email\"}", "expected_exit": 0, "features": ["html_extraction", "html"], "version": "v3.0"}
+{"id": "browser_037", "category": "html_extraction", "mal_source": "<input type=\"file\" accept=\".pdf\">", "expected_output": "{tag: \"input\", type: \"file\", accept: \".pdf\"}", "expected_exit": 0, "features": ["html_extraction", "html"], "version": "v3.0"}
+{"id": "browser_038", "category": "html_extraction", "mal_source": "<td colspan=\"2\" align=\"center\">", "expected_output": "{tag: \"td\", colspan: 2, align: \"center\"}", "expected_exit": 0, "features": ["html_extraction", "html"], "version": "v3.0"}
+{"id": "browser_039", "category": "html_extraction", "mal_source": "<input type=\"hidden\" name=\"token\">", "expected_output": "{tag: \"input\", type: \"hidden\", name: \"token\"}", "expected_exit": 0, "features": ["html_extraction", "html"], "version": "v3.0"}
+{"id": "browser_040", "category": "html_extraction", "mal_source": "<meta charset=\"utf-8\">", "expected_output": "{tag: \"meta\", charset: \"utf-8\"}", "expected_exit": 0, "features": ["html_extraction", "html"], "version": "v3.0"}
+{"id": "browser_041", "category": "link_extraction", "mal_source": "<a href=\"/about\">About</a>", "expected_output": "{text: \"About\", href: \"/about\"}", "expected_exit": 0, "features": ["link_extraction", "links"], "version": "v3.0"}
+{"id": "browser_042", "category": "link_extraction", "mal_source": "<a href=\"https://test.com\">Test</a>", "expected_output": "{text: \"Test\", href: \"https://test.com\"}", "expected_exit": 0, "features": ["link_extraction", "links"], "version": "v3.0"}
+{"id": "browser_043", "category": "link_extraction", "mal_source": "<a href=\"#top\">Top</a>", "expected_output": "{text: \"Top\", href: \"#top\", type: \"anchor\"}", "expected_exit": 0, "features": ["link_extraction", "links"], "version": "v3.0"}
+{"id": "browser_044", "category": "link_extraction", "mal_source": "<a href=\"mailto:a@b.com\">Email</a>", "expected_output": "{text: \"Email\", href: \"mailto:a@b.com\", type: \"email\"}", "expected_exit": 0, "features": ["link_extraction", "links"], "version": "v3.0"}
+{"id": "browser_045", "category": "link_extraction", "mal_source": "<a href=\"/page/2\">Next</a>", "expected_output": "{text: \"Next\", href: \"/page/2\"}", "expected_exit": 0, "features": ["link_extraction", "links"], "version": "v3.0"}
+{"id": "browser_046", "category": "link_extraction", "mal_source": "<a href=\"tel:+123456\">Call</a>", "expected_output": "{text: \"Call\", href: \"tel:+123456\", type: \"phone\"}", "expected_exit": 0, "features": ["link_extraction", "links"], "version": "v3.0"}
+{"id": "browser_047", "category": "link_extraction", "mal_source": "<a href=\"/download.pdf\">PDF</a>", "expected_output": "{text: \"PDF\", href: \"/download.pdf\"}", "expected_exit": 0, "features": ["link_extraction", "links"], "version": "v3.0"}
+{"id": "browser_048", "category": "link_extraction", "mal_source": "<a href=\"https://news.com\">News</a>", "expected_output": "{text: \"News\", href: \"https://news.com\"}", "expected_exit": 0, "features": ["link_extraction", "links"], "version": "v3.0"}
+{"id": "browser_049", "category": "link_extraction", "mal_source": "<a href=\"/login\">Login</a>", "expected_output": "{text: \"Login\", href: \"/login\"}", "expected_exit": 0, "features": ["link_extraction", "links"], "version": "v3.0"}
+{"id": "browser_050", "category": "link_extraction", "mal_source": "<a href=\"/search?q=test\">Search</a>", "expected_output": "{text: \"Search\", href: \"/search?q=test\"}", "expected_exit": 0, "features": ["link_extraction", "links"], "version": "v3.0"}
+{"id": "browser_051", "category": "link_extraction", "mal_source": "<a href=\"/user/123\">Profile</a>", "expected_output": "{text: \"Profile\", href: \"/user/123\"}", "expected_exit": 0, "features": ["link_extraction", "links"], "version": "v3.0"}
+{"id": "browser_052", "category": "link_extraction", "mal_source": "<a href=\"https://shop.com/buy\">Buy</a>", "expected_output": "{text: \"Buy\", href: \"https://shop.com/buy\"}", "expected_exit": 0, "features": ["link_extraction", "links"], "version": "v3.0"}
+{"id": "browser_053", "category": "link_extraction", "mal_source": "<a href=\"/api/data\">API</a>", "expected_output": "{text: \"API\", href: \"/api/data\"}", "expected_exit": 0, "features": ["link_extraction", "links"], "version": "v3.0"}
+{"id": "browser_054", "category": "link_extraction", "mal_source": "<a href=\"/#section\">Jump</a>", "expected_output": "{text: \"Jump\", href: \"/#section\", type: \"anchor\"}", "expected_exit": 0, "features": ["link_extraction", "links"], "version": "v3.0"}
+{"id": "browser_055", "category": "link_extraction", "mal_source": "<a href=\"/home\">Home</a>", "expected_output": "{text: \"Home\", href: \"/home\"}", "expected_exit": 0, "features": ["link_extraction", "links"], "version": "v3.0"}
+{"id": "browser_056", "category": "url_validation", "mal_source": "https://example.com", "expected_output": "{valid: true, protocol: \"https\", domain: \"example.com\"}", "expected_exit": 0, "features": ["url_validation", "urls"], "version": "v3.0"}
+{"id": "browser_057", "category": "url_validation", "mal_source": "http://test.org/path", "expected_output": "{valid: true, protocol: \"http\", domain: \"test.org\", path: \"/path\"}", "expected_exit": 0, "features": ["url_validation", "urls"], "version": "v3.0"}
+{"id": "browser_058", "category": "url_validation", "mal_source": "ftp://files.com/data", "expected_output": "{valid: true, protocol: \"ftp\", domain: \"files.com\"}", "expected_exit": 0, "features": ["url_validation", "urls"], "version": "v3.0"}
+{"id": "browser_059", "category": "url_validation", "mal_source": "not-a-url", "expected_output": "{valid: false}", "expected_exit": 0, "features": ["url_validation", "urls"], "version": "v3.0"}
+{"id": "browser_060", "category": "url_validation", "mal_source": "https://sub.domain.com/page", "expected_output": "{valid: true, protocol: \"https\", domain: \"sub.domain.com\"}", "expected_exit": 0, "features": ["url_validation", "urls"], "version": "v3.0"}
+{"id": "browser_061", "category": "url_validation", "mal_source": "http://localhost:8080", "expected_output": "{valid: true, protocol: \"http\", domain: \"localhost\", port: 8080}", "expected_exit": 0, "features": ["url_validation", "urls"], "version": "v3.0"}
+{"id": "browser_062", "category": "url_validation", "mal_source": "https://example.com?query=1", "expected_output": "{valid: true, protocol: \"https\", domain: \"example.com\", query: \"query=1\"}", "expected_exit": 0, "features": ["url_validation", "urls"], "version": "v3.0"}
+{"id": "browser_063", "category": "url_validation", "mal_source": "//cdn.example.com/file.js", "expected_output": "{valid: true, protocol: \"relative\", domain: \"cdn.example.com\"}", "expected_exit": 0, "features": ["url_validation", "urls"], "version": "v3.0"}
+{"id": "browser_064", "category": "url_validation", "mal_source": "/relative/path", "expected_output": "{valid: true, type: \"relative\", path: \"/relative/path\"}", "expected_exit": 0, "features": ["url_validation", "urls"], "version": "v3.0"}
+{"id": "browser_065", "category": "url_validation", "mal_source": "https://example.com#anchor", "expected_output": "{valid: true, protocol: \"https\", domain: \"example.com\", anchor: \"anchor\"}", "expected_exit": 0, "features": ["url_validation", "urls"], "version": "v3.0"}
+{"id": "browser_066", "category": "language_detection", "mal_source": "Hello world", "expected_output": "{language: \"Latin\", confidence: 0.95}", "expected_exit": 0, "features": ["language_detection", "lang"], "version": "v3.0"}
+{"id": "browser_067", "category": "language_detection", "mal_source": "مرحبا بالعالم", "expected_output": "{language: \"Arabic\", confidence: 0.98}", "expected_exit": 0, "features": ["language_detection", "lang"], "version": "v3.0"}
+{"id": "browser_068", "category": "language_detection", "mal_source": "Привет мир", "expected_output": "{language: \"Cyrillic\", confidence: 0.96}", "expected_exit": 0, "features": ["language_detection", "lang"], "version": "v3.0"}
+{"id": "browser_069", "category": "language_detection", "mal_source": "你好世界", "expected_output": "{language: \"Chinese\", confidence: 0.97}", "expected_exit": 0, "features": ["language_detection", "lang"], "version": "v3.0"}
+{"id": "browser_070", "category": "language_detection", "mal_source": "こんにちは世界", "expected_output": "{language: \"Japanese\", confidence: 0.95}", "expected_exit": 0, "features": ["language_detection", "lang"], "version": "v3.0"}
+{"id": "browser_071", "category": "language_detection", "mal_source": "Bonjour le monde", "expected_output": "{language: \"Latin\", confidence: 0.93}", "expected_exit": 0, "features": ["language_detection", "lang"], "version": "v3.0"}
+{"id": "browser_072", "category": "language_detection", "mal_source": "Hallo Welt", "expected_output": "{language: \"Latin\", confidence: 0.94}", "expected_exit": 0, "features": ["language_detection", "lang"], "version": "v3.0"}
+{"id": "browser_073", "category": "language_detection", "mal_source": "안녕하세요 세계", "expected_output": "{language: \"Korean\", confidence: 0.96}", "expected_exit": 0, "features": ["language_detection", "lang"], "version": "v3.0"}
+{"id": "browser_074", "category": "language_detection", "mal_source": "Γεια σου κόσμε", "expected_output": "{language: \"Greek\", confidence: 0.95}", "expected_exit": 0, "features": ["language_detection", "lang"], "version": "v3.0"}
+{"id": "browser_075", "category": "language_detection", "mal_source": "שלום עולם", "expected_output": "{language: \"Hebrew\", confidence: 0.96}", "expected_exit": 0, "features": ["language_detection", "lang"], "version": "v3.0"}
+{"id": "browser_076", "category": "unit_conversion", "mal_source": "5 m to cm", "expected_output": "{input: 5, from: \"m\", to: \"cm\", result: 500}", "expected_exit": 0, "features": ["unit_conversion", "units"], "version": "v3.0"}
+{"id": "browser_077", "category": "unit_conversion", "mal_source": "100 C to F", "expected_output": "{input: 100, from: \"C\", to: \"F\", result: 212}", "expected_exit": 0, "features": ["unit_conversion", "units"], "version": "v3.0"}
+{"id": "browser_078", "category": "unit_conversion", "mal_source": "2.5 km to m", "expected_output": "{input: 2.5, from: \"km\", to: \"m\", result: 2500}", "expected_exit": 0, "features": ["unit_conversion", "units"], "version": "v3.0"}
+{"id": "browser_079", "category": "unit_conversion", "mal_source": "32 F to C", "expected_output": "{input: 32, from: \"F\", to: \"C\", result: 0}", "expected_exit": 0, "features": ["unit_conversion", "units"], "version": "v3.0"}
+{"id": "browser_080", "category": "unit_conversion", "mal_source": "1 kg to g", "expected_output": "{input: 1, from: \"kg\", to: \"g\", result: 1000}", "expected_exit": 0, "features": ["unit_conversion", "units"], "version": "v3.0"}
+{"id": "browser_081", "category": "unit_conversion", "mal_source": "60 min to hours", "expected_output": "{input: 60, from: \"min\", to: \"hours\", result: 1}", "expected_exit": 0, "features": ["unit_conversion", "units"], "version": "v3.0"}
+{"id": "browser_082", "category": "unit_conversion", "mal_source": "1000 mm to m", "expected_output": "{input: 1000, from: \"mm\", to: \"m\", result: 1}", "expected_exit": 0, "features": ["unit_conversion", "units"], "version": "v3.0"}
+{"id": "browser_083", "category": "unit_conversion", "mal_source": "0 C to F", "expected_output": "{input: 0, from: \"C\", to: \"F\", result: 32}", "expected_exit": 0, "features": ["unit_conversion", "units"], "version": "v3.0"}
+{"id": "browser_084", "category": "unit_conversion", "mal_source": "10 lb to kg", "expected_output": "{input: 10, from: \"lb\", to: \"kg\", result: 4.54}", "expected_exit": 0, "features": ["unit_conversion", "units"], "version": "v3.0"}
+{"id": "browser_085", "category": "unit_conversion", "mal_source": "1 mile to km", "expected_output": "{input: 1, from: \"mile\", to: \"km\", result: 1.61}", "expected_exit": 0, "features": ["unit_conversion", "units"], "version": "v3.0"}
+{"id": "browser_086", "category": "form_detection", "mal_source": "<form><input name='email'><input type='password'></form>", "expected_output": "{has_login: true, user_field: \"email\", pass_field: \"password\"}", "expected_exit": 0, "features": ["form_detection", "forms"], "version": "v3.0"}
+{"id": "browser_087", "category": "form_detection", "mal_source": "<form><input name='search'></form>", "expected_output": "{has_login: false}", "expected_exit": 0, "features": ["form_detection", "forms"], "version": "v3.0"}
+{"id": "browser_088", "category": "form_detection", "mal_source": "<form><input name='username'><input type='password' name='pass'></form>", "expected_output": "{has_login: true, user_field: \"username\", pass_field: \"pass\"}", "expected_exit": 0, "features": ["form_detection", "forms"], "version": "v3.0"}
+{"id": "browser_089", "category": "form_detection", "mal_source": "<form><input type='text'><input type='submit'></form>", "expected_output": "{has_login: false}", "expected_exit": 0, "features": ["form_detection", "forms"], "version": "v3.0"}
+{"id": "browser_090", "category": "form_detection", "mal_source": "<form><input type='email' name='user'><input type='password' name='pwd'><button>Login</button></form>", "expected_output": "{has_login: true, user_field: \"user\", pass_field: \"pwd\"}", "expected_exit": 0, "features": ["form_detection", "forms"], "version": "v3.0"}

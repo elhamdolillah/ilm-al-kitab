@@ -1,0 +1,30 @@
+{"prompt": "اكتب كود MAL للمهمة التالية:\nmatch 100 with | _ => 99 + 1\n", "completion": "match 100 with | _ => 99 + 1", "category": "match_wildcards_advanced", "expected_exit": 0}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n0 - 5\n", "completion": "0 - 5", "category": "unary_advanced", "expected_exit": 251}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nx ≔ 100\nx / 10 + x\n", "completion": "x ≔ 100\nx / 10 + x", "category": "mixed", "expected_exit": 110}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n你好世界\n", "completion": "你好世界", "category": "language_detection", "expected_exit": 0}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n∃ x ∈ ⟨1,2,3⟩ : x\n", "completion": "∃ x ∈ ⟨1,2,3⟩ : x", "category": "forall_exists", "expected_exit": 0}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n60 min to hours\n", "completion": "60 min to hours", "category": "unit_conversion", "expected_exit": 0}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nsqrt(sqrt(16))\n", "completion": "sqrt(sqrt(16))", "category": "mixed", "expected_exit": 2}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n20 / 4\n", "completion": "20 / 4", "category": "basic_arithmetic", "expected_exit": 5}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n2 ^ 2 ^ 3\n", "completion": "2 ^ 2 ^ 3", "category": "complex_arithmetic", "expected_exit": 3}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n<textarea rows=\"5\" cols=\"40\">\n", "completion": "<textarea rows=\"5\" cols=\"40\">", "category": "html_extraction", "expected_exit": 0}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n0 - 1\n", "completion": "0 - 1", "category": "unary_advanced", "expected_exit": 255}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nform input\n", "completion": "form input", "category": "css_parsing", "expected_exit": 0}
+{"prompt": "اكتب كود MAL للمهمة التالية:\ntrue ∧ false\n", "completion": "true ∧ false", "category": "bool_ops", "expected_exit": 0}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n1 · 1\n", "completion": "1 · 1", "category": "basic_arithmetic", "expected_exit": 1}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nhttps://example.com\n", "completion": "https://example.com", "category": "url_validation", "expected_exit": 0}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nabs(0 - 42) + 8\n", "completion": "abs(0 - 42) + 8", "category": "unary_advanced", "expected_exit": 50}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n0 - 0\n", "completion": "0 - 0", "category": "unary_advanced", "expected_exit": 0}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nmin(0, 100)\n", "completion": "min(0, 100)", "category": "functions", "expected_exit": 0}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n2 · 3 + 4 · 5\n", "completion": "2 · 3 + 4 · 5", "category": "basic_arithmetic", "expected_exit": 26}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n10 - 2 · 3\n", "completion": "10 - 2 · 3", "category": "basic_arithmetic", "expected_exit": 4}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nnav a.active\n", "completion": "nav a.active", "category": "css_parsing", "expected_exit": 0}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nmin(10, 20)\n", "completion": "min(10, 20)", "category": "functions", "expected_exit": 10}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n100 C to F\n", "completion": "100 C to F", "category": "unit_conversion", "expected_exit": 0}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n10 == 10\n", "completion": "10 == 10", "category": "equality", "expected_exit": 1}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nmin(10, 20) == 10\n", "completion": "min(10, 20) == 10", "category": "mixed", "expected_exit": 1}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n5 + (0 - 3)\n", "completion": "5 + (0 - 3)", "category": "unary_advanced", "expected_exit": 2}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nlist_tail([1,2,3])\n", "completion": "list_tail([1,2,3])", "category": "advanced_builtins", "expected_exit": 3}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n2 · 2 · 2 · 2\n", "completion": "2 · 2 · 2 · 2", "category": "complex_arithmetic", "expected_exit": 16}
+{"prompt": "اكتب كود MAL للمهمة التالية:\n0 + 0\n", "completion": "0 + 0", "category": "basic_arithmetic", "expected_exit": 0}
+{"prompt": "اكتب كود MAL للمهمة التالية:\nx ≔ 7\nx == 8\n", "completion": "x ≔ 7\nx == 8", "category": "equality", "expected_exit": 0}
