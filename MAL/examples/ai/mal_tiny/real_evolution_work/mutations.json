@@ -1,0 +1,98 @@
+[
+  {
+    "id": "sum_numbers_precompiled",
+    "task_id": "sum_numbers",
+    "type": "precompiled",
+    "accuracy": 0.0,
+    "ops": 24.852488389151123,
+    "code": "import re\n_PATTERN = re.compile(r\"-?\\d+(?:\\.\\d+)?\")\ndef solve(input):\n    return _PATTERN.findall(input)\n"
+  },
+  {
+    "id": "sum_numbers_finditer",
+    "task_id": "sum_numbers",
+    "type": "finditer",
+    "accuracy": 0.0,
+    "ops": 25.87262045197896,
+    "code": "import re\n_PATTERN = re.compile(r\"-?\\d+(?:\\.\\d+)?\")\ndef solve(input):\n    return [m.group(0) for m in _PATTERN.finditer(input)]\n"
+  },
+  {
+    "id": "sum_numbers_cached",
+    "task_id": "sum_numbers",
+    "type": "cached",
+    "accuracy": 0.0,
+    "ops": 20.7903974816003,
+    "code": "import re\nfrom functools import lru_cache\n@lru_cache(maxsize=128)\ndef _compiled():\n    return re.compile(r\"-?\\d+(?:\\.\\d+)?\")\ndef solve(input):\n    return _compiled().findall(input)\n"
+  },
+  {
+    "id": "extract_url_precompiled",
+    "task_id": "extract_url",
+    "type": "precompiled",
+    "accuracy": 1.0,
+    "ops": 22.845543892042066,
+    "code": "import re\n_PATTERN = re.compile(r\"https?://[^\\s]+\")\ndef solve(input):\n    return _PATTERN.findall(input)\n"
+  },
+  {
+    "id": "extract_url_finditer",
+    "task_id": "extract_url",
+    "type": "finditer",
+    "accuracy": 1.0,
+    "ops": 21.089290603322983,
+    "code": "import re\n_PATTERN = re.compile(r\"https?://[^\\s]+\")\ndef solve(input):\n    return [m.group(0) for m in _PATTERN.finditer(input)]\n"
+  },
+  {
+    "id": "extract_url_cached",
+    "task_id": "extract_url",
+    "type": "cached",
+    "accuracy": 1.0,
+    "ops": 23.176313082443798,
+    "code": "import re\nfrom functools import lru_cache\n@lru_cache(maxsize=128)\ndef _compiled():\n    return re.compile(r\"https?://[^\\s]+\")\ndef solve(input):\n    return _compiled().findall(input)\n"
+  },
+  {
+    "id": "extract_email_precompiled",
+    "task_id": "extract_email",
+    "type": "precompiled",
+    "accuracy": 1.0,
+    "ops": 24.347773395362715,
+    "code": "import re\n_PATTERN = re.compile(r\"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}\")\ndef solve(input):\n    return _PATTERN.findall(input)\n"
+  },
+  {
+    "id": "extract_email_finditer",
+    "task_id": "extract_email",
+    "type": "finditer",
+    "accuracy": 1.0,
+    "ops": 22.32042715837716,
+    "code": "import re\n_PATTERN = re.compile(r\"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}\")\ndef solve(input):\n    return [m.group(0) for m in _PATTERN.finditer(input)]\n"
+  },
+  {
+    "id": "extract_email_cached",
+    "task_id": "extract_email",
+    "type": "cached",
+    "accuracy": 1.0,
+    "ops": 21.93844007838205,
+    "code": "import re\nfrom functools import lru_cache\n@lru_cache(maxsize=128)\ndef _compiled():\n    return re.compile(r\"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}\")\ndef solve(input):\n    return _compiled().findall(input)\n"
+  },
+  {
+    "id": "extract_attrs_precompiled",
+    "task_id": "extract_attrs",
+    "type": "precompiled",
+    "accuracy": 0,
+    "ops": 1.0,
+    "code": "import re\n_PATTERN = re.compile(r\"<(\\w+)\")\ndef solve(input):\n    return _PATTERN.findall(input)\n"
+  },
+  {
+    "id": "extract_attrs_finditer",
+    "task_id": "extract_attrs",
+    "type": "finditer",
+    "accuracy": 0,
+    "ops": 1.0,
+    "code": "import re\n_PATTERN = re.compile(r\"<(\\w+)\")\ndef solve(input):\n    return [m.group(0) for m in _PATTERN.finditer(input)]\n"
+  },
+  {
+    "id": "extract_attrs_cached",
+    "task_id": "extract_attrs",
+    "type": "cached",
+    "accuracy": 0,
+    "ops": 1.0,
+    "code": "import re\nfrom functools import lru_cache\n@lru_cache(maxsize=128)\ndef _compiled():\n    return re.compile(r\"<(\\w+)\")\ndef solve(input):\n    return _compiled().findall(input)\n"
+  }
+]
