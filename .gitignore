@@ -18,3 +18,5 @@
 # OS files
 .DS_Store
 Thumbs.db
+MAL/examples/ai/mal_tiny/v2_checkpoints/
+*.log
