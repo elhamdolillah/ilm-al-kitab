@@ -1,13 +1,14 @@
 import torch
 import sys, json
 sys.path.insert(0, '.')
-from hybrid_tokenizer import HybridTokenizer
-from hybrid_classifier import HybridClassifier
-from symbolic_extractor import SymbolicExtractor
+from regex_tiny.hybrid_tokenizer import HybridTokenizer
+from regex_tiny.hybrid_classifier import HybridClassifier
+from regex_tiny.symbolic_extractor import SymbolicExtractor
 class HybridNeuralSymbolicSystem:
     def __init__(self):
         self.tokenizer = HybridTokenizer()
-        self.classifier = HybridClassifier()
+        # الإصلاح: استخدام vocab_size الفعلي من الـ tokenizer (75)
+        self.classifier = HybridClassifier(vocab_size=self.tokenizer.vocab_size)
         self.classifier.load_state_dict(torch.load('regex_tiny/Hybrid-Classifier-v1.0.pt', map_location='cpu'))
         self.classifier.eval()
         self.extractor = SymbolicExtractor()
@@ -18,7 +19,8 @@ class HybridNeuralSymbolicSystem:
         ids = self.tokenizer.encode(text)
         x = torch.tensor([ids])
         pred = self.classifier.predict(x)
-        if pred.item() != 1: return []
+        if pred.item() != 1: 
+            return []
         if task == 'email': return self.extractor.extract_email(text)
         elif task == 'url': return self.extractor.extract_url(text)
         elif task == 'number': return self.extractor.extract_numbers(text)
@@ -26,7 +28,7 @@ class HybridNeuralSymbolicSystem:
 if __name__ == '__main__':
     system = HybridNeuralSymbolicSystem()
     print("\n" + "=" * 70)
-    print("🧪 Testing Hybrid System")
+    print("🧪 Testing Hybrid System (Neural Decision + Symbolic Extraction)")
     print("=" * 70)
     tests = [
         ("Contact: user@example.com", 'email', ["user@example.com"]),
@@ -41,7 +43,8 @@ if __name__ == '__main__':
     correct = 0
     for text, task, expected in tests:
         result = system.process(text, task)
-        if result == expected: correct += 1
+        if result == expected: 
+            correct += 1
         print(f"  {'✅' if result == expected else '❌'} {text[:40]}...")
         print(f"     Expected: {expected}")
         print(f"     Got: {result}")
