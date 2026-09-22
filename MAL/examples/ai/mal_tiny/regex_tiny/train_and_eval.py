@@ -2,13 +2,13 @@ import torch
 import json
 import sys
 sys.path.insert(0, '.')
-from model import RegexTinyModel
-from hybrid_tokenizer import HybridTokenizer
+# الإصلاح: الاستيراد من مجلد regex_tiny تحديداً
+from regex_tiny.model import RegexTinyModel
+from regex_tiny.hybrid_tokenizer import HybridTokenizer
 print("=" * 70)
 print("Regex-Tiny v1.0: Training + Honest Evaluation")
 print("=" * 70)
 tok = HybridTokenizer()
-# FIX: Correct path to real_pairs.jsonl
 with open('regex_tiny/real_pairs.jsonl', 'r', encoding='utf-8') as f:
     pairs = [json.loads(line) for line in f]
 print(f"\n📚 Dataset: {len(pairs)} pairs")
@@ -58,5 +58,5 @@ for prompt, expected in test_pairs:
 accuracy = correct / len(test_pairs)
 print(f"\n🎯 Test Accuracy: {accuracy:.0%} ({correct}/{len(test_pairs)})")
 with open('regex_tiny/evaluation_results.json', 'w') as f:
-    json.dump({'accuracy': accuracy, 'correct': correct, 'total': len(test_pairs)}, f, indent=2)
+    json.dump({'accuracy': accuracy, 'correct': correct, 'total': len(test_pairs), 'approach': 'pure_neural'}, f, indent=2)
 print("📁 Results saved: regex_tiny/evaluation_results.json")

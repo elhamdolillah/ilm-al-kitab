@@ -1,0 +1,6 @@
+{
+  "accuracy": 1.0,
+  "correct": 8,
+  "total": 8,
+  "approach": "neural_symbolic_hybrid"
+}

@@ -1,5 +1,6 @@
 {
   "accuracy": 0.0,
   "correct": 0,
-  "total": 4
+  "total": 4,
+  "approach": "pure_neural"
 }
