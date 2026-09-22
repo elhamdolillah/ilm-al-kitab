@@ -1,0 +1,20 @@
+{"prompt": "# extract emails\nInput: Contact: user@example.com\n", "completion": "['user@example.com']", "category": "extract_email", "verified": true}
+{"prompt": "# extract emails\nInput: Email: john.doe@company.org\n", "completion": "['john.doe@company.org']", "category": "extract_email", "verified": true}
+{"prompt": "# extract emails\nInput: Multiple: a@b.com and c@d.org\n", "completion": "['a@b.com', 'c@d.org']", "category": "extract_email", "verified": true}
+{"prompt": "# extract emails\nInput: No emails here\n", "completion": "[]", "category": "extract_email", "verified": true}
+{"prompt": "# extract emails\nInput: Complex: user.name+tag@subdomain.example.co.uk\n", "completion": "['tag@subdomain.example.co.uk']", "category": "extract_email", "verified": true}
+{"prompt": "# extract emails\nInput: Short: x@y.com\n", "completion": "['x@y.com']", "category": "extract_email", "verified": true}
+{"prompt": "# extract emails\nInput: Long: very.long.email@subdomain.example.com\n", "completion": "['very.long.email@subdomain.example.com']", "category": "extract_email", "verified": true}
+{"prompt": "# extract emails\nInput: Mixed: text1 a@b.com text2 c@d.org text3\n", "completion": "['a@b.com', 'c@d.org']", "category": "extract_email", "verified": true}
+{"prompt": "# extract emails\nInput: Invalid: not-an-email\n", "completion": "[]", "category": "extract_email", "verified": true}
+{"prompt": "# extract emails\nInput: Valid: test@example.co.uk\n", "completion": "['test@example.co.uk']", "category": "extract_email", "verified": true}
+{"prompt": "# extract URLs\nInput: Visit https://example.com\n", "completion": "['https://example.com']", "category": "extract_url", "verified": true}
+{"prompt": "# extract URLs\nInput: URL: http://test.org/page\n", "completion": "['http://test.org/page']", "category": "extract_url", "verified": true}
+{"prompt": "# extract URLs\nInput: Multiple: https://a.com and http://b.org\n", "completion": "['https://a.com', 'http://b.org']", "category": "extract_url", "verified": true}
+{"prompt": "# extract URLs\nInput: No URLs\n", "completion": "[]", "category": "extract_url", "verified": true}
+{"prompt": "# extract URLs\nInput: Complex: https://sub.domain.com:8080/path?q=1\n", "completion": "['https://sub.domain.com:8080/path?q=1']", "category": "extract_url", "verified": true}
+{"prompt": "# extract URLs\nInput: Short: http://x.com\n", "completion": "['http://x.com']", "category": "extract_url", "verified": true}
+{"prompt": "# extract URLs\nInput: Long: https://www.example.com/very/long/path\n", "completion": "['https://www.example.com/very/long/path']", "category": "extract_url", "verified": true}
+{"prompt": "# extract URLs\nInput: Mixed: text1 https://a.com text2 http://b.org\n", "completion": "['https://a.com', 'http://b.org']", "category": "extract_url", "verified": true}
+{"prompt": "# extract URLs\nInput: Invalid: not-a-url\n", "completion": "[]", "category": "extract_url", "verified": true}
+{"prompt": "# extract URLs\nInput: Valid: ftp://files.example.com/data\n", "completion": "[]", "category": "extract_url", "verified": true}
