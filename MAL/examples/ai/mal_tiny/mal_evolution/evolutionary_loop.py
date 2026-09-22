@@ -324,14 +324,14 @@ function/process/method extract(input) {{
             rule['timestamp'] = time.time()
             self.library.append(rule)
         # حفظ المكتبة
-        lib_path = Path(f"mal_library/gen_{generation}.json")
+        lib_path = Path(f"mal_evolution/mal_library/gen_{generation}.json")
         with open(lib_path, 'w', encoding='utf-8') as f:
             json.dump(self.library, f, indent=2, ensure_ascii=False)
     def update_model(self, mal_rules: List[Dict], generation: int):
         """تحديث النموذج (اختياري)"""
         # في الواقع: fine-tuning على القواعد الجديدة
         # هنا: فقط حفظ checkpoint
-        checkpoint_path = Path(f"checkpoints/model_gen_{generation}.pt")
+        checkpoint_path = Path(f"mal_evolution/checkpoints/model_gen_{generation}.pt")
         torch.save(self.model.state_dict(), checkpoint_path)
     def save_checkpoint(self, generation: int, best: List[CodeCandidate], 
                        mal_rules: List[Dict]):
@@ -345,7 +345,7 @@ function/process/method extract(input) {{
             'avg_accuracy': sum(c.accuracy for c in best) / len(best) if best else 0,
             'mal_rules_count': len(mal_rules)
         }
-        checkpoint_path = Path(f"checkpoints/gen_{generation}.json")
+        checkpoint_path = Path(f"mal_evolution/checkpoints/gen_{generation}.json")
         with open(checkpoint_path, 'w') as f:
             json.dump(checkpoint, f, indent=2)
         self.history.append(checkpoint)

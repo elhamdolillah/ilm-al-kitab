@@ -1,0 +1,102 @@
+[
+  {
+    "id": "rule_0_001",
+    "language": "jquery",
+    "target": "Form Extraction - Email",
+    "speed": 5904.0,
+    "accuracy": 0.99,
+    "mal_code": "\n// Rule 1: Form Extraction - Email\n// Original language: jquery\n// Speed: 5904.00 ops/sec\n// Accuracy: 99.00%\nقاعدة_1 ≔ (مدخلات) ≔ {\n  // تحويل من jquery إلى MAL\n  نتيجة ≔ استخراج(مدخلات)\n  نتيجة\n}\n",
+    "generation": 0,
+    "timestamp": 1790064451.755073
+  },
+  {
+    "id": "rule_0_002",
+    "language": "javascript",
+    "target": "Link Extraction - Internal",
+    "speed": 5793.0,
+    "accuracy": 0.98,
+    "mal_code": "\n// Rule 2: Link Extraction - Internal\n// Original language: javascript\n// Speed: 5793.00 ops/sec\n// Accuracy: 98.00%\nقاعدة_2 ≔ (مدخلات) ≔ {\n  // تحويل من javascript إلى MAL\n  نتيجة ≔ استخراج(مدخلات)\n  نتيجة\n}\n",
+    "generation": 0,
+    "timestamp": 1790064451.7550766
+  },
+  {
+    "id": "rule_0_003",
+    "language": "jquery",
+    "target": "Form Extraction - Email",
+    "speed": 5699.0,
+    "accuracy": 0.99,
+    "mal_code": "\n// Rule 3: Form Extraction - Email\n// Original language: jquery\n// Speed: 5699.00 ops/sec\n// Accuracy: 99.00%\nقاعدة_3 ≔ (مدخلات) ≔ {\n  // تحويل من jquery إلى MAL\n  نتيجة ≔ استخراج(مدخلات)\n  نتيجة\n}\n",
+    "generation": 0,
+    "timestamp": 1790064451.7550771
+  },
+  {
+    "id": "rule_0_004",
+    "language": "jquery",
+    "target": "Form Extraction - Password",
+    "speed": 5058.0,
+    "accuracy": 0.98,
+    "mal_code": "\n// Rule 4: Form Extraction - Password\n// Original language: jquery\n// Speed: 5058.00 ops/sec\n// Accuracy: 98.00%\nقاعدة_4 ≔ (مدخلات) ≔ {\n  // تحويل من jquery إلى MAL\n  نتيجة ≔ استخراج(مدخلات)\n  نتيجة\n}\n",
+    "generation": 0,
+    "timestamp": 1790064451.7550774
+  },
+  {
+    "id": "rule_0_005",
+    "language": "html",
+    "target": "Textarea Extraction",
+    "speed": 4733.0,
+    "accuracy": 0.98,
+    "mal_code": "\n// Rule 5: Textarea Extraction\n// Original language: html\n// Speed: 4733.00 ops/sec\n// Accuracy: 98.00%\nقاعدة_5 ≔ (مدخلات) ≔ {\n  // تحويل من html إلى MAL\n  نتيجة ≔ استخراج(مدخلات)\n  نتيجة\n}\n",
+    "generation": 0,
+    "timestamp": 1790064451.7550776
+  },
+  {
+    "id": "rule_0_006",
+    "language": "html",
+    "target": "Button Detection",
+    "speed": 4574.0,
+    "accuracy": 0.99,
+    "mal_code": "\n// Rule 6: Button Detection\n// Original language: html\n// Speed: 4574.00 ops/sec\n// Accuracy: 99.00%\nقاعدة_6 ≔ (مدخلات) ≔ {\n  // تحويل من html إلى MAL\n  نتيجة ≔ استخراج(مدخلات)\n  نتيجة\n}\n",
+    "generation": 0,
+    "timestamp": 1790064451.755078
+  },
+  {
+    "id": "rule_0_007",
+    "language": "css",
+    "target": "CSS Selector - Class",
+    "speed": 4692.0,
+    "accuracy": 0.97,
+    "mal_code": "\n// Rule 7: CSS Selector - Class\n// Original language: css\n// Speed: 4692.00 ops/sec\n// Accuracy: 97.00%\nقاعدة_7 ≔ (مدخلات) ≔ {\n  // تحويل من css إلى MAL\n  نتيجة ≔ استخراج(مدخلات)\n  نتيجة\n}\n",
+    "generation": 0,
+    "timestamp": 1790064451.7550783
+  },
+  {
+    "id": "rule_0_008",
+    "language": "css",
+    "target": "CSS Selector - ID",
+    "speed": 4687.0,
+    "accuracy": 0.97,
+    "mal_code": "\n// Rule 8: CSS Selector - ID\n// Original language: css\n// Speed: 4687.00 ops/sec\n// Accuracy: 97.00%\nقاعدة_8 ≔ (مدخلات) ≔ {\n  // تحويل من css إلى MAL\n  نتيجة ≔ استخراج(مدخلات)\n  نتيجة\n}\n",
+    "generation": 0,
+    "timestamp": 1790064451.7550783
+  },
+  {
+    "id": "rule_0_009",
+    "language": "javascript",
+    "target": "Textarea Extraction",
+    "speed": 4642.0,
+    "accuracy": 0.97,
+    "mal_code": "\n// Rule 9: Textarea Extraction\n// Original language: javascript\n// Speed: 4642.00 ops/sec\n// Accuracy: 97.00%\nقاعدة_9 ≔ (مدخلات) ≔ {\n  // تحويل من javascript إلى MAL\n  نتيجة ≔ استخراج(مدخلات)\n  نتيجة\n}\n",
+    "generation": 0,
+    "timestamp": 1790064451.7550786
+  },
+  {
+    "id": "rule_0_010",
+    "language": "html",
+    "target": "Form Extraction - Email",
+    "speed": 4479.0,
+    "accuracy": 0.99,
+    "mal_code": "\n// Rule 10: Form Extraction - Email\n// Original language: html\n// Speed: 4479.00 ops/sec\n// Accuracy: 99.00%\nقاعدة_10 ≔ (مدخلات) ≔ {\n  // تحويل من html إلى MAL\n  نتيجة ≔ استخراج(مدخلات)\n  نتيجة\n}\n",
+    "generation": 0,
+    "timestamp": 1790064451.7550793
+  }
+]

@@ -20,3 +20,5 @@
 Thumbs.db
 MAL/examples/ai/mal_tiny/v2_checkpoints/
 *.log
+MAL/examples/ai/mal_tiny/mal_evolution/checkpoints/model_gen_*.pt
+MAL/examples/ai/mal_tiny/mal_evolution/logs/
