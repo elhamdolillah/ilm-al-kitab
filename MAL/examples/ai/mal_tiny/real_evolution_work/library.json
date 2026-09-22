@@ -1,18 +1,10 @@
 [
   {
-    "task_id": "extract_url",
+    "task_id": "extract_email",
     "language": "python",
-    "code": "import re\ndef solve(input):\n    return re.findall(r\"https?://[^\\s]+\", input)\n",
+    "code": "import re\ndef solve(input):\n    return re.findall(r\"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}\", input)\n",
     "accuracy": 1.0,
-    "ops_per_sec": 25.537848961029674,
-    "generation": 0
-  },
-  {
-    "task_id": "extract_attrs",
-    "language": "python",
-    "code": "import re\ndef solve(input):\n    tag_m = re.search(r\"<(\\w+)\", input)\n    tag = tag_m.group(1) if tag_m else None\n    result = {\"tag\": tag}\n    for m in re.finditer(r'(\\w+)=(?:\"([^\"]*)\"|' + \"'\" + r'([^' + \"'\" + r']*)' + \"'\" + r'|([^\\s>]+))', input):\n        name = m.group(1)\n        val = m.group(2) if m.group(2) is not None else (m.group(3) if m.group(3) is not None else m.group(4))\n        if val is None or val == \"\":\n            result[name] = True\n        else:\n            try:\n                result[name] = int(val) if \".\" not in val else float(val)\n            except ValueError:\n                result[name] = val\n    return result\n",
-    "accuracy": 1.0,
-    "ops_per_sec": 24.45479730643321,
+    "ops_per_sec": 26.39375239944798,
     "generation": 0
   },
   {
@@ -20,55 +12,7 @@
     "language": "python",
     "code": "def solve(input):\n    return len(input.split()) if input.strip() else 0\n",
     "accuracy": 1.0,
-    "ops_per_sec": 24.223376046526056,
-    "generation": 0
-  },
-  {
-    "task_id": "count_words",
-    "language": "python",
-    "code": "def solve(input):\n    return len(input.split()) if input.strip() else 0\n",
-    "accuracy": 1.0,
-    "ops_per_sec": 24.023356073242347,
-    "generation": 0
-  },
-  {
-    "task_id": "extract_email",
-    "language": "python",
-    "code": "import re\ndef solve(input):\n    return re.findall(r\"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}\", input)\n",
-    "accuracy": 1.0,
-    "ops_per_sec": 23.808338030963917,
-    "generation": 0
-  },
-  {
-    "task_id": "sum_numbers",
-    "language": "python",
-    "code": "import re\ndef solve(input):\n    nums = re.findall(r\"-?\\d+(?:\\.\\d+)?\", input)\n    return sum(float(n) if \".\" in n else int(n) for n in nums) if nums else 0\n",
-    "accuracy": 1.0,
-    "ops_per_sec": 23.77272276301573,
-    "generation": 0
-  },
-  {
-    "task_id": "sum_numbers",
-    "language": "python",
-    "code": "import re\ndef solve(input):\n    nums = re.findall(r\"-?\\d+(?:\\.\\d+)?\", input)\n    return sum(float(n) if \".\" in n else int(n) for n in nums) if nums else 0\n",
-    "accuracy": 1.0,
-    "ops_per_sec": 23.32956306400114,
-    "generation": 0
-  },
-  {
-    "task_id": "extract_email",
-    "language": "python",
-    "code": "import re\ndef solve(input):\n    return re.findall(r\"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}\", input)\n",
-    "accuracy": 1.0,
-    "ops_per_sec": 23.26324270504955,
-    "generation": 0
-  },
-  {
-    "task_id": "extract_url",
-    "language": "python",
-    "code": "import re\ndef solve(input):\n    return re.findall(r\"https?://[^\\s]+\", input)\n",
-    "accuracy": 1.0,
-    "ops_per_sec": 23.211330684412545,
+    "ops_per_sec": 26.09924821803975,
     "generation": 0
   },
   {
@@ -76,15 +20,63 @@
     "language": "python",
     "code": "import re\ndef solve(input):\n    tag_m = re.search(r\"<(\\w+)\", input)\n    tag = tag_m.group(1) if tag_m else None\n    result = {\"tag\": tag}\n    for m in re.finditer(r'(\\w+)=(?:\"([^\"]*)\"|' + \"'\" + r'([^' + \"'\" + r']*)' + \"'\" + r'|([^\\s>]+))', input):\n        name = m.group(1)\n        val = m.group(2) if m.group(2) is not None else (m.group(3) if m.group(3) is not None else m.group(4))\n        if val is None or val == \"\":\n            result[name] = True\n        else:\n            try:\n                result[name] = int(val) if \".\" not in val else float(val)\n            except ValueError:\n                result[name] = val\n    return result\n",
     "accuracy": 1.0,
-    "ops_per_sec": 22.941464154560396,
+    "ops_per_sec": 24.238769155162853,
+    "generation": 0
+  },
+  {
+    "task_id": "sum_numbers",
+    "language": "python",
+    "code": "import re\ndef solve(input):\n    nums = re.findall(r\"-?\\d+(?:\\.\\d+)?\", input)\n    return sum(float(n) if \".\" in n else int(n) for n in nums) if nums else 0\n",
+    "accuracy": 1.0,
+    "ops_per_sec": 23.802770438200792,
     "generation": 0
   },
   {
     "task_id": "extract_email",
-    "language": "javascript",
-    "code": "function solve(input) {\n    const re = /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}/g;\n    return input.match(re) || [];\n}\n",
+    "language": "python",
+    "code": "import re\ndef solve(input):\n    return re.findall(r\"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}\", input)\n",
     "accuracy": 1.0,
-    "ops_per_sec": 15.999933376589674,
+    "ops_per_sec": 23.682587730403732,
+    "generation": 0
+  },
+  {
+    "task_id": "extract_url",
+    "language": "python",
+    "code": "import re\ndef solve(input):\n    return re.findall(r\"https?://[^\\s]+\", input)\n",
+    "accuracy": 1.0,
+    "ops_per_sec": 23.335256699539826,
+    "generation": 0
+  },
+  {
+    "task_id": "count_words",
+    "language": "python",
+    "code": "def solve(input):\n    return len(input.split()) if input.strip() else 0\n",
+    "accuracy": 1.0,
+    "ops_per_sec": 23.093267042043564,
+    "generation": 0
+  },
+  {
+    "task_id": "extract_attrs",
+    "language": "python",
+    "code": "import re\ndef solve(input):\n    tag_m = re.search(r\"<(\\w+)\", input)\n    tag = tag_m.group(1) if tag_m else None\n    result = {\"tag\": tag}\n    for m in re.finditer(r'(\\w+)=(?:\"([^\"]*)\"|' + \"'\" + r'([^' + \"'\" + r']*)' + \"'\" + r'|([^\\s>]+))', input):\n        name = m.group(1)\n        val = m.group(2) if m.group(2) is not None else (m.group(3) if m.group(3) is not None else m.group(4))\n        if val is None or val == \"\":\n            result[name] = True\n        else:\n            try:\n                result[name] = int(val) if \".\" not in val else float(val)\n            except ValueError:\n                result[name] = val\n    return result\n",
+    "accuracy": 1.0,
+    "ops_per_sec": 22.81785187205893,
+    "generation": 0
+  },
+  {
+    "task_id": "extract_url",
+    "language": "python",
+    "code": "import re\ndef solve(input):\n    return re.findall(r\"https?://[^\\s]+\", input)\n",
+    "accuracy": 1.0,
+    "ops_per_sec": 22.7458312214061,
+    "generation": 0
+  },
+  {
+    "task_id": "sum_numbers",
+    "language": "python",
+    "code": "import re\ndef solve(input):\n    nums = re.findall(r\"-?\\d+(?:\\.\\d+)?\", input)\n    return sum(float(n) if \".\" in n else int(n) for n in nums) if nums else 0\n",
+    "accuracy": 1.0,
+    "ops_per_sec": 21.692640146292195,
     "generation": 0
   },
   {
@@ -92,7 +84,7 @@
     "language": "javascript",
     "code": "function solve(input) {\n    const tagMatch = input.match(/<(\\w+)/);\n    const tag = tagMatch ? tagMatch[1] : null;\n    const result = {tag: tag};\n    const attrRe = /(\\w+)=(?:\"([^\"]*)\"|'([^']*)'|([^\\s>]+))/g;\n    let m;\n    while ((m = attrRe.exec(input)) !== null) {\n        const name = m[1];\n        const value = m[2] !== undefined ? m[2] : (m[3] !== undefined ? m[3] : m[4]);\n        if (value === \"\" || value === undefined) {\n            result[name] = true;\n        } else if (!isNaN(value) && value !== \"\") {\n            result[name] = Number(value);\n        } else {\n            result[name] = value;\n        }\n    }\n    return result;\n}\n",
     "accuracy": 1.0,
-    "ops_per_sec": 15.761790068345428,
+    "ops_per_sec": 16.398117086688227,
     "generation": 0
   },
   {
@@ -100,23 +92,7 @@
     "language": "javascript",
     "code": "function solve(input) {\n    const nums = input.match(/-?\\d+(?:\\.\\d+)?/g);\n    if (!nums) return 0;\n    return nums.reduce((s, n) => s + Number(n), 0);\n}\n",
     "accuracy": 1.0,
-    "ops_per_sec": 15.659958202812117,
-    "generation": 0
-  },
-  {
-    "task_id": "count_words",
-    "language": "javascript",
-    "code": "function solve(input) {\n    if (!input.trim()) return 0;\n    return input.trim().split(/\\s+/).length;\n}\n",
-    "accuracy": 1.0,
-    "ops_per_sec": 15.530982864902438,
-    "generation": 0
-  },
-  {
-    "task_id": "count_words",
-    "language": "javascript",
-    "code": "function solve(input) {\n    if (!input.trim()) return 0;\n    return input.trim().split(/\\s+/).length;\n}\n",
-    "accuracy": 1.0,
-    "ops_per_sec": 15.291779554006373,
+    "ops_per_sec": 16.201960921927704,
     "generation": 0
   },
   {
@@ -124,15 +100,7 @@
     "language": "javascript",
     "code": "function solve(input) {\n    const nums = input.match(/-?\\d+(?:\\.\\d+)?/g);\n    if (!nums) return 0;\n    return nums.reduce((s, n) => s + Number(n), 0);\n}\n",
     "accuracy": 1.0,
-    "ops_per_sec": 15.104452710370385,
-    "generation": 0
-  },
-  {
-    "task_id": "extract_email",
-    "language": "javascript",
-    "code": "function solve(input) {\n    const re = /\\b[\\w.+-]+@[\\w-]+\\.[\\w.-]+\\b/g;\n    return input.match(re) || [];\n}\n",
-    "accuracy": 1.0,
-    "ops_per_sec": 14.946616745740121,
+    "ops_per_sec": 16.112690074780147,
     "generation": 0
   },
   {
@@ -140,7 +108,39 @@
     "language": "javascript",
     "code": "function solve(input) {\n    const re = /https?:\\/\\/[^\\s]+/g;\n    return input.match(re) || [];\n}\n",
     "accuracy": 1.0,
-    "ops_per_sec": 14.877432613881927,
+    "ops_per_sec": 16.022358552023356,
+    "generation": 0
+  },
+  {
+    "task_id": "extract_email",
+    "language": "javascript",
+    "code": "function solve(input) {\n    const re = /\\b[\\w.+-]+@[\\w-]+\\.[\\w.-]+\\b/g;\n    return input.match(re) || [];\n}\n",
+    "accuracy": 1.0,
+    "ops_per_sec": 15.858044219310395,
+    "generation": 0
+  },
+  {
+    "task_id": "count_words",
+    "language": "javascript",
+    "code": "function solve(input) {\n    if (!input.trim()) return 0;\n    return input.trim().split(/\\s+/).length;\n}\n",
+    "accuracy": 1.0,
+    "ops_per_sec": 15.76960296049014,
+    "generation": 0
+  },
+  {
+    "task_id": "extract_email",
+    "language": "javascript",
+    "code": "function solve(input) {\n    const re = /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}/g;\n    return input.match(re) || [];\n}\n",
+    "accuracy": 1.0,
+    "ops_per_sec": 15.598891527862907,
+    "generation": 0
+  },
+  {
+    "task_id": "count_words",
+    "language": "javascript",
+    "code": "function solve(input) {\n    if (!input.trim()) return 0;\n    return input.trim().split(/\\s+/).length;\n}\n",
+    "accuracy": 1.0,
+    "ops_per_sec": 15.377078105485765,
     "generation": 0
   },
   {
@@ -148,23 +148,15 @@
     "language": "javascript",
     "code": "function solve(input) {\n    const tagMatch = input.match(/<(\\w+)/);\n    const tag = tagMatch ? tagMatch[1] : null;\n    const result = {tag: tag};\n    const attrRe = /(\\w+)=(?:\"([^\"]*)\"|'([^']*)'|([^\\s>]+))/g;\n    let m;\n    while ((m = attrRe.exec(input)) !== null) {\n        const name = m[1];\n        const value = m[2] !== undefined ? m[2] : (m[3] !== undefined ? m[3] : m[4]);\n        if (value === \"\" || value === undefined) {\n            result[name] = true;\n        } else if (!isNaN(value) && value !== \"\") {\n            result[name] = Number(value);\n        } else {\n            result[name] = value;\n        }\n    }\n    return result;\n}\n",
     "accuracy": 1.0,
-    "ops_per_sec": 14.833327505178453,
+    "ops_per_sec": 14.798029158088701,
     "generation": 0
   },
   {
-    "task_id": "count_words",
-    "language": "python",
-    "code": "def solve(input):\n    return len(input.split()) if input.strip() else 0\n",
-    "accuracy": 1.0,
-    "ops_per_sec": 27.35417760415387,
-    "generation": 1
-  },
-  {
     "task_id": "extract_email",
     "language": "python",
     "code": "import re\ndef solve(input):\n    return re.findall(r\"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}\", input)\n",
     "accuracy": 1.0,
-    "ops_per_sec": 26.151485845848587,
+    "ops_per_sec": 24.573682624785736,
     "generation": 1
   },
   {
@@ -172,23 +164,15 @@
     "language": "python",
     "code": "import re\ndef solve(input):\n    nums = re.findall(r\"-?\\d+(?:\\.\\d+)?\", input)\n    return sum(float(n) if \".\" in n else int(n) for n in nums) if nums else 0\n",
     "accuracy": 1.0,
-    "ops_per_sec": 24.844507036331954,
+    "ops_per_sec": 22.349221429621156,
     "generation": 1
   },
   {
-    "task_id": "extract_url",
+    "task_id": "extract_attrs",
     "language": "python",
-    "code": "import re\ndef solve(input):\n    return re.findall(r\"https?://[^\\s]+\", input)\n",
+    "code": "import re\ndef solve(input):\n    tag_m = re.search(r\"<(\\w+)\", input)\n    tag = tag_m.group(1) if tag_m else None\n    result = {\"tag\": tag}\n    for m in re.finditer(r'(\\w+)=(?:\"([^\"]*)\"|' + \"'\" + r'([^' + \"'\" + r']*)' + \"'\" + r'|([^\\s>]+))', input):\n        name = m.group(1)\n        val = m.group(2) if m.group(2) is not None else (m.group(3) if m.group(3) is not None else m.group(4))\n        if val is None or val == \"\":\n            result[name] = True\n        else:\n            try:\n                result[name] = int(val) if \".\" not in val else float(val)\n            except ValueError:\n                result[name] = val\n    return result\n",
     "accuracy": 1.0,
-    "ops_per_sec": 24.511634287034035,
-    "generation": 1
-  },
-  {
-    "task_id": "extract_email",
-    "language": "python",
-    "code": "import re\ndef solve(input):\n    return re.findall(r\"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}\", input)\n",
-    "accuracy": 1.0,
-    "ops_per_sec": 24.13249260280653,
+    "ops_per_sec": 22.13186461361978,
     "generation": 1
   },
   {
@@ -196,23 +180,7 @@
     "language": "python",
     "code": "import re\ndef solve(input):\n    nums = re.findall(r\"-?\\d+(?:\\.\\d+)?\", input)\n    return sum(float(n) if \".\" in n else int(n) for n in nums) if nums else 0\n",
     "accuracy": 1.0,
-    "ops_per_sec": 24.056363032165034,
-    "generation": 1
-  },
-  {
-    "task_id": "count_words",
-    "language": "python",
-    "code": "def solve(input):\n    return len(input.split()) if input.strip() else 0\n",
-    "accuracy": 1.0,
-    "ops_per_sec": 23.822367959333647,
-    "generation": 1
-  },
-  {
-    "task_id": "extract_attrs",
-    "language": "python",
-    "code": "import re\ndef solve(input):\n    tag_m = re.search(r\"<(\\w+)\", input)\n    tag = tag_m.group(1) if tag_m else None\n    result = {\"tag\": tag}\n    for m in re.finditer(r'(\\w+)=(?:\"([^\"]*)\"|' + \"'\" + r'([^' + \"'\" + r']*)' + \"'\" + r'|([^\\s>]+))', input):\n        name = m.group(1)\n        val = m.group(2) if m.group(2) is not None else (m.group(3) if m.group(3) is not None else m.group(4))\n        if val is None or val == \"\":\n            result[name] = True\n        else:\n            try:\n                result[name] = int(val) if \".\" not in val else float(val)\n            except ValueError:\n                result[name] = val\n    return result\n",
-    "accuracy": 1.0,
-    "ops_per_sec": 23.502550848724493,
+    "ops_per_sec": 21.821753110026574,
     "generation": 1
   },
   {
@@ -220,7 +188,31 @@
     "language": "python",
     "code": "import re\ndef solve(input):\n    return re.findall(r\"https?://[^\\s]+\", input)\n",
     "accuracy": 1.0,
-    "ops_per_sec": 23.42703169367597,
+    "ops_per_sec": 21.35628574457851,
+    "generation": 1
+  },
+  {
+    "task_id": "extract_email",
+    "language": "python",
+    "code": "import re\ndef solve(input):\n    return re.findall(r\"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}\", input)\n",
+    "accuracy": 1.0,
+    "ops_per_sec": 21.3078586812998,
+    "generation": 1
+  },
+  {
+    "task_id": "count_words",
+    "language": "python",
+    "code": "def solve(input):\n    return len(input.split()) if input.strip() else 0\n",
+    "accuracy": 1.0,
+    "ops_per_sec": 21.252609307532904,
+    "generation": 1
+  },
+  {
+    "task_id": "extract_url",
+    "language": "python",
+    "code": "import re\ndef solve(input):\n    return re.findall(r\"https?://[^\\s]+\", input)\n",
+    "accuracy": 1.0,
+    "ops_per_sec": 20.908075343763212,
     "generation": 1
   },
   {
@@ -228,55 +220,15 @@
     "language": "python",
     "code": "import re\ndef solve(input):\n    tag_m = re.search(r\"<(\\w+)\", input)\n    tag = tag_m.group(1) if tag_m else None\n    result = {\"tag\": tag}\n    for m in re.finditer(r'(\\w+)=(?:\"([^\"]*)\"|' + \"'\" + r'([^' + \"'\" + r']*)' + \"'\" + r'|([^\\s>]+))', input):\n        name = m.group(1)\n        val = m.group(2) if m.group(2) is not None else (m.group(3) if m.group(3) is not None else m.group(4))\n        if val is None or val == \"\":\n            result[name] = True\n        else:\n            try:\n                result[name] = int(val) if \".\" not in val else float(val)\n            except ValueError:\n                result[name] = val\n    return result\n",
     "accuracy": 1.0,
-    "ops_per_sec": 22.412940457632708,
-    "generation": 1
-  },
-  {
-    "task_id": "extract_email",
-    "language": "javascript",
-    "code": "function solve(input) {\n    const re = /\\b[\\w.+-]+@[\\w-]+\\.[\\w.-]+\\b/g;\n    return input.match(re) || [];\n}\n",
-    "accuracy": 1.0,
-    "ops_per_sec": 15.937379941170024,
+    "ops_per_sec": 20.694990465487507,
     "generation": 1
   },
   {
     "task_id": "count_words",
-    "language": "javascript",
-    "code": "function solve(input) {\n    if (!input.trim()) return 0;\n    return input.trim().split(/\\s+/).length;\n}\n",
+    "language": "python",
+    "code": "def solve(input):\n    return len(input.split()) if input.strip() else 0\n",
     "accuracy": 1.0,
-    "ops_per_sec": 15.679098086190466,
-    "generation": 1
-  },
-  {
-    "task_id": "extract_url",
-    "language": "javascript",
-    "code": "function solve(input) {\n    const re = /https?:\\/\\/[^\\s]+/g;\n    return input.match(re) || [];\n}\n",
-    "accuracy": 1.0,
-    "ops_per_sec": 15.57091170520482,
-    "generation": 1
-  },
-  {
-    "task_id": "extract_attrs",
-    "language": "javascript",
-    "code": "function solve(input) {\n    const tagMatch = input.match(/<(\\w+)/);\n    const tag = tagMatch ? tagMatch[1] : null;\n    const result = {tag: tag};\n    const attrRe = /(\\w+)=(?:\"([^\"]*)\"|'([^']*)'|([^\\s>]+))/g;\n    let m;\n    while ((m = attrRe.exec(input)) !== null) {\n        const name = m[1];\n        const value = m[2] !== undefined ? m[2] : (m[3] !== undefined ? m[3] : m[4]);\n        if (value === \"\" || value === undefined) {\n            result[name] = true;\n        } else if (!isNaN(value) && value !== \"\") {\n            result[name] = Number(value);\n        } else {\n            result[name] = value;\n        }\n    }\n    return result;\n}\n",
-    "accuracy": 1.0,
-    "ops_per_sec": 15.420042118406181,
-    "generation": 1
-  },
-  {
-    "task_id": "count_words",
-    "language": "javascript",
-    "code": "function solve(input) {\n    if (!input.trim()) return 0;\n    return input.trim().split(/\\s+/).length;\n}\n",
-    "accuracy": 1.0,
-    "ops_per_sec": 15.390252513054374,
-    "generation": 1
-  },
-  {
-    "task_id": "extract_attrs",
-    "language": "javascript",
-    "code": "function solve(input) {\n    const tagMatch = input.match(/<(\\w+)/);\n    const tag = tagMatch ? tagMatch[1] : null;\n    const result = {tag: tag};\n    const attrRe = /(\\w+)=(?:\"([^\"]*)\"|'([^']*)'|([^\\s>]+))/g;\n    let m;\n    while ((m = attrRe.exec(input)) !== null) {\n        const name = m[1];\n        const value = m[2] !== undefined ? m[2] : (m[3] !== undefined ? m[3] : m[4]);\n        if (value === \"\" || value === undefined) {\n            result[name] = true;\n        } else if (!isNaN(value) && value !== \"\") {\n            result[name] = Number(value);\n        } else {\n            result[name] = value;\n        }\n    }\n    return result;\n}\n",
-    "accuracy": 1.0,
-    "ops_per_sec": 15.378606989414331,
+    "ops_per_sec": 20.398630763186233,
     "generation": 1
   },
   {
@@ -284,127 +236,151 @@
     "language": "javascript",
     "code": "function solve(input) {\n    const re = /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}/g;\n    return input.match(re) || [];\n}\n",
     "accuracy": 1.0,
-    "ops_per_sec": 15.231787802238253,
+    "ops_per_sec": 15.304904643596023,
     "generation": 1
-  },
-  {
-    "task_id": "sum_numbers",
-    "language": "javascript",
-    "code": "function solve(input) {\n    const nums = input.match(/-?\\d+(?:\\.\\d+)?/g);\n    if (!nums) return 0;\n    return nums.reduce((s, n) => s + Number(n), 0);\n}\n",
-    "accuracy": 1.0,
-    "ops_per_sec": 15.052257612599067,
-    "generation": 1
-  },
-  {
-    "task_id": "sum_numbers",
-    "language": "javascript",
-    "code": "function solve(input) {\n    const nums = input.match(/-?\\d+(?:\\.\\d+)?/g);\n    if (!nums) return 0;\n    return nums.reduce((s, n) => s + Number(n), 0);\n}\n",
-    "accuracy": 1.0,
-    "ops_per_sec": 14.94734312236133,
-    "generation": 1
-  },
-  {
-    "task_id": "sum_numbers",
-    "language": "python",
-    "code": "import re\ndef solve(input):\n    nums = re.findall(r\"-?\\d+(?:\\.\\d+)?\", input)\n    return sum(float(n) if \".\" in n else int(n) for n in nums) if nums else 0\n",
-    "accuracy": 1.0,
-    "ops_per_sec": 25.090530964503504,
-    "generation": 2
-  },
-  {
-    "task_id": "extract_url",
-    "language": "python",
-    "code": "import re\ndef solve(input):\n    return re.findall(r\"https?://[^\\s]+\", input)\n",
-    "accuracy": 1.0,
-    "ops_per_sec": 24.185585783141185,
-    "generation": 2
-  },
-  {
-    "task_id": "count_words",
-    "language": "python",
-    "code": "def solve(input):\n    return len(input.split()) if input.strip() else 0\n",
-    "accuracy": 1.0,
-    "ops_per_sec": 23.954541684418185,
-    "generation": 2
   },
   {
     "task_id": "extract_email",
-    "language": "python",
-    "code": "import re\ndef solve(input):\n    return re.findall(r\"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}\", input)\n",
+    "language": "javascript",
+    "code": "function solve(input) {\n    const re = /\\b[\\w.+-]+@[\\w-]+\\.[\\w.-]+\\b/g;\n    return input.match(re) || [];\n}\n",
     "accuracy": 1.0,
-    "ops_per_sec": 23.784381277973313,
-    "generation": 2
-  },
-  {
-    "task_id": "extract_attrs",
-    "language": "python",
-    "code": "import re\ndef solve(input):\n    tag_m = re.search(r\"<(\\w+)\", input)\n    tag = tag_m.group(1) if tag_m else None\n    result = {\"tag\": tag}\n    for m in re.finditer(r'(\\w+)=(?:\"([^\"]*)\"|' + \"'\" + r'([^' + \"'\" + r']*)' + \"'\" + r'|([^\\s>]+))', input):\n        name = m.group(1)\n        val = m.group(2) if m.group(2) is not None else (m.group(3) if m.group(3) is not None else m.group(4))\n        if val is None or val == \"\":\n            result[name] = True\n        else:\n            try:\n                result[name] = int(val) if \".\" not in val else float(val)\n            except ValueError:\n                result[name] = val\n    return result\n",
-    "accuracy": 1.0,
-    "ops_per_sec": 23.270228005222393,
-    "generation": 2
-  },
-  {
-    "task_id": "extract_attrs",
-    "language": "python",
-    "code": "import re\ndef solve(input):\n    tag_m = re.search(r\"<(\\w+)\", input)\n    tag = tag_m.group(1) if tag_m else None\n    result = {\"tag\": tag}\n    for m in re.finditer(r'(\\w+)=(?:\"([^\"]*)\"|' + \"'\" + r'([^' + \"'\" + r']*)' + \"'\" + r'|([^\\s>]+))', input):\n        name = m.group(1)\n        val = m.group(2) if m.group(2) is not None else (m.group(3) if m.group(3) is not None else m.group(4))\n        if val is None or val == \"\":\n            result[name] = True\n        else:\n            try:\n                result[name] = int(val) if \".\" not in val else float(val)\n            except ValueError:\n                result[name] = val\n    return result\n",
-    "accuracy": 1.0,
-    "ops_per_sec": 22.683014301006338,
-    "generation": 2
-  },
-  {
-    "task_id": "sum_numbers",
-    "language": "python",
-    "code": "import re\ndef solve(input):\n    nums = re.findall(r\"-?\\d+(?:\\.\\d+)?\", input)\n    return sum(float(n) if \".\" in n else int(n) for n in nums) if nums else 0\n",
-    "accuracy": 1.0,
-    "ops_per_sec": 22.539273586307665,
-    "generation": 2
-  },
-  {
-    "task_id": "extract_url",
-    "language": "python",
-    "code": "import re\ndef solve(input):\n    return re.findall(r\"https?://[^\\s]+\", input)\n",
-    "accuracy": 1.0,
-    "ops_per_sec": 22.522608530728835,
-    "generation": 2
-  },
-  {
-    "task_id": "count_words",
-    "language": "python",
-    "code": "def solve(input):\n    return len(input.split()) if input.strip() else 0\n",
-    "accuracy": 1.0,
-    "ops_per_sec": 22.470678740238768,
-    "generation": 2
-  },
-  {
-    "task_id": "extract_email",
-    "language": "python",
-    "code": "import re\ndef solve(input):\n    return re.findall(r\"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}\", input)\n",
-    "accuracy": 1.0,
-    "ops_per_sec": 21.228151997041145,
-    "generation": 2
+    "ops_per_sec": 14.781336703051315,
+    "generation": 1
   },
   {
     "task_id": "extract_attrs",
     "language": "javascript",
     "code": "function solve(input) {\n    const tagMatch = input.match(/<(\\w+)/);\n    const tag = tagMatch ? tagMatch[1] : null;\n    const result = {tag: tag};\n    const attrRe = /(\\w+)=(?:\"([^\"]*)\"|'([^']*)'|([^\\s>]+))/g;\n    let m;\n    while ((m = attrRe.exec(input)) !== null) {\n        const name = m[1];\n        const value = m[2] !== undefined ? m[2] : (m[3] !== undefined ? m[3] : m[4]);\n        if (value === \"\" || value === undefined) {\n            result[name] = true;\n        } else if (!isNaN(value) && value !== \"\") {\n            result[name] = Number(value);\n        } else {\n            result[name] = value;\n        }\n    }\n    return result;\n}\n",
     "accuracy": 1.0,
-    "ops_per_sec": 16.445421559216644,
-    "generation": 2
+    "ops_per_sec": 14.5605563511138,
+    "generation": 1
+  },
+  {
+    "task_id": "count_words",
+    "language": "javascript",
+    "code": "function solve(input) {\n    if (!input.trim()) return 0;\n    return input.trim().split(/\\s+/).length;\n}\n",
+    "accuracy": 1.0,
+    "ops_per_sec": 14.546366609534504,
+    "generation": 1
+  },
+  {
+    "task_id": "extract_url",
+    "language": "javascript",
+    "code": "function solve(input) {\n    const re = /https?:\\/\\/[^\\s]+/g;\n    return input.match(re) || [];\n}\n",
+    "accuracy": 1.0,
+    "ops_per_sec": 14.314477568882873,
+    "generation": 1
+  },
+  {
+    "task_id": "extract_attrs",
+    "language": "javascript",
+    "code": "function solve(input) {\n    const tagMatch = input.match(/<(\\w+)/);\n    const tag = tagMatch ? tagMatch[1] : null;\n    const result = {tag: tag};\n    const attrRe = /(\\w+)=(?:\"([^\"]*)\"|'([^']*)'|([^\\s>]+))/g;\n    let m;\n    while ((m = attrRe.exec(input)) !== null) {\n        const name = m[1];\n        const value = m[2] !== undefined ? m[2] : (m[3] !== undefined ? m[3] : m[4]);\n        if (value === \"\" || value === undefined) {\n            result[name] = true;\n        } else if (!isNaN(value) && value !== \"\") {\n            result[name] = Number(value);\n        } else {\n            result[name] = value;\n        }\n    }\n    return result;\n}\n",
+    "accuracy": 1.0,
+    "ops_per_sec": 13.780067025096555,
+    "generation": 1
+  },
+  {
+    "task_id": "count_words",
+    "language": "javascript",
+    "code": "function solve(input) {\n    if (!input.trim()) return 0;\n    return input.trim().split(/\\s+/).length;\n}\n",
+    "accuracy": 1.0,
+    "ops_per_sec": 13.751194355019354,
+    "generation": 1
   },
   {
     "task_id": "sum_numbers",
     "language": "javascript",
     "code": "function solve(input) {\n    const nums = input.match(/-?\\d+(?:\\.\\d+)?/g);\n    if (!nums) return 0;\n    return nums.reduce((s, n) => s + Number(n), 0);\n}\n",
     "accuracy": 1.0,
-    "ops_per_sec": 16.403996220085947,
+    "ops_per_sec": 13.726129159227453,
+    "generation": 1
+  },
+  {
+    "task_id": "sum_numbers",
+    "language": "javascript",
+    "code": "function solve(input) {\n    const nums = input.match(/-?\\d+(?:\\.\\d+)?/g);\n    if (!nums) return 0;\n    return nums.reduce((s, n) => s + Number(n), 0);\n}\n",
+    "accuracy": 1.0,
+    "ops_per_sec": 13.58501894049044,
+    "generation": 1
+  },
+  {
+    "task_id": "extract_email",
+    "language": "python",
+    "code": "import re\ndef solve(input):\n    return re.findall(r\"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}\", input)\n",
+    "accuracy": 1.0,
+    "ops_per_sec": 27.81317646137407,
+    "generation": 2
+  },
+  {
+    "task_id": "count_words",
+    "language": "python",
+    "code": "def solve(input):\n    return len(input.split()) if input.strip() else 0\n",
+    "accuracy": 1.0,
+    "ops_per_sec": 24.490181785702855,
+    "generation": 2
+  },
+  {
+    "task_id": "extract_url",
+    "language": "python",
+    "code": "import re\ndef solve(input):\n    return re.findall(r\"https?://[^\\s]+\", input)\n",
+    "accuracy": 1.0,
+    "ops_per_sec": 23.956447113018907,
+    "generation": 2
+  },
+  {
+    "task_id": "extract_url",
+    "language": "python",
+    "code": "import re\ndef solve(input):\n    return re.findall(r\"https?://[^\\s]+\", input)\n",
+    "accuracy": 1.0,
+    "ops_per_sec": 22.855371041668988,
     "generation": 2
   },
   {
     "task_id": "extract_email",
-    "language": "javascript",
-    "code": "function solve(input) {\n    const re = /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}/g;\n    return input.match(re) || [];\n}\n",
+    "language": "python",
+    "code": "import re\ndef solve(input):\n    return re.findall(r\"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}\", input)\n",
     "accuracy": 1.0,
-    "ops_per_sec": 15.76720993525538,
+    "ops_per_sec": 22.708425378646126,
+    "generation": 2
+  },
+  {
+    "task_id": "count_words",
+    "language": "python",
+    "code": "def solve(input):\n    return len(input.split()) if input.strip() else 0\n",
+    "accuracy": 1.0,
+    "ops_per_sec": 21.022247298617717,
+    "generation": 2
+  },
+  {
+    "task_id": "extract_attrs",
+    "language": "python",
+    "code": "import re\ndef solve(input):\n    tag_m = re.search(r\"<(\\w+)\", input)\n    tag = tag_m.group(1) if tag_m else None\n    result = {\"tag\": tag}\n    for m in re.finditer(r'(\\w+)=(?:\"([^\"]*)\"|' + \"'\" + r'([^' + \"'\" + r']*)' + \"'\" + r'|([^\\s>]+))', input):\n        name = m.group(1)\n        val = m.group(2) if m.group(2) is not None else (m.group(3) if m.group(3) is not None else m.group(4))\n        if val is None or val == \"\":\n            result[name] = True\n        else:\n            try:\n                result[name] = int(val) if \".\" not in val else float(val)\n            except ValueError:\n                result[name] = val\n    return result\n",
+    "accuracy": 1.0,
+    "ops_per_sec": 19.896304151198173,
+    "generation": 2
+  },
+  {
+    "task_id": "sum_numbers",
+    "language": "python",
+    "code": "import re\ndef solve(input):\n    nums = re.findall(r\"-?\\d+(?:\\.\\d+)?\", input)\n    return sum(float(n) if \".\" in n else int(n) for n in nums) if nums else 0\n",
+    "accuracy": 1.0,
+    "ops_per_sec": 19.733884279029652,
+    "generation": 2
+  },
+  {
+    "task_id": "sum_numbers",
+    "language": "python",
+    "code": "import re\ndef solve(input):\n    nums = re.findall(r\"-?\\d+(?:\\.\\d+)?\", input)\n    return sum(float(n) if \".\" in n else int(n) for n in nums) if nums else 0\n",
+    "accuracy": 1.0,
+    "ops_per_sec": 19.72271536240138,
+    "generation": 2
+  },
+  {
+    "task_id": "extract_attrs",
+    "language": "python",
+    "code": "import re\ndef solve(input):\n    tag_m = re.search(r\"<(\\w+)\", input)\n    tag = tag_m.group(1) if tag_m else None\n    result = {\"tag\": tag}\n    for m in re.finditer(r'(\\w+)=(?:\"([^\"]*)\"|' + \"'\" + r'([^' + \"'\" + r']*)' + \"'\" + r'|([^\\s>]+))', input):\n        name = m.group(1)\n        val = m.group(2) if m.group(2) is not None else (m.group(3) if m.group(3) is not None else m.group(4))\n        if val is None or val == \"\":\n            result[name] = True\n        else:\n            try:\n                result[name] = int(val) if \".\" not in val else float(val)\n            except ValueError:\n                result[name] = val\n    return result\n",
+    "accuracy": 1.0,
+    "ops_per_sec": 18.16563573936842,
     "generation": 2
   },
   {
@@ -412,7 +388,7 @@
     "language": "javascript",
     "code": "function solve(input) {\n    if (!input.trim()) return 0;\n    return input.trim().split(/\\s+/).length;\n}\n",
     "accuracy": 1.0,
-    "ops_per_sec": 15.727396557317324,
+    "ops_per_sec": 14.606643145265947,
     "generation": 2
   },
   {
@@ -420,23 +396,7 @@
     "language": "javascript",
     "code": "function solve(input) {\n    const re = /https?:\\/\\/[^\\s]+/g;\n    return input.match(re) || [];\n}\n",
     "accuracy": 1.0,
-    "ops_per_sec": 15.583676943556975,
-    "generation": 2
-  },
-  {
-    "task_id": "count_words",
-    "language": "javascript",
-    "code": "function solve(input) {\n    if (!input.trim()) return 0;\n    return input.trim().split(/\\s+/).length;\n}\n",
-    "accuracy": 1.0,
-    "ops_per_sec": 15.181811577916047,
-    "generation": 2
-  },
-  {
-    "task_id": "sum_numbers",
-    "language": "javascript",
-    "code": "function solve(input) {\n    const nums = input.match(/-?\\d+(?:\\.\\d+)?/g);\n    if (!nums) return 0;\n    return nums.reduce((s, n) => s + Number(n), 0);\n}\n",
-    "accuracy": 1.0,
-    "ops_per_sec": 15.015180208272849,
+    "ops_per_sec": 14.208969978680726,
     "generation": 2
   },
   {
@@ -444,7 +404,7 @@
     "language": "javascript",
     "code": "function solve(input) {\n    const re = /\\b[\\w.+-]+@[\\w-]+\\.[\\w.-]+\\b/g;\n    return input.match(re) || [];\n}\n",
     "accuracy": 1.0,
-    "ops_per_sec": 14.742407644505139,
+    "ops_per_sec": 14.18397161073671,
     "generation": 2
   },
   {
@@ -452,7 +412,47 @@
     "language": "javascript",
     "code": "function solve(input) {\n    const tagMatch = input.match(/<(\\w+)/);\n    const tag = tagMatch ? tagMatch[1] : null;\n    const result = {tag: tag};\n    const attrRe = /(\\w+)=(?:\"([^\"]*)\"|'([^']*)'|([^\\s>]+))/g;\n    let m;\n    while ((m = attrRe.exec(input)) !== null) {\n        const name = m[1];\n        const value = m[2] !== undefined ? m[2] : (m[3] !== undefined ? m[3] : m[4]);\n        if (value === \"\" || value === undefined) {\n            result[name] = true;\n        } else if (!isNaN(value) && value !== \"\") {\n            result[name] = Number(value);\n        } else {\n            result[name] = value;\n        }\n    }\n    return result;\n}\n",
     "accuracy": 1.0,
-    "ops_per_sec": 14.652150488587747,
+    "ops_per_sec": 14.13592454981059,
+    "generation": 2
+  },
+  {
+    "task_id": "count_words",
+    "language": "javascript",
+    "code": "function solve(input) {\n    if (!input.trim()) return 0;\n    return input.trim().split(/\\s+/).length;\n}\n",
+    "accuracy": 1.0,
+    "ops_per_sec": 14.107378319361816,
+    "generation": 2
+  },
+  {
+    "task_id": "extract_email",
+    "language": "javascript",
+    "code": "function solve(input) {\n    const re = /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}/g;\n    return input.match(re) || [];\n}\n",
+    "accuracy": 1.0,
+    "ops_per_sec": 14.06981270283886,
+    "generation": 2
+  },
+  {
+    "task_id": "sum_numbers",
+    "language": "javascript",
+    "code": "function solve(input) {\n    const nums = input.match(/-?\\d+(?:\\.\\d+)?/g);\n    if (!nums) return 0;\n    return nums.reduce((s, n) => s + Number(n), 0);\n}\n",
+    "accuracy": 1.0,
+    "ops_per_sec": 13.542987093963292,
+    "generation": 2
+  },
+  {
+    "task_id": "extract_attrs",
+    "language": "javascript",
+    "code": "function solve(input) {\n    const tagMatch = input.match(/<(\\w+)/);\n    const tag = tagMatch ? tagMatch[1] : null;\n    const result = {tag: tag};\n    const attrRe = /(\\w+)=(?:\"([^\"]*)\"|'([^']*)'|([^\\s>]+))/g;\n    let m;\n    while ((m = attrRe.exec(input)) !== null) {\n        const name = m[1];\n        const value = m[2] !== undefined ? m[2] : (m[3] !== undefined ? m[3] : m[4]);\n        if (value === \"\" || value === undefined) {\n            result[name] = true;\n        } else if (!isNaN(value) && value !== \"\") {\n            result[name] = Number(value);\n        } else {\n            result[name] = value;\n        }\n    }\n    return result;\n}\n",
+    "accuracy": 1.0,
+    "ops_per_sec": 12.763817125064309,
+    "generation": 2
+  },
+  {
+    "task_id": "sum_numbers",
+    "language": "javascript",
+    "code": "function solve(input) {\n    const nums = input.match(/-?\\d+(?:\\.\\d+)?/g);\n    if (!nums) return 0;\n    return nums.reduce((s, n) => s + Number(n), 0);\n}\n",
+    "accuracy": 1.0,
+    "ops_per_sec": 11.491190852011357,
     "generation": 2
   }
 ]

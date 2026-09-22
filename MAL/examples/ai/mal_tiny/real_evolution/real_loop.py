@@ -247,7 +247,7 @@ def solve(input):
             total_tests=total,
             error=error
         )
-    def _execute(self, candidate, input_data, iterations=10):
+    def _execute(self, candidate, input_data, iterations=3):
         if candidate.language == "javascript":
             return self._execute_js(candidate.code, input_data, iterations)
         elif candidate.language == "python":
@@ -355,7 +355,7 @@ def solve(input):
                     candidates.append(self.generate_candidate(task, "javascript", v))
                     candidates.append(self.generate_candidate(task, "python", v))
             print(f"Candidates: {len(candidates)}")
-            print(f"Benchmarking (real execution, {10} iterations each)...")
+            print(f"Benchmarking (real execution, 3 iterations each)...")
             results = []
             for i, cand in enumerate(candidates, 1):
                 task = next(t for t in tasks if t.id == cand.task_id)
