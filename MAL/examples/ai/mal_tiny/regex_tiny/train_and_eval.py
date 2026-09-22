@@ -8,7 +8,7 @@ print("=" * 70)
 # Load tokenizer
 tok = HybridTokenizer()
 # Load pairs
-with open('real_pairs.jsonl', 'r', encoding='utf-8') as f:
+with open('regex_tiny/real_pairs.jsonl', 'r', encoding='utf-8') as f:
     pairs = [json.loads(line) for line in f]
 print(f"\n📚 Dataset: {len(pairs)} pairs")
 # Build model
