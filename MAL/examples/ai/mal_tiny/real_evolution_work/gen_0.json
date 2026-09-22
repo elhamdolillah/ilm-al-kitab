@@ -7,140 +7,140 @@
       "id": "extract_email_javascript_v0",
       "language": "javascript",
       "accuracy": 1.0,
-      "ops_per_sec": 15.598891527862907,
+      "ops_per_sec": 14.53583326943008,
       "error": null
     },
     {
       "id": "extract_email_python_v0",
       "language": "python",
       "accuracy": 1.0,
-      "ops_per_sec": 23.682587730403732,
+      "ops_per_sec": 23.599560790239096,
       "error": null
     },
     {
       "id": "extract_email_javascript_v1",
       "language": "javascript",
       "accuracy": 1.0,
-      "ops_per_sec": 15.858044219310395,
+      "ops_per_sec": 15.258718274039218,
       "error": null
     },
     {
       "id": "extract_email_python_v1",
       "language": "python",
       "accuracy": 1.0,
-      "ops_per_sec": 26.39375239944798,
+      "ops_per_sec": 24.550747131320055,
       "error": null
     },
     {
       "id": "extract_url_javascript_v0",
       "language": "javascript",
       "accuracy": 1.0,
-      "ops_per_sec": 16.022358552023356,
+      "ops_per_sec": 15.552345514123996,
       "error": null
     },
     {
       "id": "extract_url_python_v0",
       "language": "python",
       "accuracy": 1.0,
-      "ops_per_sec": 22.7458312214061,
+      "ops_per_sec": 23.45248413759636,
       "error": null
     },
     {
       "id": "extract_url_javascript_v1",
       "language": "javascript",
       "accuracy": 0.8,
-      "ops_per_sec": 15.442934587893255,
+      "ops_per_sec": 14.93848655165638,
       "error": null
     },
     {
       "id": "extract_url_python_v1",
       "language": "python",
       "accuracy": 1.0,
-      "ops_per_sec": 23.335256699539826,
+      "ops_per_sec": 24.9502526475818,
       "error": null
     },
     {
       "id": "extract_attrs_javascript_v0",
       "language": "javascript",
       "accuracy": 1.0,
-      "ops_per_sec": 14.798029158088701,
+      "ops_per_sec": 15.083610158884326,
       "error": null
     },
     {
       "id": "extract_attrs_python_v0",
       "language": "python",
       "accuracy": 1.0,
-      "ops_per_sec": 24.238769155162853,
+      "ops_per_sec": 22.41701028595047,
       "error": null
     },
     {
       "id": "extract_attrs_javascript_v1",
       "language": "javascript",
       "accuracy": 1.0,
-      "ops_per_sec": 16.398117086688227,
+      "ops_per_sec": 14.68358531495104,
       "error": null
     },
     {
       "id": "extract_attrs_python_v1",
       "language": "python",
       "accuracy": 1.0,
-      "ops_per_sec": 22.81785187205893,
+      "ops_per_sec": 23.233820569572636,
       "error": null
     },
     {
       "id": "sum_numbers_javascript_v0",
       "language": "javascript",
       "accuracy": 1.0,
-      "ops_per_sec": 16.112690074780147,
+      "ops_per_sec": 15.205032607352797,
       "error": null
     },
     {
       "id": "sum_numbers_python_v0",
       "language": "python",
       "accuracy": 1.0,
-      "ops_per_sec": 23.802770438200792,
+      "ops_per_sec": 24.653640138391975,
       "error": null
     },
     {
       "id": "sum_numbers_javascript_v1",
       "language": "javascript",
       "accuracy": 1.0,
-      "ops_per_sec": 16.201960921927704,
+      "ops_per_sec": 15.893195076483998,
       "error": null
     },
     {
       "id": "sum_numbers_python_v1",
       "language": "python",
       "accuracy": 1.0,
-      "ops_per_sec": 21.692640146292195,
+      "ops_per_sec": 26.97886025439713,
       "error": null
     },
     {
       "id": "count_words_javascript_v0",
       "language": "javascript",
       "accuracy": 1.0,
-      "ops_per_sec": 15.377078105485765,
+      "ops_per_sec": 15.500587828630664,
       "error": null
     },
     {
       "id": "count_words_python_v0",
       "language": "python",
       "accuracy": 1.0,
-      "ops_per_sec": 23.093267042043564,
+      "ops_per_sec": 24.29545645031443,
       "error": null
     },
     {
       "id": "count_words_javascript_v1",
       "language": "javascript",
       "accuracy": 1.0,
-      "ops_per_sec": 15.76960296049014,
+      "ops_per_sec": 14.736069199455514,
       "error": null
     },
     {
       "id": "count_words_python_v1",
       "language": "python",
       "accuracy": 1.0,
-      "ops_per_sec": 26.09924821803975,
+      "ops_per_sec": 17.978171739753193,
       "error": null
     }
   ]
