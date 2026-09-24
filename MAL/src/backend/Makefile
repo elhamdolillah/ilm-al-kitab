@@ -1,8 +1,9 @@
-# Makefile for MAL Tensor C Library
+# Makefile for MAL Tensor C Library (OpenBLAS Optimized)
 CC = gcc
 CFLAGS = -O3 -Wall -Wextra -fPIC -I.
 AR = ar
 ARFLAGS = rcs
+LDFLAGS = -lopenblas
 TARGET_LIB = libmal_tensor.a
 OBJS = mal_tensor.o
 all: $(TARGET_LIB)

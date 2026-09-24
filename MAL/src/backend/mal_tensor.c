@@ -4,6 +4,7 @@
 #include <string.h>
 #include <math.h>
 #include <stdio.h>
+#include <cblas.h>
 // ═══════════════════════════════════════════════════════════
 // Helper Functions
 // ═══════════════════════════════════════════════════════════
@@ -130,15 +131,11 @@ Tensor tensor_matmul(Tensor a, Tensor b) {
         double* da = (double*)a.data;
         double* db = (double*)b.data;
         double* dr = (double*)res.data;
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                double sum = 0.0;
-                for (int l = 0; l < k; l++) {
-                    sum += da[i * k + l] * db[l * n + j];
-                }
-                dr[i * n + j] = sum;
-            }
-        }
+        // 🚀 Production Optimization: OpenBLAS cblas_dgemm
+        // C = alpha * A * B + beta * C
+        // A is (m x k), B is (k x n), C is (m x n)
+        cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans,
+                    m, n, k, 1.0, da, k, db, n, 0.0, dr, n);
     }
     return res;
 }
@@ -174,6 +171,7 @@ Tensor tensor_reshape(Tensor a, int new_ndim, int* new_dims) {
     return res;
 }
 void tensor_backward(Tensor loss) {
+    (void)loss; // Suppress unused parameter warning
     // 🚀 PRODUCTION: This should traverse the computational graph 
     // in reverse topological order and call grad_fn for each node.
     printf("[Autodiff] Backward pass initiated for loss tensor.\n");
