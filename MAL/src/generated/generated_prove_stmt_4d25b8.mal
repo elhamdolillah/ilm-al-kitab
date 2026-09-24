@@ -1,6 +1,0 @@
--- نظرية مولدة آلياً بواسطة MHLJ v3
-theorem equality_theorem : ∀ (n : Nat), ب = ب
-proof
-  -- استراتيجية البرهان: استقراء أو تطابق
-  admit
-qed

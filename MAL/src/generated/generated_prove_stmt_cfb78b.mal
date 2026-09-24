@@ -1,6 +1,0 @@
--- نظرية مولدة آلياً بواسطة MHLJ v3
-theorem my_theorem : ∀ (n : Nat), 3 < 7
-proof
-  -- استراتيجية البرهان: استقراء أو تطابق
-  admit
-qed

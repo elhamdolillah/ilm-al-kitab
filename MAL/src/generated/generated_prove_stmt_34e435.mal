@@ -1,6 +1,0 @@
--- نظرية مولدة آلياً بواسطة MHLJ v3
-theorem inequality_theorem : ∀ (د : Nat), د + 1 > د
-proof
-  -- استراتيجية البرهان: استقراء أو تطابق
-  admit
-qed
