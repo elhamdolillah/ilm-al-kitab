@@ -1,0 +1,6 @@
+-- نظرية مولدة آلياً بواسطة MHLJ v3
+theorem inequality_theorem : ∀ (n : Nat), 10 > 5
+proof
+  -- استراتيجية البرهان: استقراء أو تطابق
+  admit
+qed
