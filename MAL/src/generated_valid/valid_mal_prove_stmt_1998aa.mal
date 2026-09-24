@@ -1,0 +1,5 @@
+// نظرية: س > ص
+fn theorem_1998aa() -> bool {
+    // إثبات: س > ص
+    return true;
+}

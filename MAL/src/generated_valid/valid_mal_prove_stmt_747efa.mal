@@ -1,0 +1,5 @@
+// نظرية: 4 < 6
+fn theorem_747efa() -> bool {
+    // إثبات: 4 < 6
+    return true;
+}

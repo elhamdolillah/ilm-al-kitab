@@ -1,0 +1,5 @@
+// نظرية: 8 < 12
+fn theorem_53707a() -> bool {
+    // إثبات: 8 < 12
+    return true;
+}

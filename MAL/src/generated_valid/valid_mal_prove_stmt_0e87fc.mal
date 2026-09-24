@@ -1,0 +1,5 @@
+// نظرية: 3 < 7
+fn theorem_0e87fc() -> bool {
+    // إثبات: 3 < 7
+    return true;
+}

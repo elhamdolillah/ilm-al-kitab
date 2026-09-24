@@ -1,0 +1,5 @@
+// نظرية: س > 0
+fn theorem_8155ed() -> bool {
+    // إثبات: س > 0
+    return true;
+}

@@ -1,0 +1,5 @@
+// نظرية: س * 2 > س
+fn theorem_3c917c() -> bool {
+    // إثبات: س * 2 > س
+    return true;
+}

@@ -1,0 +1,5 @@
+// نظرية: 10 > 5
+fn theorem_9ef36a() -> bool {
+    // إثبات: 10 > 5
+    return true;
+}

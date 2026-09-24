@@ -1,0 +1,5 @@
+// تعريف متغير: x
+fn init_x() -> i32 {
+    let x: i32 = 0;
+    return x;
+}

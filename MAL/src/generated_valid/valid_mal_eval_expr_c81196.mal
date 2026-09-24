@@ -1,0 +1,5 @@
+// تعبير تقييمي
+fn eval_expr_c81196() -> i32 {
+    let result: i32 = 20 / 5;
+    return result;
+}
