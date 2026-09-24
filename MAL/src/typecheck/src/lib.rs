@@ -1,7 +1,7 @@
 //! # MAL Type Checker — type inference and checking
 #![forbid(unsafe_code)]
 use mal_arena::{Arena, ASTNode, BinaryOp, UnaryOp, NodeID};
-use mal_types::DataType;
+use mal_types::{DataType, TensorDtype, Shape};
 use mal_ownership::StringTable;
 use std::collections::HashMap;
 /// Type checking errors.
@@ -18,6 +18,15 @@ pub enum TypeError {
     TypeMismatch { expected: DataType, actual: DataType },
     /// Unknown type (cannot infer).
     UnknownType { expr: String },
+    /// Matrix multiplication requires 2D tensors.
+    MatMulRequires2D { lhs_rank: usize, rhs_rank: usize },
+    /// Matrix multiplication inner dimensions must match.
+    MatMulDimMismatch { lhs_inner: usize, rhs_inner: usize },
+    /// Shapes are not compatible for broadcasting.
+    BroadcastIncompatible { shape1: Shape, shape2: Shape },
+    /// Tensor operation on non-tensor type.
+    NotATensor { expected: DataType },
+
 }
 impl std::fmt::Display for TypeError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -205,4 +214,48 @@ mod tests {
         let lambda = arena.allocate(ASTNode::Lambda { params: param, body }).unwrap();
         assert_eq!(infer_type(lambda, &arena, &st, &env).unwrap(), DataType::Int64);
     }
+}
+
+// ═══════════════════════════════════════════════════════════
+// Shape Inference Helpers for Tensor Operations
+// ═══════════════════════════════════════════════════════════
+/// Infer output shape for matrix multiplication: (M x K) @ (K x N) -> (M x N)
+pub fn infer_matmul_shape(lhs_shape: &Shape, rhs_shape: &Shape) -> Result<Shape, TypeError> {
+    if lhs_shape.rank() != 2 || rhs_shape.rank() != 2 {
+        return Err(TypeError::MatMulRequires2D {
+            lhs_rank: lhs_shape.rank(),
+            rhs_rank: rhs_shape.rank(),
+        });
+    }
+    let m = lhs_shape.dims[0];
+    let k1 = lhs_shape.dims[1];
+    let k2 = rhs_shape.dims[0];
+    let n = rhs_shape.dims[1];
+    if k1 != k2 {
+        return Err(TypeError::MatMulDimMismatch {
+            lhs_inner: k1,
+            rhs_inner: k2,
+        });
+    }
+    Ok(Shape::new(vec![m, n]))
+}
+/// Infer output shape for element-wise operations with NumPy-style broadcasting
+pub fn infer_broadcast_shape(shape1: &Shape, shape2: &Shape) -> Result<Shape, TypeError> {
+    if !shape1.can_broadcast(shape2) {
+        return Err(TypeError::BroadcastIncompatible {
+            shape1: shape1.clone(),
+            shape2: shape2.clone(),
+        });
+    }
+    // Compute the broadcasted shape
+    let max_rank = shape1.rank().max(shape2.rank());
+    let mut s1 = shape1.dims.clone();
+    let mut s2 = shape2.dims.clone();
+    while s1.len() < max_rank { s1.insert(0, 1); }
+    while s2.len() < max_rank { s2.insert(0, 1); }
+    let result_dims = s1.iter()
+        .zip(s2.iter())
+        .map(|(d1, d2)| d1.max(d2))
+        .collect();
+    Ok(Shape::new(result_dims))
 }

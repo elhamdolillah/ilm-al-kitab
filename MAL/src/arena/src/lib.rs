@@ -74,6 +74,12 @@ pub enum TypeTag {
     Match,
     /// Pattern match arm (Phase 43).
     MatchArm,
+
+
+    /// Tensor operation.
+    TensorOp,
+    /// Automatic differentiation operation.
+    AutodiffOp,
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -92,6 +98,25 @@ pub use mal_types::{
 };
 /// AST node with inline payload (no heap allocation per node).
 #[derive(Debug, Clone)]
+/// Tensor operations for AI/ML.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum TensorOpKind {
+    MatMul,
+    Add,
+    Sub,
+    Mul,
+    Relu,
+    Sigmoid,
+    Transpose,
+    Reshape,
+}
+/// Automatic differentiation operations.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum AutodiffOpKind {
+    Backward,
+    Grad,
+    ZeroGrad,
+}
 pub enum ASTNode {
     /// Empty slot.
     Empty,
@@ -202,6 +227,23 @@ pub enum ASTNode {
         /// Body expression to evaluate if pattern matches.
         body: NodeID,
     },
+
+    /// Tensor operation node.
+    TensorOp {
+        /// The specific tensor operation.
+        op: TensorOpKind,
+        /// Arguments (as List node).
+        args: NodeID,
+    },
+    /// Automatic differentiation node.
+    AutodiffOp {
+        /// The specific autodiff operation.
+        op: AutodiffOpKind,
+        /// Target expression (e.g., loss for Backward, variable for Grad).
+        target: NodeID,
+        /// Additional parameters (e.g., list of variables for ZeroGrad).
+        params: NodeID,
+    },
 }
 
 /// Pattern for match expressions (Phase 43).
@@ -239,6 +281,8 @@ impl ASTNode {
             ASTNode::UnaryOp { .. } => TypeTag::UnaryOp,
             ASTNode::Match { .. } => TypeTag::Match,
             ASTNode::MatchArm { .. } => TypeTag::MatchArm,
+            ASTNode::TensorOp { .. } => TypeTag::TensorOp,
+            ASTNode::AutodiffOp { .. } => TypeTag::AutodiffOp,
         }
     }
 }

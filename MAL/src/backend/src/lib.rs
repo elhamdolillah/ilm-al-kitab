@@ -36,6 +36,8 @@ pub fn c_type(mal_type: &str) -> &'static str {
         "bool" => "bool",
         "string" | "str" => "const char*",
         "void" | "unit" => "void",
+        "Tensor" => "Tensor",
+        "Model" => "Model*",
         _ => "int64_t",
     }
 }
@@ -97,6 +99,7 @@ impl CTranslationUnit {
         tu.includes.push("#include <stdio.h>".into());
         tu.includes.push("#include <stdlib.h>".into());
         tu.includes.push("#include <string.h>".into());
+        tu.includes.push("#include \"mal_tensor.h\"".into());
         tu
     }
     pub fn add_function(&mut self, func: CFunction) {
@@ -276,6 +279,27 @@ pub fn run_binary(binary_path: &str, args: &[&str]) -> Result<String, String> {
 // ═══════════════════════════════════════════════════════════
 // TESTS
 // ═══════════════════════════════════════════════════════════
+
+// ═══════════════════════════════════════════════════════════
+// TENSOR & AUTODIFF TRANSLATION (Phase: AI Infrastructure)
+// ═══════════════════════════════════════════════════════════
+/// Translates tensor operations to C99 mal_tensor library calls.
+pub fn translate_tensor_op(op: &str, args: &[String]) -> String {
+    match op {
+        "matmul" | "@" => format!("tensor_matmul({}, {})", args.get(0).unwrap_or(&"".into()), args.get(1).unwrap_or(&"".into())),
+        "add" | "+" => format!("tensor_add({}, {})", args.get(0).unwrap_or(&"".into()), args.get(1).unwrap_or(&"".into())),
+        "sub" | "-" => format!("tensor_sub({}, {})", args.get(0).unwrap_or(&"".into()), args.get(1).unwrap_or(&"".into())),
+        "mul" | "*" => format!("tensor_mul({}, {})", args.get(0).unwrap_or(&"".into()), args.get(1).unwrap_or(&"".into())),
+        "relu" => format!("tensor_relu({})", args.get(0).unwrap_or(&"".into())),
+        "sigmoid" => format!("tensor_sigmoid({})", args.get(0).unwrap_or(&"".into())),
+        "transpose" => format!("tensor_transpose({})", args.get(0).unwrap_or(&"".into())),
+        "backward" => format!("tensor_backward({})", args.get(0).unwrap_or(&"".into())),
+        "grad" => format!("tensor_grad({}, \"{}\")", args.get(0).unwrap_or(&"".into()), args.get(1).unwrap_or(&"".into())),
+        "zero_grad" => format!("tensor_zero_grad(&{})", args.get(0).unwrap_or(&"".into())),
+        _ => format!("/* Unknown tensor op: {} */", op),
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
