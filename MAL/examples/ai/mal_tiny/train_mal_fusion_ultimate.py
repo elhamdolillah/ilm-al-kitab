@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 التدريب النهائي لنموذج MHLJ Fusion للوصول إلى 100%
-- سعة أكبر (embed_dim=128)
+- متوافق مع embed_dim=64 من MAL-Tiny
 - بيانات مركزة على الحالات الصعبة
 - Dropout لمنع Overfitting
 """
@@ -19,26 +19,26 @@ if regex_dir not in sys.path: sys.path.insert(0, regex_dir)
 from hybrid_tokenizer import HybridTokenizer
 from hybrid_classifier import HybridClassifier
 class LayaJevFusionHead(nn.Module):
-    def __init__(self, mal_embed_dim=128, num_intents=4, num_entities=4):
+    def __init__(self, mal_embed_dim=64, num_intents=4, num_entities=4):
         super().__init__()
         self.laya_attention = nn.MultiheadAttention(embed_dim=mal_embed_dim, num_heads=4, batch_first=True)
         self.laya_aggregation = nn.Sequential(
-            nn.Linear(mal_embed_dim, 256),
+            nn.Linear(mal_embed_dim, 128),
             nn.GELU(),
             nn.Dropout(0.2),
-            nn.Linear(256, mal_embed_dim)
+            nn.Linear(128, mal_embed_dim)
         )
         self.intent_router = nn.Sequential(
-            nn.Linear(mal_embed_dim, 128),
+            nn.Linear(mal_embed_dim, 64),
             nn.GELU(),
             nn.Dropout(0.2),
-            nn.Linear(128, num_intents)
+            nn.Linear(64, num_intents)
         )
         self.entity_router = nn.Sequential(
-            nn.Linear(mal_embed_dim, 128),
+            nn.Linear(mal_embed_dim, 64),
             nn.GELU(),
             nn.Dropout(0.2),
-            nn.Linear(128, num_entities)
+            nn.Linear(64, num_entities)
         )
         self.num_intents = num_intents
         self.num_entities = num_entities
@@ -61,15 +61,15 @@ class MHLJFusionModel(nn.Module):
         self.hybrid_classifier.eval()
         for param in self.mal_model.parameters(): param.requires_grad = False
         for param in self.hybrid_classifier.parameters(): param.requires_grad = False
-        # سعة أكبر: 128 بدلاً من 64
-        self.fusion_head = LayaJevFusionHead(mal_embed_dim=128, num_intents=4, num_entities=4)
+        # متوافق مع MAL-Tiny: embed_dim=64
+        self.fusion_head = LayaJevFusionHead(mal_embed_dim=64, num_intents=4, num_entities=4)
     def forward(self, mal_input_ids, hybrid_input_ids):
         with torch.no_grad():
             mal_embeddings = self.mal_model.tok_emb(mal_input_ids)
         return self.fusion_head(mal_embeddings)
 if __name__ == '__main__':
     print("="*70)
-    print("🚀 التدريب النهائي للوصول إلى 100% (سعة أكبر + بيانات مركزة)")
+    print("🚀 التدريب النهائي للوصول إلى 100% (متوافق مع MAL-Tiny)")
     print("="*70)
     model = MHLJFusionModel()
     optimizer = torch.optim.AdamW(model.fusion_head.parameters(), lr=1e-3, weight_decay=1e-4)
@@ -207,5 +207,5 @@ if __name__ == '__main__':
             if test_acc_pct == 1.0:
                 print("   🎯 تم الوصول لـ 100%!")
                 break
-    print(f"\n🏆 أفضل دقة اختبار: {best_test_acc:.0%}")
+    print(f"\n أفضل دقة اختبار: {best_test_acc:.0%}")
     print("💾 النموذج محفوظ في: MHLJ_Fusion_Head_Ultimate.pt")
