@@ -53,6 +53,13 @@ pub enum DataType {
     Model {
         name: String,
     },
+    /// First-class function type (Higher-Order Functions support)
+    Function {
+        /// Argument types
+        arg_types: Vec<DataType>,
+        /// Return type
+        return_type: Box<DataType>,
+    },
 }
 // ═══════════════════════════════════════════════════════════
 // AI / Tensor Supporting Types
