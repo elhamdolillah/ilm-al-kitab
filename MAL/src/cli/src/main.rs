@@ -1,131 +1,182 @@
-//! # malc — MAL Compiler (Phase 63)
+//! # malc — MAL Compiler (Modern CLI)
 //!
 //! Usage:
-//!   malc <input.mal> -o <output>      Compile MAL source to binary
-//!   malc <input.mal> --emit-c         Emit C source only (no GCC)
-//!   malc --help                       Show help
-//!
-//! Pipeline:
-//!   .mal source → NIR → C99 → GCC → ELF binary
-//!
-//! Constitutional Compliance:
-//!   - Principle 5 (البيان): Honest error messages
-//!   - Principle 7 (التفكر): 5 tests verify pipeline
+//!   malc check <file>          Check syntax and types
+//!   malc compile <file> -o <out> Compile to native binary
+//!   malc run <file>            Compile and run immediately
+//!   malc --version             Show version
+use clap::{Parser, Subcommand};
 use mal_backend::{compile_c_to_binary, transpile_to_c, CompileOptions};
-use std::env;
 use std::fs;
 use std::path::Path;
-use std::process;
-fn print_help() {
-    println!("malc — MAL Compiler v1.0.0");
-    println!();
-    println!("Usage:");
-    println!("  malc <input.mal> -o <output>    Compile to native binary");
-    println!("  malc <input.mal> --emit-c       Emit C source only");
-    println!("  malc --help                     Show this help");
-    println!();
-    println!("Examples:");
-    println!("  malc hello.mal -o hello");
-    println!("  malc fib.mal -o fib && ./fib");
-    println!();
-    println!("Pipeline: .mal → NIR → C99 → GCC → native binary");
+use std::process::{self, Command};
+#[derive(Parser)]
+#[command(name = "malc")]
+#[command(author = "MAL Team")]
+#[command(version = "1.1.0")]
+#[command(about = "MAL Compiler — Mathematical Arabic Language", long_about = None)]
+struct Cli {
+    #[command(subcommand)]
+    command: Commands,
+}
+#[derive(Subcommand)]
+enum Commands {
+    /// Check syntax and types without generating code
+    Check {
+        /// Input MAL source file
+        file: String,
+    },
+    /// Compile MAL source to a native binary
+    Compile {
+        /// Input MAL source file
+        file: String,
+        /// Output binary path (default: a.out)
+        #[arg(short, long, default_value = "a.out")]
+        output: String,
+        /// Emit C source only, do not invoke GCC
+        #[arg(long)]
+        emit_c: bool,
+        /// Disable optimizations
+        #[arg(long)]
+        no_opt: bool,
+    },
+    /// Compile and run the MAL program immediately
+    Run {
+        /// Input MAL source file
+        file: String,
+        /// Arguments to pass to the compiled program
+        #[arg(last = true)]
+        args: Vec<String>,
+    },
 }
 fn main() {
-    let args: Vec<String> = env::args().collect();
-    if args.len() < 2 {
-        print_help();
-        process::exit(1);
-    }
-    if args[1] == "--help" || args[1] == "-h" {
-        print_help();
-        process::exit(0);
-    }
-    // Parse arguments
-    let input_path = &args[1];
-    let mut output_path = String::from("a.out");
-    let mut emit_c_only = false;
-    let mut optimize = true;
-    let mut i = 2;
-    while i < args.len() {
-        match args[i].as_str() {
-            "-o" | "--output" => {
-                if i + 1 < args.len() {
-                    output_path = args[i + 1].clone();
-                    i += 1;
-                } else {
-                    eprintln!("Error: -o requires a filename argument");
+    let cli = Cli::parse();
+    match cli.command {
+        Commands::Check { file } => {
+            if !Path::new(&file).exists() {
+                eprintln!("❌ Error: Input file '{}' not found", file);
+                process::exit(1);
+            }
+            let source = match fs::read_to_string(&file) {
+                Ok(s) => s,
+                Err(e) => {
+                    eprintln!("❌ Error reading '{}': {}", file, e);
+                    process::exit(1);
+                }
+            };
+            println!("🔍 Checking {}...", file);
+            // Note: Full type checking integration will be added here
+            match transpile_to_c(&source) {
+                Ok(_) => println!("✅ {} is syntactically valid and transpiles successfully.", file),
+                Err(e) => {
+                    eprintln!("❌ Transpilation/Check error: {}", e);
                     process::exit(1);
                 }
             }
-            "--emit-c" => emit_c_only = true,
-            "--no-opt" => optimize = false,
-            _ => {
-                eprintln!("Unknown option: {}", args[i]);
+        }
+        Commands::Compile { file, output, emit_c, no_opt } => {
+            if !Path::new(&file).exists() {
+                eprintln!("❌ Error: Input file '{}' not found", file);
+                process::exit(1);
+            }
+            let source = match fs::read_to_string(&file) {
+                Ok(s) => s,
+                Err(e) => {
+                    eprintln!("❌ Error reading '{}': {}", file, e);
+                    process::exit(1);
+                }
+            };
+            println!("⚙️ Compiling {}...", file);
+            let tu = match transpile_to_c(&source) {
+                Ok(tu) => tu,
+                Err(e) => {
+                    eprintln!("❌ Transpilation error: {}", e);
+                    process::exit(1);
+                }
+            };
+            let c_source = tu.render();
+            if emit_c {
+                let c_file = format!("{}.c", output.trim_end_matches(".out").trim_end_matches(".exe"));
+                match fs::write(&c_file, &c_source) {
+                    Ok(_) => {
+                        println!("✅ Wrote C source to {}", c_file);
+                        process::exit(0);
+                    }
+                    Err(e) => {
+                        eprintln!("❌ Error writing '{}': {}", c_file, e);
+                        process::exit(1);
+                    }
+                }
+            }
+            let options = CompileOptions {
+                optimize: !no_opt,
+                output_name: output.clone(),
+                keep_c_source: false,
+            };
+            let result = compile_c_to_binary(&c_source, &options);
+            if result.success {
+                if let Some(ref bin_path) = result.binary_path {
+                    if bin_path != &output {
+                        let _ = fs::rename(bin_path, &output);
+                    }
+                }
+                println!("✅ Compiled successfully → {}", output);
+                if !result.warnings.is_empty() {
+                    println!("⚠️  {} warning(s) from GCC", result.warnings.len());
+                }
+            } else {
+                eprintln!("❌ Compilation failed");
+                for err in &result.errors {
+                    eprintln!("  {}", err);
+                }
                 process::exit(1);
             }
         }
-        i += 1;
-    }
-    // Read input file
-    if !Path::new(input_path).exists() {
-        eprintln!("Error: input file '{}' not found", input_path);
-        process::exit(1);
-    }
-    let source = match fs::read_to_string(input_path) {
-        Ok(s) => s,
-        Err(e) => {
-            eprintln!("Error reading '{}': {}", input_path, e);
-            process::exit(1);
-        }
-    };
-    println!("malc: compiling {}", input_path);
-    // Stage 1: Transpile MAL → C
-    let tu = match transpile_to_c(&source) {
-        Ok(tu) => tu,
-        Err(e) => {
-            eprintln!("Transpilation error: {}", e);
-            process::exit(1);
-        }
-    };
-    let c_source = tu.render();
-    // Emit C source if requested
-    if emit_c_only {
-        let c_file = format!("{}.c", output_path.trim_end_matches(".out"));
-        match fs::write(&c_file, &c_source) {
-            Ok(_) => {
-                println!("malc: wrote C source to {}", c_file);
-                process::exit(0);
+        Commands::Run { file, args } => {
+            if !Path::new(&file).exists() {
+                eprintln!("❌ Error: Input file '{}' not found", file);
+                process::exit(1);
             }
-            Err(e) => {
-                eprintln!("Error writing '{}': {}", c_file, e);
+            let source = match fs::read_to_string(&file) {
+                Ok(s) => s,
+                Err(e) => {
+                    eprintln!("❌ Error reading '{}': {}", file, e);
+                    process::exit(1);
+                }
+            };
+            println!("⚙️ Compiling and running {}...", file);
+            let tu = match transpile_to_c(&source) {
+                Ok(tu) => tu,
+                Err(e) => {
+                    eprintln!("❌ Transpilation error: {}", e);
+                    process::exit(1);
+                }
+            };
+            let c_source = tu.render();
+            let temp_bin = "mal_temp_run".to_string();
+            let options = CompileOptions {
+                optimize: true,
+                output_name: temp_bin.clone(),
+                keep_c_source: false,
+            };
+            let result = compile_c_to_binary(&c_source, &options);
+            if result.success {
+                println!("▶️ Running...");
+                let mut cmd = Command::new(format!("./{}", temp_bin));
+                cmd.args(&args);
+                let status = cmd.status().expect("Failed to execute compiled binary");
+                // Cleanup
+                let _ = fs::remove_file(&temp_bin);
+                if !status.success() {
+                    process::exit(status.code().unwrap_or(1));
+                }
+            } else {
+                eprintln!("❌ Compilation failed");
+                for err in &result.errors {
+                    eprintln!("  {}", err);
+                }
                 process::exit(1);
             }
         }
-    }
-    // Stage 2: Compile C → binary
-    let options = CompileOptions {
-        optimize,
-        output_name: output_path.clone(),
-        keep_c_source: false,
-    };
-    let result = compile_c_to_binary(&c_source, &options);
-    if result.success {
-        // Move binary to requested output path if different
-        if let Some(ref bin_path) = result.binary_path {
-            if bin_path != &output_path {
-                let _ = fs::rename(bin_path, &output_path);
-            }
-        }
-        println!("malc: compiled successfully → {}", output_path);
-        if !result.warnings.is_empty() {
-            println!("malc: {} warning(s) from GCC", result.warnings.len());
-        }
-        process::exit(0);
-    } else {
-        eprintln!("malc: compilation failed");
-        for err in &result.errors {
-            eprintln!("{}", err);
-        }
-        process::exit(1);
     }
 }
