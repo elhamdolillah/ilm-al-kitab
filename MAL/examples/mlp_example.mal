@@ -1,0 +1,49 @@
+// ═══════════════════════════════════════════════════════════
+// مثال: شبكة عصبية بسيطة (MLP) بلغة MAL الخالصة
+// يوضح هذا المثال تعريف النموذج، المرور الأمامي، وحلقة التدريب
+// ═══════════════════════════════════════════════════════════
+// 1. تعريف دالة المرور الأمامي (Forward Pass)
+fn forward(x: Tensor, w1: Tensor, b1: Tensor, w2: Tensor, b2: Tensor) -> Tensor {
+    // الطبقة المخفية: z1 = x @ w1 + b1, a1 = relu(z1)
+    let z1 = tensor_add(tensor_matmul(x, w1), b1);
+    let a1 = tensor_relu(z1);
+    // طبقة المخرجات: z2 = a1 @ w2 + b2
+    let z2 = tensor_add(tensor_matmul(a1, w2), b2);
+    return z2;
+}
+// 2. دالة حساب الخسارة (Mean Squared Error Loss)
+fn mse_loss(pred: Tensor, target: Tensor) -> Tensor {
+    let diff = tensor_sub(pred, target);
+    let squared = tensor_mul(diff, diff);
+    // ملاحظة: tensor_mean ستُنفذ في مكتبة C لتقليل الأبعاد
+    return tensor_mean(squared, 0); 
+}
+// 3. حلقة التدريب (Training Loop)
+fn train_step(x: Tensor, y: Tensor, w1: Tensor, b1: Tensor, w2: Tensor, b2: Tensor, lr: f64) {
+    // أ. المرور الأمامي
+    let pred = forward(x, w1, b1, w2, b2);
+    // ب. حساب الخسارة
+    let loss = mse_loss(pred, y);
+    // ج. الانتشار العكسي (Backpropagation)
+    tensor_backward(loss);
+    // د. تحديث الأوزان (Gradient Descent)
+    // ملاحظة: يتم ذلك عبر دوال مساعدة في مكتبة C لتحديث البيانات في المكان
+    // w = w - lr * w.grad
+    tensor_update_weights(w1, lr);
+    tensor_update_weights(b1, lr);
+    tensor_update_weights(w2, lr);
+    tensor_update_weights(b2, lr);
+    // هـ. تصفير التدرجات (Zero Gradients)
+    tensor_zero_grad(w1);
+    tensor_zero_grad(b1);
+    tensor_zero_grad(w2);
+    tensor_zero_grad(b2);
+}
+// 4. نقطة الدخول الرئيسية
+fn main() -> i32 {
+    // تهيئة أبعاد الموترات (مثال: 2 ميزات إدخال، 4 وحدات مخفية، 1 مخرج)
+    // في التطبيق الفعلي، سيتم استدعاء دوال tensor_zeros أو tensor_rand من mal_tensor.h
+    printf("✅ تم تجميع نموذج MLP بنجاح في لغة MAL!\n");
+    printf("البنية التحتية للذكاء الاصطناعي جاهزة للعمل.\n");
+    return 0;
+}
