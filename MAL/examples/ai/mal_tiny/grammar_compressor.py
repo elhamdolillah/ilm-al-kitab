@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-المحرك اللغوي-الرياضي الحتمي (Deterministic Neuro-Grammatical Engine) v5
-يدعم: الاكتشاف الديناميكي للمجالات + عدم التكرار + البحث التلقائي عبر الإنترنت
+المحرك اللغوي-الرياضي الحتمي (Deterministic Neuro-Grammatical Engine) v6
+يدعم: الاكتشاف الديناميكي للمجالات + عدم التكرار + البحث التلقائي + إدارة صحيحة لاتصالات قاعدة البيانات
 """
 import re
 import json
@@ -146,6 +146,7 @@ class DeterministicGrammarEngine:
             pass
         return None
     def auto_lookup_and_add(self, word: str) -> Optional[Dict]:
+        # فحص عدم التكرار
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         cursor.execute('SELECT original_word FROM grammar_math_rules WHERE original_word = ?', (word,))
@@ -205,17 +206,18 @@ class DeterministicGrammarEngine:
                       info['math_region'], info.get('domain', 'عام'), token, 1.0, 0))
                 compressed_tokens.append(token)
             elif self.auto_lookup_enabled and not word.isdigit():
+                # 🔑 الحل الحاسم: إغلاق الاتصال قبل استدعاء دالة تفتح اتصالاً جديداً
+                conn.commit()
+                conn.close()
                 result = self.auto_lookup_and_add(word)
-                if result and word in self.lexicon:
-                    info = self.lexicon[word]
-                    token = info['math_region']
-                    cursor.execute('''
-                        INSERT OR IGNORE INTO grammar_math_rules 
-                        (original_word, root, morph_pattern, pos, source, math_region, domain, compression_token, certainty_score, auto_generated)
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                    ''', (word, info['root'], info['pattern'], info['pos'], info['source'], 
-                          info['math_region'], info.get('domain', 'عام'), token, 0.95, 1))
+                if result:
+                    # الدالة السابقة أضافت الكلمة وأغلقت الاتصال وأعدت تحميل القاموس
+                    info = self.lexicon.get(word, {})
+                    token = info.get('math_region', 'GENERAL')
                     compressed_tokens.append(token)
+                # إعادة فتح الاتصال لبقية الكلمات
+                conn = sqlite3.connect(self.db_path)
+                cursor = conn.cursor()
         conn.commit()
         conn.close()
         seen = set()
