@@ -19,6 +19,14 @@
 // ═══════════════════════════════════════════════════════════════
 pub use mal_types::DataType;
 
+/// A unique identifier for a node in the Arena.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct NodeID(pub u32);
+impl NodeID {
+    /// An invalid NodeID, often used as a placeholder.
+    pub const INVALID: NodeID = NodeID(u32::MAX);
+}
+
 /// Errors that can occur when working with the Arena.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ArenaError {
