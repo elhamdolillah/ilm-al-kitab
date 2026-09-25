@@ -22,6 +22,9 @@ def generate_and_run():
         return jsonify({"error": "Missing 'text' in request body"}), 400
     user_text = data['text']
     try:
+        # حفظ المجلد الحالي والانتقال لمجلد المولد لضمان صحة المسارات النسبية
+        original_cwd = os.getcwd()
+        os.chdir(GENERATOR_DIR)
         # 1. تحميل مولد الكود الذكي
         sys.path.insert(0, GENERATOR_DIR)
         from mal_code_generator_v4 import MALCodeGeneratorV4
@@ -55,6 +58,8 @@ def generate_and_run():
         output = f"❌ خطأ غير متوقع: {str(e)}"
         mal_code = "// Error"
     finally:
+        # استعادة مجلد العمل الأصلي
+        os.chdir(original_cwd)
         # تنظيف الملف المؤقت
         if os.path.exists(TEMP_MAL_FILE):
             os.remove(TEMP_MAL_FILE)
