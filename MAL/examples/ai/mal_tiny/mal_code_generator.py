@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from typing import List, Dict
+from typing import List, Dict
 import sys, os
 sys.path.insert(0, '/root/ilm-al-kitab/MAL/examples/ai/mal_tiny')
 from integrated_engine import IntegratedEngine
