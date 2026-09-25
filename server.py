@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
-"""
-MAL Mobile Integration Server
-يستقبل أوامر نصية من الهاتف، يولد كود MAL، وينفذه عبر المترجم.
-"""
 import os
 import sys
 import subprocess
-import json
 from flask import Flask, request, jsonify
 app = Flask(__name__)
 PROJECT_DIR = "/root/ilm-al-kitab"
@@ -35,21 +30,18 @@ def generate_and_run():
             f.write(mal_code)
         malc_bin = os.path.join(PROJECT_DIR, "MAL/src/cli/target/release/malc")
         temp_bin = os.path.join(PROJECT_DIR, "temp_mal_binary")
-        # استخدام واجهة malc القديمة المضمونة والموجودة بالفعل في النظام
         cmd = [malc_bin, TEMP_MAL_FILE, "-o", temp_bin]
         build_result = subprocess.run(cmd, cwd=PROJECT_DIR, capture_output=True, text=True, timeout=30)
         if build_result.returncode == 0 and os.path.exists(temp_bin):
             run_result = subprocess.run([temp_bin], cwd=PROJECT_DIR, capture_output=True, text=True, timeout=10)
             output = run_result.stdout.strip()
             if run_result.returncode != 0:
-                output += "
-" + run_result.stderr.strip()
+                output += "\n" + run_result.stderr.strip()
             os.remove(temp_bin)
         else:
-            output = f"❌ خطأ في التجميع:
-{build_result.stderr.strip()}"
+            output = "❌ خطأ في التجميع:\n" + build_result.stderr.strip()
     except Exception as e:
-        output = f"❌ خطأ: {str(e)}"
+        output = "❌ خطأ: " + str(e)
     finally:
         if os.path.exists(TEMP_MAL_FILE):
             os.remove(TEMP_MAL_FILE)
@@ -58,7 +50,6 @@ def generate_and_run():
         "generated_mal_code": mal_code,
         "execution_output": output
     })
-
 if __name__ == '__main__':
     print("🚀 بدء تشغيل خادم MAL على المنفذ 5000...")
     app.run(host='0.0.0.0', port=5000, debug=False)

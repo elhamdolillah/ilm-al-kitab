@@ -90,23 +90,10 @@ pub use mal_types::DataType;
 #[derive(Debug, Clone)]
 /// Tensor operations for AI/ML.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum TensorOpKind {
-    MatMul,
-    Add,
-    Sub,
-    Mul,
-    Relu,
-    Sigmoid,
-    Transpose,
-    Reshape,
-}
+pub enum TensorOpKind { MatMul, Add, Sub, Mul, Relu, Sigmoid, Transpose, Reshape }
 /// Automatic differentiation operations.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum AutodiffOpKind {
-    Backward,
-    Grad,
-    ZeroGrad,
-}
+pub enum AutodiffOpKind { Backward, Grad, ZeroGrad }
 pub enum ASTNode {
     /// Empty slot.
     Empty,
@@ -482,7 +469,6 @@ mod tests {
 // ═══════════════════════════════════════════════════════════
 // COMPILER OPTIMIZATION: Constant Folding Pass
 // ═══════════════════════════════════════════════════════════
-/// Recursively folds constant expressions in the AST.
 
 
 // ═══════════════════════════════════════════════════════════
