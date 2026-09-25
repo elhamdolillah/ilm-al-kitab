@@ -135,7 +135,8 @@ class DeterministicGrammarEngine:
             "clean": clean_text,
             "compressed_sequence": " -> ".join(unique_tokens),
             "tokens": unique_tokens,
-            "certainty": 1.0
+            "certainty": 1.0,
+            "auto_lookup_used": self.auto_lookup_enabled
         }
     def export_db_to_json(self, output_path: str):
         """تصدير قاعدة البيانات كسجل مرجعي للقواعد والمناطق الرياضية."""
