@@ -97,7 +97,6 @@ class AutoLookup:
         # 2. تحليل نص التعريف المستخرج من الإنترنت للبحث عن مؤشرات المجال
         if meaning_text:
             # البحث عن النصوص بين أقواس، وهي الطريقة الشائعة في القواميس العربية لتحديد المجال
-            # مثال: "مكثف: (كهرباء) جهاز يخزن..." أو "اجتهاد: (فقه) بذل الجهد..."
             parentheses_matches = re.findall(r'\((.*?)\)', meaning_text)
             for match in parentheses_matches:
                 match = match.strip()
@@ -147,7 +146,7 @@ class AutoLookup:
                 if meaning_div:
                     root_elem = soup.find('span', class_='root-word')
                     return {
-                        'meaning': meaning_div.get_text(strip=True)[:300], # زيادة طول النص لتحسين الاستنتاج
+                        'meaning': meaning_div.get_text(strip=True)[:300],
                         'root': root_elem.get_text(strip=True) if root_elem else None,
                         'source': 'almaany'
                     }
@@ -210,11 +209,10 @@ class AutoLookup:
         for word in words:
             res = self.lookup_and_add(word, dict_path)
             if res: results.append(res)
-            import time; time.sleep(0.5) # تأخير بسيط لاحترام الخادم
+            import time; time.sleep(0.5)
         return results
 if __name__ == "__main__":
     lookup = AutoLookup()
-    # كلمات اختبارية من مجالات جديدة (شرعي، فضاء، كهرباء، إلكترونيك)
     test_words = ['اجتهاد', 'مدار', 'مكثف', 'ترانزستور', 'فقه', 'جاذبية']
     print("🤖 اختبار الاكتشاف الديناميكي للمجالات:")
     lookup.batch_lookup(test_words, 'arabic_morphology_dict.json')
