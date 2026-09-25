@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-المحرك اللغوي-الرياضي الحتمي (Deterministic Neuro-Grammatical Engine) v8
-يدعم: الاكتشاف الديناميكي + عدم التكرار + البحث التلقائي + تنظيم المعرفة الهيكلي (تصنيف المكتبات)
+المحرك اللغوي-الرياضي الحتمي (Deterministic Neuro-Grammatical Engine) v9
+يدعم: الاكتشاف الديناميكي + عدم التكرار + البحث التلقائي + تنظيم المعرفة الهيكلي + حساب نسبة الحتمية الكلية
 """
 import re
 import json
@@ -12,7 +12,6 @@ import os
 import requests
 from bs4 import BeautifulSoup
 class KnowledgeOrganizer:
-    """ينظم الإجابات هيكلياً مثل تصنيف المكتبات لضمان حتمية >97%"""
     def __init__(self):
         self.hierarchy_templates = {
             'شرعي': {'library': 'العلوم الشرعية', 'main_axes': ['أصول الفقه', 'أحكام المعاملات', 'الفقه المقارن']},
@@ -223,17 +222,48 @@ class DeterministicGrammarEngine:
         domain_note = " (مجال مكتشف ديناميكياً!)" if domain in self.dynamic_domains else ""
         print(f"✅ تمت الإضافة: {word} -> {region} [{domain}]{domain_note}")
         return entry
+    def calculate_sentence_certainty(self, words_info: List[Dict]) -> float:
+        """حساب نسبة الحتمية الكلية للجملة بناءً على تصنيف كلماتها ذات الدلالة"""
+        if not words_info:
+            return 0.0
+        total_score = 0.0
+        valid_words_count = 0
+        # كلمات توقف شائعة لا تؤثر في الحساب
+        stopwords = {'في', 'من', 'إلى', 'على', 'عن', 'مع', 'هذا', 'هذه', 'ذلك', 'تلك', 'هو', 'هي', 'و', 'أو', 'ثم', 'لكن', 'أن', 'لا', 'لم', 'لن', 'قد', 'إن'}
+        for info in words_info:
+            word = info.get('word', '')
+            # تجاهل الكلمات القصيرة جداً، كلمات التوقف، والأرقام
+            if len(word) <= 2 or word in stopwords or word.isdigit():
+                continue
+            valid_words_count += 1
+            domain = info.get('domain', 'عام')
+            auto_generated = info.get('auto_generated', False)
+            # منطق احتساب النسبة
+            if not auto_generated:
+                if domain != 'عام':
+                    total_score += 1.0      # كلمة معروفة في مجال محدد (حتمية كاملة)
+                else:
+                    total_score += 0.6      # كلمة معروفة لكن مجالها عام
+            else:
+                if domain != 'عام':
+                    total_score += 0.95     # كلمة مكتشفة ديناميكياً في مجال محدد
+                else:
+                    total_score += 0.3      # كلمة مكتشفة ديناميكياً ومجالها عام
+        if valid_words_count == 0:
+            return 0.0
+        return total_score / valid_words_count
     def analyze_and_compress_with_structure(self, text: str) -> Dict:
-        """تحليل النص مع توليد استجابة هيكلية منظمة لكل مصطلح رئيسي"""
         clean_text = araby.strip_tashkeel(text)
         clean_text = araby.normalize_hamza(clean_text)
         clean_text = araby.normalize_alef(clean_text)
         words = re.findall(r'\b\w+\b', clean_text)
         compressed_tokens = []
         structured_responses = []
+        words_info = [] # لتجميع معلومات كل كلمة لحساب النسبة
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         for word in words:
+            word_info = {'word': word}
             if word in self.lexicon:
                 info = self.lexicon[word]
                 token = info['math_region']
@@ -244,7 +274,8 @@ class DeterministicGrammarEngine:
                 ''', (word, info['root'], info['pattern'], info['pos'], info['source'], 
                       info['math_region'], info.get('domain', 'عام'), token, 1.0, 0))
                 compressed_tokens.append(token)
-                # توليد استجابة هيكلية للمصطلحات ذات الدلالة العالية
+                word_info.update(info)
+                word_info['auto_generated'] = False
                 if info['domain'] != 'عام' or len(word) > 3:
                     resp = self.organizer.organize_response(word, info['domain'], info.get('meaning', ''), token)
                     structured_responses.append(resp)
@@ -260,44 +291,54 @@ class DeterministicGrammarEngine:
                     ''', (word, info['root'], info['pattern'], info['pos'], info['source'], 
                           info['math_region'], info.get('domain', 'عام'), token, 0.95, 1))
                     compressed_tokens.append(token)
+                    word_info.update(info)
+                    word_info['auto_generated'] = True
                     resp = self.organizer.organize_response(word, info['domain'], info.get('meaning', ''), token)
                     structured_responses.append(resp)
+            words_info.append(word_info)
         conn.commit()
         conn.close()
         seen = set()
         unique_tokens = [t for t in compressed_tokens if not (t in seen or seen.add(t))]
+        # 1. حساب نسبة الحتمية الكلية للجملة
+        certainty_percentage = self.calculate_sentence_certainty(words_info)
+        is_deterministic = certainty_percentage >= 0.97
+        # 2. إضافة تنويه إذا لم تصل النسبة إلى 97%
+        disclaimer = ""
+        if not is_deterministic:
+            disclaimer = f"\n\n⚠️ تنويه هام: نسبة الحتمية للتصنيف هي {certainty_percentage:.1%} (أقل من عتبة 97٪).\nالنموذج غير متأكد تماماً ويحتاج إلى تغذية إضافية بالمعطيات لتقديم إجابة صادقة وحتمية بنسبة 100٪ عن هذا السؤال.\nومع ذلك، إليك التحليل الأولي بناءً على المعطيات المتاحة:"
         return {
             "original": text,
             "clean": clean_text,
             "compressed_sequence": " -> ".join(unique_tokens),
             "tokens": unique_tokens,
-            "certainty": 1.0,
+            "certainty_percentage": certainty_percentage,
+            "is_deterministic": is_deterministic,
+            "disclaimer": disclaimer,
             "auto_lookup_used": self.auto_lookup_enabled,
             "discovered_domains": list(self.dynamic_domains),
-            "hierarchical_responses": structured_responses # المخرجات المنظمة هيكلياً
+            "hierarchical_responses": structured_responses
         }
 if __name__ == "__main__":
     engine = DeterministicGrammarEngine(auto_lookup_enabled=True)
-    # اختبار المجالات المعقدة والمتخصصة
     test_texts = [
         "تتشابك الحالات الكمومية للجسيمات دون الذرية في تراكب احتمالي",
         "يعتمد التصميم المعماري المستدام على تحسين الكفاءة الحرارية وتقليل البصمة الكربونية",
-        "يستخدم الطب الدقيق التسلسل الجيني لتخصيص العلاج الدوائي بناءً على الملف الوراثي للمريض",
-        "هذا اجتهاد فقهي في مسألة شرعية"
+        "هذا سؤال غريب جداً عن شيء لا أعرفه في الفضاء الخارجي" # جملة اختبارية منخفضة الحتمية
     ]
     for text in test_texts:
         print(f"\n" + "="*80)
         print(f"📝 النص المدخل: {text}")
         print("="*80)
         result = engine.analyze_and_compress_with_structure(text)
+        # عرض نسبة الحتمية بوضوح
+        status_icon = "✅" if result['is_deterministic'] else "⚠️"
+        print(f"{status_icon} نسبة الحتمية الكلية: {result['certainty_percentage']:.1%} | حتمي: {result['is_deterministic']}")
         print(f"✅ التسلسل المضغوط: {result['compressed_sequence']}")
-        print(f"✅ المجالات المكتشفة: {result['discovered_domains']}")
-        # عرض عينة من الاستجابة الهيكلية لأول مصطلح ذي دلالة
+        if result['disclaimer']:
+            print(result['disclaimer'])
         if result['hierarchical_responses']:
             sample_resp = result['hierarchical_responses'][0]
             print(f"\n📚 نموذج التصنيف الهيكلي للمصطلح: '{sample_resp['word']}'")
             print(f"   📂 القسم: {sample_resp['hierarchical_classification']['library_section']}")
             print(f"   📌 المحور الرئيسي: {sample_resp['hierarchical_classification']['main_axis']}")
-            print(f"   📍 المحور الثانوي: {sample_resp['hierarchical_classification']['secondary_axis']}")
-            print(f"   📝 المقدمة: {sample_resp['hierarchical_classification']['structured_content']['introduction'][:100]}...")
-            print(f"   💻 توجيه الكود: {sample_resp['mal_code_guidance']}")
