@@ -116,7 +116,7 @@ impl Shape {
         while s2.len() < max_rank { s2.insert(0, 1); }
         let result_dims = s1.iter()
             .zip(s2.iter())
-            .map(|(d1, d2)| d1.max(d2))
+            .map(|(&d1, &d2)| d1.max(d2))
             .collect();
         Some(Shape::new(result_dims))
     }
