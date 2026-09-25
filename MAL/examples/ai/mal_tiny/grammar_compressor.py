@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-المحرك اللغوي-الرياضي الحتمي (Deterministic Neuro-Grammatical Engine) v6
-يدعم: الاكتشاف الديناميكي للمجالات + عدم التكرار + البحث التلقائي + إدارة صحيحة لاتصالات قاعدة البيانات
+المحرك اللغوي-الرياضي الحتمي (Deterministic Neuro-Grammatical Engine) v7
+يدعم: الاكتشاف الديناميكي للمجالات + عدم التكرار + البحث التلقائي + إدارة صحيحة لاتصالات SQLite
 """
 import re
 import json
@@ -145,20 +145,17 @@ class DeterministicGrammarEngine:
         except Exception:
             pass
         return None
-    def auto_lookup_and_add(self, word: str) -> Optional[Dict]:
-        # فحص عدم التكرار
-        conn = sqlite3.connect(self.db_path)
-        cursor = conn.cursor()
+    def auto_lookup_and_add(self, word: str, conn: sqlite3.Connection, cursor: sqlite3.Cursor) -> Optional[Dict]:
+        """البحث التلقائي وإضافة المصطلح باستخدام نفس الاتصال لتجنب القفل"""
+        # فحص عدم التكرار باستخدام المؤشر الحالي
         cursor.execute('SELECT original_word FROM grammar_math_rules WHERE original_word = ?', (word,))
         if cursor.fetchone():
-            conn.close()
             return None
         dictionary = []
         if os.path.exists(self.dict_path):
             with open(self.dict_path, 'r', encoding='utf-8') as f:
                 dictionary = json.load(f)
             if any(e['word'] == word for e in dictionary):
-                conn.close()
                 return None
         print(f"🤖 بحث تلقائي عن: '{word}'")
         result = self.search_online(word)
@@ -171,17 +168,18 @@ class DeterministicGrammarEngine:
             'source': result['source'] if result else 'auto', 'math_region': region,
             'domain': domain, 'meaning': meaning, 'auto_generated': True
         }
+        # حفظ في JSON
         dictionary.append(entry)
         with open(self.dict_path, 'w', encoding='utf-8') as f:
             json.dump(dictionary, f, ensure_ascii=False, indent=2)
+        # حفظ في DB باستخدام نفس المؤشر
         cursor.execute('''
             INSERT INTO grammar_math_rules 
             (original_word, root, morph_pattern, pos, source, math_region, domain, compression_token, certainty_score, auto_generated)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ''', (word, entry['root'], entry['pattern'], entry['pos'], entry['source'], 
               entry['math_region'], entry['domain'], entry['math_region'], 0.95, 1))
-        conn.commit()
-        conn.close()
+        # إعادة تحميل القاموس في الذاكرة
         self._load_morphology_dictionary()
         domain_note = " (مجال مكتشف ديناميكياً!)" if domain in self.dynamic_domains else ""
         print(f"✅ تمت الإضافة: {word} -> {region} [{domain}]{domain_note}")
@@ -192,6 +190,7 @@ class DeterministicGrammarEngine:
         clean_text = araby.normalize_alef(clean_text)
         words = re.findall(r'\b\w+\b', clean_text)
         compressed_tokens = []
+        # فتح اتصال واحد فقط طوال عملية المعالجة
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         for word in words:
@@ -206,18 +205,19 @@ class DeterministicGrammarEngine:
                       info['math_region'], info.get('domain', 'عام'), token, 1.0, 0))
                 compressed_tokens.append(token)
             elif self.auto_lookup_enabled and not word.isdigit():
-                # 🔑 الحل الحاسم: إغلاق الاتصال قبل استدعاء دالة تفتح اتصالاً جديداً
-                conn.commit()
-                conn.close()
-                result = self.auto_lookup_and_add(word)
-                if result:
-                    # الدالة السابقة أضافت الكلمة وأغلقت الاتصال وأعدت تحميل القاموس
-                    info = self.lexicon.get(word, {})
-                    token = info.get('math_region', 'GENERAL')
+                # 🔑 الحل الحاسم: تمرير نفس الاتصال والمؤشر لتجنب فتح اتصال جديد والقفل
+                result = self.auto_lookup_and_add(word, conn, cursor)
+                if result and word in self.lexicon:
+                    info = self.lexicon[word]
+                    token = info['math_region']
+                    cursor.execute('''
+                        INSERT OR IGNORE INTO grammar_math_rules 
+                        (original_word, root, morph_pattern, pos, source, math_region, domain, compression_token, certainty_score, auto_generated)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    ''', (word, info['root'], info['pattern'], info['pos'], info['source'], 
+                          info['math_region'], info.get('domain', 'عام'), token, 0.95, 1))
                     compressed_tokens.append(token)
-                # إعادة فتح الاتصال لبقية الكلمات
-                conn = sqlite3.connect(self.db_path)
-                cursor = conn.cursor()
+        # حفظ جميع التغييرات مرة واحدة في النهاية
         conn.commit()
         conn.close()
         seen = set()
