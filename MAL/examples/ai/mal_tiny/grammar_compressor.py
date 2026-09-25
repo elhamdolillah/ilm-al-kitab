@@ -10,11 +10,14 @@ import pyarabic.araby as araby
 from typing import Dict, List, Optional
 import os
 class DeterministicGrammarEngine:
-    def __init__(self, db_path: str = "grammar_math_rules.db", dict_path: str = "arabic_morphology_dict.json"):
+    def __init__(self, db_path: str = "grammar_math_rules.db", dict_path: str = "arabic_morphology_dict.json", en_dict_path: str = "english_to_arabic_bridge.json"):
         self.db_path = db_path
         self.dict_path = dict_path
+        self.en_dict_path = en_dict_path
         self.lexicon = {}
+        self.en_lexicon = {}
         self._load_morphology_dictionary()
+        self._load_english_dictionary()
         self._init_db()
     def _load_morphology_dictionary(self):
         """تحميل القاموس الصرفي والنحوي المفتوح المصدر."""
@@ -32,6 +35,16 @@ class DeterministicGrammarEngine:
             print(f"✅ تم تحميل {len(self.lexicon)} مدخل من القاموس الصرفي المفتوح.")
         else:
             print("⚠️ لم يتم العثور على ملف القاموس، سيتم الاعتماد على القاموس المدمج فقط.")
+
+    def _load_english_dictionary(self):
+        """تحميل القاموس الإنجليزي-العربي"""
+        if os.path.exists(self.en_dict_path):
+            with open(self.en_dict_path, 'r', encoding='utf-8') as f:
+                self.en_lexicon = json.load(f)
+            print(f"✅ تم تحميل {len(self.en_lexicon)} مصطلح إنجليزي")
+        else:
+            print("⚠️ لم يتم العثور على القاموس الإنجليزي")
+
     def _init_db(self):
         """تهيئة قاعدة بيانات SQLite لتخزين القواعد والمناطق الرياضية بشكل حتمي."""
         conn = sqlite3.connect(self.db_path)

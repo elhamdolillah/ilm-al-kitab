@@ -1,0 +1,1314 @@
+{
+  "calculate": [
+    {
+      "ar": "احسب",
+      "root": "ح س ب",
+      "math_region": "EVALUATE"
+    }
+  ],
+  "calculation": [
+    {
+      "ar": "حساب",
+      "root": "ح س ب",
+      "math_region": "EVALUATE"
+    }
+  ],
+  "value": [
+    {
+      "ar": "قيمة",
+      "root": "ق ي م",
+      "math_region": "SCALAR_VALUE"
+    }
+  ],
+  "total": [
+    {
+      "ar": "مجموع",
+      "root": "ج م ع",
+      "math_region": "SUM_OPERATION"
+    }
+  ],
+  "sum": [
+    {
+      "ar": "جمع",
+      "root": "ج م ع",
+      "math_region": "SUM_OPERATION"
+    }
+  ],
+  "difference": [
+    {
+      "ar": "فرق",
+      "root": "ف ر ق",
+      "math_region": "SUB_OPERATION"
+    }
+  ],
+  "result": [
+    {
+      "ar": "حاصل",
+      "root": "ح ص ل",
+      "math_region": "RESULT_TENSOR"
+    }
+  ],
+  "multiplication": [
+    {
+      "ar": "ضرب",
+      "root": "ض ر ب",
+      "math_region": "MATMUL"
+    }
+  ],
+  "multiply": [
+    {
+      "ar": "اضرب",
+      "root": "ض ر ب",
+      "math_region": "MATMUL"
+    }
+  ],
+  "division": [
+    {
+      "ar": "قسمة",
+      "root": "ق س م",
+      "math_region": "DIV_OPERATION"
+    }
+  ],
+  "divide": [
+    {
+      "ar": "قسم",
+      "root": "ق س م",
+      "math_region": "DIV_OPERATION"
+    },
+    {
+      "ar": "اقسم",
+      "root": "ق س م",
+      "math_region": "DIV_OPERATION"
+    }
+  ],
+  "matrix": [
+    {
+      "ar": "مصفوفة",
+      "root": "ص ف ف",
+      "math_region": "MATRIX_TENSOR"
+    }
+  ],
+  "vector": [
+    {
+      "ar": "متجه",
+      "root": "و ج ه",
+      "math_region": "VECTOR_TENSOR"
+    }
+  ],
+  "bias": [
+    {
+      "ar": "انحياز",
+      "root": "ن ح ي ز",
+      "math_region": "BIAS_VECTOR"
+    }
+  ],
+  "function": [
+    {
+      "ar": "دالة",
+      "root": "د و ل",
+      "math_region": "FUNCTION"
+    }
+  ],
+  "derivative": [
+    {
+      "ar": "مشتق",
+      "root": "ش ت ق",
+      "math_region": "DERIVATIVE"
+    }
+  ],
+  "derive": [
+    {
+      "ar": "اشتق",
+      "root": "ش ت ق",
+      "math_region": "DERIVATIVE"
+    }
+  ],
+  "integral": [
+    {
+      "ar": "تكامل",
+      "root": "ك م ل",
+      "math_region": "INTEGRAL"
+    }
+  ],
+  "أنشئ": [
+    {
+      "ar": "أنشئ",
+      "root": "ن ش أ",
+      "math_region": "ALLOCATE_TENSOR"
+    }
+  ],
+  "إنشاء": [
+    {
+      "ar": "إنشاء",
+      "root": "ن ش أ",
+      "math_region": "ALLOCATE_TENSOR"
+    }
+  ],
+  "activation": [
+    {
+      "ar": "تنشيط",
+      "root": "ن ش ط",
+      "math_region": "ACTIVATION_FUNC"
+    }
+  ],
+  "activate": [
+    {
+      "ar": "نشّط",
+      "root": "ن ش ط",
+      "math_region": "ACTIVATION_FUNC"
+    }
+  ],
+  "layer": [
+    {
+      "ar": "طبقة",
+      "root": "ط ب ق",
+      "math_region": "LAYER_DIMENSION"
+    }
+  ],
+  "مخفية": [
+    {
+      "ar": "مخفية",
+      "root": "خ ف ي",
+      "math_region": "HIDDEN_STATE"
+    }
+  ],
+  "weights": [
+    {
+      "ar": "أوزان",
+      "root": "و ز ن",
+      "math_region": "WEIGHT_MATRIX"
+    }
+  ],
+  "weight": [
+    {
+      "ar": "وزن",
+      "root": "و ز ن",
+      "math_region": "WEIGHT_MATRIX"
+    }
+  ],
+  "network": [
+    {
+      "ar": "شبكة",
+      "root": "ش ب ك",
+      "math_region": "GRAPH_STRUCTURE"
+    }
+  ],
+  "neural": [
+    {
+      "ar": "عصبية",
+      "root": "ع ص ب",
+      "math_region": "NEURAL_WEIGHTS"
+    }
+  ],
+  "إدخال": [
+    {
+      "ar": "إدخال",
+      "root": "د خ ل",
+      "math_region": "INPUT_TENSOR"
+    }
+  ],
+  "مخرجات": [
+    {
+      "ar": "مخرجات",
+      "root": "خ ر ج",
+      "math_region": "OUTPUT_TENSOR"
+    }
+  ],
+  "algorithm": [
+    {
+      "ar": "خوارزمية",
+      "root": "خ و ر ز",
+      "math_region": "ALGORITHM"
+    }
+  ],
+  "model": [
+    {
+      "ar": "نموذج",
+      "root": "ن م ج",
+      "math_region": "MODEL"
+    }
+  ],
+  "training": [
+    {
+      "ar": "تدريب",
+      "root": "د ر ب",
+      "math_region": "OPTIMIZATION_STEP"
+    }
+  ],
+  "train": [
+    {
+      "ar": "درب",
+      "root": "د ر ب",
+      "math_region": "OPTIMIZATION_STEP"
+    }
+  ],
+  "error": [
+    {
+      "ar": "خطأ",
+      "root": "خ ط أ",
+      "math_region": "LOSS_FUNCTION"
+    }
+  ],
+  "optimization": [
+    {
+      "ar": "تحسين",
+      "root": "ح س ن",
+      "math_region": "OPTIMIZATION"
+    }
+  ],
+  "coefficient": [
+    {
+      "ar": "معامل",
+      "root": "ع م ل",
+      "math_region": "COEFFICIENT"
+    }
+  ],
+  "variable": [
+    {
+      "ar": "متغير",
+      "root": "غ ي ر",
+      "math_region": "VARIABLE"
+    }
+  ],
+  "constant": [
+    {
+      "ar": "ثابت",
+      "root": "ث ب ت",
+      "math_region": "CONSTANT"
+    }
+  ],
+  "matrices": [
+    {
+      "ar": "مصفوفات",
+      "root": "ص ف ف",
+      "math_region": "MATRIX_TENSOR"
+    }
+  ],
+  "vectors": [
+    {
+      "ar": "متجهات",
+      "root": "و ج ه",
+      "math_region": "VECTOR_TENSOR"
+    }
+  ],
+  "layers": [
+    {
+      "ar": "طبقات",
+      "root": "ط ب ق",
+      "math_region": "LAYER_DIMENSION"
+    }
+  ],
+  "functions": [
+    {
+      "ar": "دوال",
+      "root": "د و ل",
+      "math_region": "FUNCTION"
+    }
+  ],
+  "values": [
+    {
+      "ar": "قيم",
+      "root": "ق ي م",
+      "math_region": "SCALAR_VALUE"
+    }
+  ],
+  "ReLU": [
+    {
+      "ar": "ReLU",
+      "root": "N/A",
+      "math_region": "RELU_FUNC"
+    }
+  ],
+  "Sigmoid": [
+    {
+      "ar": "Sigmoid",
+      "root": "N/A",
+      "math_region": "SIGMOID_FUNC"
+    }
+  ],
+  "Tanh": [
+    {
+      "ar": "Tanh",
+      "root": "N/A",
+      "math_region": "TANH_FUNC"
+    }
+  ],
+  "Softmax": [
+    {
+      "ar": "Softmax",
+      "root": "N/A",
+      "math_region": "SOFTMAX_FUNC"
+    }
+  ],
+  "computer": [
+    {
+      "ar": "حاسب",
+      "root": "ح س ب",
+      "math_region": "EVALUATE"
+    }
+  ],
+  "computed": [
+    {
+      "ar": "محسوب",
+      "root": "ح س ب",
+      "math_region": "EVALUATE"
+    }
+  ],
+  "calculator": [
+    {
+      "ar": "حاسبة",
+      "root": "ح س ب",
+      "math_region": "EVALUATE"
+    }
+  ],
+  "calculations": [
+    {
+      "ar": "حسابات",
+      "root": "ح س ب",
+      "math_region": "EVALUATE"
+    }
+  ],
+  "add": [
+    {
+      "ar": "اجمع",
+      "root": "ج م ع",
+      "math_region": "SUM_OPERATION"
+    }
+  ],
+  "union": [
+    {
+      "ar": "جامع",
+      "root": "ج م ع",
+      "math_region": "SUM_OPERATION"
+    }
+  ],
+  "sums": [
+    {
+      "ar": "مجاميع",
+      "root": "ج م ع",
+      "math_region": "SUM_OPERATION"
+    }
+  ],
+  "جامعة": [
+    {
+      "ar": "جامعة",
+      "root": "ج م ع",
+      "math_region": "UNION"
+    }
+  ],
+  "subtraction": [
+    {
+      "ar": "طرح",
+      "root": "ط ر ح",
+      "math_region": "SUB_OPERATION"
+    }
+  ],
+  "multiplier": [
+    {
+      "ar": "ضارب",
+      "root": "ض ر ب",
+      "math_region": "MATMUL"
+    }
+  ],
+  "multiplicand": [
+    {
+      "ar": "مضروب",
+      "root": "ض ر ب",
+      "math_region": "MATMUL"
+    }
+  ],
+  "matrix multiply": [
+    {
+      "ar": "ضرائب",
+      "root": "ض ر ب",
+      "math_region": "MATMUL"
+    }
+  ],
+  "divisor": [
+    {
+      "ar": "قاسم",
+      "root": "ق س م",
+      "math_region": "DIV_OPERATION"
+    }
+  ],
+  "dividend": [
+    {
+      "ar": "مقسوم",
+      "root": "ق س م",
+      "math_region": "DIV_OPERATION"
+    }
+  ],
+  "sections": [
+    {
+      "ar": "أقسام",
+      "root": "ق س م",
+      "math_region": "DIV_OPERATION"
+    }
+  ],
+  "row": [
+    {
+      "ar": "صف",
+      "root": "ص ف ف",
+      "math_region": "MATRIX_TENSOR"
+    }
+  ],
+  "rows": [
+    {
+      "ar": "صفوف",
+      "root": "ص ف ف",
+      "math_region": "MATRIX_TENSOR"
+    }
+  ],
+  "face": [
+    {
+      "ar": "وجه",
+      "root": "و ج ه",
+      "math_region": "VECTOR_TENSOR"
+    }
+  ],
+  "faces": [
+    {
+      "ar": "أوجه",
+      "root": "و ج ه",
+      "math_region": "VECTOR_TENSOR"
+    }
+  ],
+  "determinant": [
+    {
+      "ar": "محدد",
+      "root": "ح د د",
+      "math_region": "DETERMINANT"
+    }
+  ],
+  "inverse": [
+    {
+      "ar": "معكوس",
+      "root": "ع ك س",
+      "math_region": "INVERSE"
+    }
+  ],
+  "transpose": [
+    {
+      "ar": "منقول",
+      "root": "ن ق ل",
+      "math_region": "TRANSPOSE"
+    }
+  ],
+  "transform": [
+    {
+      "ar": "تحويل",
+      "root": "ح و ل",
+      "math_region": "TRANSFORM"
+    },
+    {
+      "ar": "حوّل",
+      "root": "ح و ل",
+      "math_region": "TRANSFORM"
+    }
+  ],
+  "converter": [
+    {
+      "ar": "محول",
+      "root": "ح و ل",
+      "math_region": "TRANSFORM"
+    }
+  ],
+  "transforms": [
+    {
+      "ar": "تحويلات",
+      "root": "ح و ل",
+      "math_region": "TRANSFORM"
+    }
+  ],
+  "complete": [
+    {
+      "ar": "كامل",
+      "root": "ك م ل",
+      "math_region": "INTEGRAL"
+    }
+  ],
+  "derivation": [
+    {
+      "ar": "اشتقاق",
+      "root": "ش ت ق",
+      "math_region": "DERIVATIVE"
+    }
+  ],
+  "networks": [
+    {
+      "ar": "شبكات",
+      "root": "ش ب ك",
+      "math_region": "NEURAL_NETWORK"
+    }
+  ],
+  "neural network": [
+    {
+      "ar": "شبكة عصبية",
+      "root": "ش ب ك",
+      "math_region": "NEURAL_NETWORK"
+    }
+  ],
+  "hidden layer": [
+    {
+      "ar": "طبقة مخفية",
+      "root": "ط ب ق",
+      "math_region": "HIDDEN_LAYER"
+    }
+  ],
+  "active": [
+    {
+      "ar": "نشط",
+      "root": "ن ش ط",
+      "math_region": "ACTIVATION_FUNC"
+    }
+  ],
+  "activity": [
+    {
+      "ar": "نشاط",
+      "root": "ن ش ط",
+      "math_region": "ACTIVATION_FUNC"
+    }
+  ],
+  "obtaining": [
+    {
+      "ar": "حصول",
+      "root": "ح ص ل",
+      "math_region": "RESULT_TENSOR"
+    }
+  ],
+  "evaluation": [
+    {
+      "ar": "تقييم",
+      "root": "ق ي م",
+      "math_region": "SCALAR_VALUE"
+    }
+  ],
+  "differentiate": [
+    {
+      "ar": "افرق",
+      "root": "ف ر ق",
+      "math_region": "SUB_OPERATION"
+    }
+  ],
+  "differences": [
+    {
+      "ar": "فروق",
+      "root": "ف ر ق",
+      "math_region": "SUB_OPERATION"
+    }
+  ],
+  "ratio": [
+    {
+      "ar": "نسبة",
+      "root": "ن س ب",
+      "math_region": "RATIO"
+    }
+  ],
+  "ratios": [
+    {
+      "ar": "نسب",
+      "root": "ن س ب",
+      "math_region": "RATIO"
+    }
+  ],
+  "relative": [
+    {
+      "ar": "نسبي",
+      "root": "ن س ب",
+      "math_region": "RATIO"
+    }
+  ],
+  "percentage": [
+    {
+      "ar": "مئوية",
+      "root": "م ئ ة",
+      "math_region": "PERCENTAGE"
+    }
+  ],
+  "trainer": [
+    {
+      "ar": "مدرب",
+      "root": "د ر ب",
+      "math_region": "OPTIMIZATION_STEP"
+    }
+  ],
+  "trainings": [
+    {
+      "ar": "تدريبات",
+      "root": "د ر ب",
+      "math_region": "OPTIMIZATION_STEP"
+    }
+  ],
+  "improve": [
+    {
+      "ar": "حسن",
+      "root": "ح س ن",
+      "math_region": "OPTIMIZATION"
+    }
+  ],
+  "optimizer": [
+    {
+      "ar": "محسن",
+      "root": "ح س ن",
+      "math_region": "OPTIMIZATION"
+    }
+  ],
+  "errors": [
+    {
+      "ar": "أخطاء",
+      "root": "خ ط أ",
+      "math_region": "LOSS_FUNCTION"
+    }
+  ],
+  "loss function": [
+    {
+      "ar": "دالة خطأ",
+      "root": "خ ط أ",
+      "math_region": "LOSS_FUNCTION"
+    }
+  ],
+  "learning": [
+    {
+      "ar": "تعلم",
+      "root": "ع ل م",
+      "math_region": "LEARNING"
+    }
+  ],
+  "space": [
+    {
+      "ar": "فضاء",
+      "root": "ف ض ي",
+      "math_region": "VECTOR_SPACE"
+    }
+  ],
+  "spaces": [
+    {
+      "ar": "فضاءات",
+      "root": "ف ض ي",
+      "math_region": "VECTOR_SPACE"
+    }
+  ],
+  "vector space": [
+    {
+      "ar": "فضاء متجهي",
+      "root": "ف ض ي",
+      "math_region": "VECTOR_SPACE"
+    }
+  ],
+  "exponent": [
+    {
+      "ar": "أس",
+      "root": "أ س س",
+      "math_region": "EXPONENT"
+    }
+  ],
+  "basis": [
+    {
+      "ar": "أساس",
+      "root": "أ س س",
+      "math_region": "EXPONENT"
+    }
+  ],
+  "bases": [
+    {
+      "ar": "أسس",
+      "root": "أ س س",
+      "math_region": "EXPONENT"
+    }
+  ],
+  "fundamental": [
+    {
+      "ar": "أساسي",
+      "root": "أ س س",
+      "math_region": "EXPONENT"
+    }
+  ],
+  "dimension": [
+    {
+      "ar": "بُعد",
+      "root": "ب ع د",
+      "math_region": "DIMENSION"
+    }
+  ],
+  "dimensions": [
+    {
+      "ar": "أبعاد",
+      "root": "ب ع د",
+      "math_region": "DIMENSION"
+    }
+  ],
+  "dimensional": [
+    {
+      "ar": "بعدي",
+      "root": "ب ع د",
+      "math_region": "DIMENSION"
+    }
+  ],
+  "rank": [
+    {
+      "ar": "رتبة",
+      "root": "ر ت ب",
+      "math_region": "RANK"
+    }
+  ],
+  "ranks": [
+    {
+      "ar": "رتب",
+      "root": "ر ت ب",
+      "math_region": "RANK"
+    }
+  ],
+  "order": [
+    {
+      "ar": "ترتيب",
+      "root": "ر ت ب",
+      "math_region": "RANK"
+    }
+  ],
+  "kernel": [
+    {
+      "ar": "نواة",
+      "root": "ن و ي",
+      "math_region": "KERNEL"
+    }
+  ],
+  "kernels": [
+    {
+      "ar": "أنوية",
+      "root": "ن و ي",
+      "math_region": "KERNEL"
+    }
+  ],
+  "nuclear": [
+    {
+      "ar": "نوي",
+      "root": "ن و ي",
+      "math_region": "KERNEL"
+    }
+  ],
+  "point": [
+    {
+      "ar": "نقطة",
+      "root": "ن ق ط",
+      "math_region": "POINT"
+    }
+  ],
+  "line": [
+    {
+      "ar": "خط",
+      "root": "خ ط ط",
+      "math_region": "LINE"
+    }
+  ],
+  "surface": [
+    {
+      "ar": "سطح",
+      "root": "س ط ح",
+      "math_region": "SURFACE"
+    }
+  ],
+  "angle": [
+    {
+      "ar": "زاوية",
+      "root": "ز و ي",
+      "math_region": "ANGLE"
+    }
+  ],
+  "circle": [
+    {
+      "ar": "دائرة",
+      "root": "د و ر",
+      "math_region": "CIRCLE"
+    }
+  ],
+  "number": [
+    {
+      "ar": "عدد",
+      "root": "ع د د",
+      "math_region": "NUMBER"
+    }
+  ],
+  "integer": [
+    {
+      "ar": "صحيح",
+      "root": "ص ح ح",
+      "math_region": "INTEGER"
+    }
+  ],
+  "fraction": [
+    {
+      "ar": "كسر",
+      "root": "ك س ر",
+      "math_region": "FRACTION"
+    }
+  ],
+  "root": [
+    {
+      "ar": "جذر",
+      "root": "ج ذ ر",
+      "math_region": "ROOT"
+    }
+  ],
+  "energy": [
+    {
+      "ar": "طاقة",
+      "root": "ط ا ق",
+      "math_region": "ENERGY"
+    }
+  ],
+  "force": [
+    {
+      "ar": "قوة",
+      "root": "ق و ي",
+      "math_region": "FORCE"
+    }
+  ],
+  "mass": [
+    {
+      "ar": "كتلة",
+      "root": "ك ت ل",
+      "math_region": "MASS"
+    }
+  ],
+  "velocity": [
+    {
+      "ar": "سرعة",
+      "root": "س ر ع",
+      "math_region": "VELOCITY"
+    }
+  ],
+  "frequency": [
+    {
+      "ar": "تردد",
+      "root": "ت ر د د",
+      "math_region": "FREQUENCY"
+    }
+  ],
+  "atom": [
+    {
+      "ar": "ذرة",
+      "root": "ذ ر ة",
+      "math_region": "ATOM"
+    }
+  ],
+  "molecule": [
+    {
+      "ar": "جزيء",
+      "root": "ج ز ء",
+      "math_region": "MOLECULE"
+    }
+  ],
+  "equivalence": [
+    {
+      "ar": "تكافؤ",
+      "root": "ت ك ا ف ؤ",
+      "math_region": "EQUIVALENCE"
+    }
+  ],
+  "data": [
+    {
+      "ar": "بيانات",
+      "root": "ب ي ا ن",
+      "math_region": "DATA"
+    }
+  ],
+  "probability": [
+    {
+      "ar": "احتمال",
+      "root": "ا ح ت م ا ل",
+      "math_region": "PROBABILITY"
+    }
+  ],
+  "distribution": [
+    {
+      "ar": "توزيع",
+      "root": "ت و ز ي ع",
+      "math_region": "DISTRIBUTION"
+    }
+  ],
+  "mean": [
+    {
+      "ar": "متوسط",
+      "root": "م ت و س ط",
+      "math_region": "MEAN"
+    }
+  ],
+  "variance": [
+    {
+      "ar": "تباين",
+      "root": "ت ب ا ي ن",
+      "math_region": "VARIANCE"
+    }
+  ],
+  "sample": [
+    {
+      "ar": "عينة",
+      "root": "ع ي ن ة",
+      "math_region": "SAMPLE"
+    }
+  ],
+  "limit": [
+    {
+      "ar": "نهاية",
+      "root": "ن ه ي ة",
+      "math_region": "LIMIT"
+    }
+  ],
+  "series": [
+    {
+      "ar": "متسلسلة",
+      "root": "م ت س ل س ل ة",
+      "math_region": "SERIES"
+    }
+  ],
+  "convergence": [
+    {
+      "ar": "تقارب",
+      "root": "ت ق ا ر ب",
+      "math_region": "CONVERGENCE"
+    }
+  ],
+  "logarithm": [
+    {
+      "ar": "لوغاريتم",
+      "root": "ل و غ",
+      "math_region": "LOGARITHM"
+    }
+  ],
+  "PCA": [
+    {
+      "ar": "PCA",
+      "root": "N/A",
+      "math_region": "PCA"
+    }
+  ],
+  "SVD": [
+    {
+      "ar": "SVD",
+      "root": "N/A",
+      "math_region": "SVD"
+    }
+  ],
+  "CNN": [
+    {
+      "ar": "CNN",
+      "root": "N/A",
+      "math_region": "CNN"
+    }
+  ],
+  "RNN": [
+    {
+      "ar": "RNN",
+      "root": "N/A",
+      "math_region": "RNN"
+    }
+  ],
+  "GAN": [
+    {
+      "ar": "GAN",
+      "root": "N/A",
+      "math_region": "GAN"
+    }
+  ],
+  "LSTM": [
+    {
+      "ar": "LSTM",
+      "root": "N/A",
+      "math_region": "LSTM"
+    }
+  ],
+  "BERT": [
+    {
+      "ar": "BERT",
+      "root": "N/A",
+      "math_region": "BERT"
+    }
+  ],
+  "GPT": [
+    {
+      "ar": "GPT",
+      "root": "N/A",
+      "math_region": "GPT"
+    }
+  ],
+  "Adam": [
+    {
+      "ar": "Adam",
+      "root": "N/A",
+      "math_region": "ADAM_OPTIMIZER"
+    }
+  ],
+  "SGD": [
+    {
+      "ar": "SGD",
+      "root": "N/A",
+      "math_region": "SGD"
+    }
+  ],
+  "MSE": [
+    {
+      "ar": "MSE",
+      "root": "N/A",
+      "math_region": "MSE"
+    }
+  ],
+  "MAE": [
+    {
+      "ar": "MAE",
+      "root": "N/A",
+      "math_region": "MAE"
+    }
+  ],
+  "NLP": [
+    {
+      "ar": "NLP",
+      "root": "N/A",
+      "math_region": "NLP"
+    }
+  ],
+  "API": [
+    {
+      "ar": "API",
+      "root": "N/A",
+      "math_region": "API"
+    }
+  ],
+  "GPU": [
+    {
+      "ar": "GPU",
+      "root": "N/A",
+      "math_region": "GPU"
+    }
+  ],
+  "CPU": [
+    {
+      "ar": "CPU",
+      "root": "N/A",
+      "math_region": "CPU"
+    }
+  ],
+  "RAM": [
+    {
+      "ar": "RAM",
+      "root": "N/A",
+      "math_region": "RAM"
+    }
+  ],
+  "SSD": [
+    {
+      "ar": "SSD",
+      "root": "N/A",
+      "math_region": "SSD"
+    }
+  ],
+  "HTTP": [
+    {
+      "ar": "HTTP",
+      "root": "N/A",
+      "math_region": "HTTP"
+    }
+  ],
+  "JSON": [
+    {
+      "ar": "JSON",
+      "root": "N/A",
+      "math_region": "JSON"
+    }
+  ],
+  "XML": [
+    {
+      "ar": "XML",
+      "root": "N/A",
+      "math_region": "XML"
+    }
+  ],
+  "SQL": [
+    {
+      "ar": "SQL",
+      "root": "N/A",
+      "math_region": "SQL"
+    }
+  ],
+  "NoSQL": [
+    {
+      "ar": "NoSQL",
+      "root": "N/A",
+      "math_region": "NOSQL"
+    }
+  ],
+  "REST": [
+    {
+      "ar": "REST",
+      "root": "N/A",
+      "math_region": "REST"
+    }
+  ],
+  "GraphQL": [
+    {
+      "ar": "GraphQL",
+      "root": "N/A",
+      "math_region": "GRAPHQL"
+    }
+  ],
+  "Docker": [
+    {
+      "ar": "Docker",
+      "root": "N/A",
+      "math_region": "DOCKER"
+    }
+  ],
+  "Kubernetes": [
+    {
+      "ar": "Kubernetes",
+      "root": "N/A",
+      "math_region": "KUBERNETES"
+    }
+  ],
+  "Linux": [
+    {
+      "ar": "Linux",
+      "root": "N/A",
+      "math_region": "LINUX"
+    }
+  ],
+  "Windows": [
+    {
+      "ar": "Windows",
+      "root": "N/A",
+      "math_region": "WINDOWS"
+    }
+  ],
+  "macOS": [
+    {
+      "ar": "macOS",
+      "root": "N/A",
+      "math_region": "MACOS"
+    }
+  ],
+  "Python": [
+    {
+      "ar": "Python",
+      "root": "N/A",
+      "math_region": "PYTHON"
+    }
+  ],
+  "Rust": [
+    {
+      "ar": "Rust",
+      "root": "N/A",
+      "math_region": "RUST"
+    }
+  ],
+  "C++": [
+    {
+      "ar": "C++",
+      "root": "N/A",
+      "math_region": "CPP"
+    }
+  ],
+  "Java": [
+    {
+      "ar": "Java",
+      "root": "N/A",
+      "math_region": "JAVA"
+    }
+  ],
+  "JavaScript": [
+    {
+      "ar": "JavaScript",
+      "root": "N/A",
+      "math_region": "JAVASCRIPT"
+    }
+  ],
+  "TypeScript": [
+    {
+      "ar": "TypeScript",
+      "root": "N/A",
+      "math_region": "TYPESCRIPT"
+    }
+  ],
+  "Go": [
+    {
+      "ar": "Go",
+      "root": "N/A",
+      "math_region": "GO"
+    }
+  ],
+  "Swift": [
+    {
+      "ar": "Swift",
+      "root": "N/A",
+      "math_region": "SWIFT"
+    }
+  ],
+  "Kotlin": [
+    {
+      "ar": "Kotlin",
+      "root": "N/A",
+      "math_region": "KOTLIN"
+    }
+  ],
+  "Ruby": [
+    {
+      "ar": "Ruby",
+      "root": "N/A",
+      "math_region": "RUBY"
+    }
+  ],
+  "PHP": [
+    {
+      "ar": "PHP",
+      "root": "N/A",
+      "math_region": "PHP"
+    }
+  ],
+  "Scala": [
+    {
+      "ar": "Scala",
+      "root": "N/A",
+      "math_region": "SCALA"
+    }
+  ],
+  "Haskell": [
+    {
+      "ar": "Haskell",
+      "root": "N/A",
+      "math_region": "HASKELL"
+    }
+  ],
+  "Elixir": [
+    {
+      "ar": "Elixir",
+      "root": "N/A",
+      "math_region": "ELIXIR"
+    }
+  ],
+  "Erlang": [
+    {
+      "ar": "Erlang",
+      "root": "N/A",
+      "math_region": "ERLANG"
+    }
+  ],
+  "Julia": [
+    {
+      "ar": "Julia",
+      "root": "N/A",
+      "math_region": "JULIA"
+    }
+  ],
+  "MATLAB": [
+    {
+      "ar": "MATLAB",
+      "root": "N/A",
+      "math_region": "MATLAB"
+    }
+  ],
+  "R": [
+    {
+      "ar": "R",
+      "root": "N/A",
+      "math_region": "R_LANG"
+    }
+  ]
+}

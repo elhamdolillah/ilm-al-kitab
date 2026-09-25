@@ -5,7 +5,8 @@
     "pattern": "افعل",
     "pos": "فعل أمر",
     "source": "حساب",
-    "math_region": "EVALUATE"
+    "math_region": "EVALUATE",
+    "en": "calculate"
   },
   {
     "word": "حساب",
@@ -13,7 +14,8 @@
     "pattern": "فعال",
     "pos": "مصدر",
     "source": "حساب",
-    "math_region": "EVALUATE"
+    "math_region": "EVALUATE",
+    "en": "calculation"
   },
   {
     "word": "قيمة",
@@ -21,7 +23,8 @@
     "pattern": "فعلة",
     "pos": "اسم",
     "source": "قوم",
-    "math_region": "SCALAR_VALUE"
+    "math_region": "SCALAR_VALUE",
+    "en": "value"
   },
   {
     "word": "مجموع",
@@ -29,7 +32,8 @@
     "pattern": "مفعول",
     "pos": "اسم مفعول",
     "source": "جمع",
-    "math_region": "SUM_OPERATION"
+    "math_region": "SUM_OPERATION",
+    "en": "total"
   },
   {
     "word": "جمع",
@@ -37,7 +41,8 @@
     "pattern": "فعل",
     "pos": "مصدر",
     "source": "جمع",
-    "math_region": "SUM_OPERATION"
+    "math_region": "SUM_OPERATION",
+    "en": "sum"
   },
   {
     "word": "فرق",
@@ -45,7 +50,8 @@
     "pattern": "فعل",
     "pos": "اسم",
     "source": "فروق",
-    "math_region": "SUB_OPERATION"
+    "math_region": "SUB_OPERATION",
+    "en": "difference"
   },
   {
     "word": "حاصل",
@@ -53,7 +59,8 @@
     "pattern": "فاعل",
     "pos": "اسم فاعل",
     "source": "حصول",
-    "math_region": "RESULT_TENSOR"
+    "math_region": "RESULT_TENSOR",
+    "en": "result"
   },
   {
     "word": "ضرب",
@@ -61,7 +68,8 @@
     "pattern": "فعل",
     "pos": "مصدر",
     "source": "ضرب",
-    "math_region": "MATMUL"
+    "math_region": "MATMUL",
+    "en": "multiplication"
   },
   {
     "word": "اضرب",
@@ -69,7 +77,8 @@
     "pattern": "افعل",
     "pos": "فعل أمر",
     "source": "ضرب",
-    "math_region": "MATMUL"
+    "math_region": "MATMUL",
+    "en": "multiply"
   },
   {
     "word": "قسمة",
@@ -77,7 +86,8 @@
     "pattern": "فعلة",
     "pos": "اسم",
     "source": "قسم",
-    "math_region": "DIV_OPERATION"
+    "math_region": "DIV_OPERATION",
+    "en": "division"
   },
   {
     "word": "قسم",
@@ -85,7 +95,8 @@
     "pattern": "فعل",
     "pos": "مصدر",
     "source": "قسم",
-    "math_region": "DIV_OPERATION"
+    "math_region": "DIV_OPERATION",
+    "en": "divide"
   },
   {
     "word": "مصفوفة",
@@ -93,7 +104,8 @@
     "pattern": "مفعولة",
     "pos": "اسم",
     "source": "صف",
-    "math_region": "MATRIX_TENSOR"
+    "math_region": "MATRIX_TENSOR",
+    "en": "matrix"
   },
   {
     "word": "متجه",
@@ -101,7 +113,8 @@
     "pattern": "مفعل",
     "pos": "اسم",
     "source": "وجه",
-    "math_region": "VECTOR_TENSOR"
+    "math_region": "VECTOR_TENSOR",
+    "en": "vector"
   },
   {
     "word": "انحياز",
@@ -109,7 +122,8 @@
     "pattern": "انفعال",
     "pos": "اسم",
     "source": "نحاز",
-    "math_region": "BIAS_VECTOR"
+    "math_region": "BIAS_VECTOR",
+    "en": "bias"
   },
   {
     "word": "دالة",
@@ -117,7 +131,8 @@
     "pattern": "فالة",
     "pos": "اسم",
     "source": "دول",
-    "math_region": "FUNCTION"
+    "math_region": "FUNCTION",
+    "en": "function"
   },
   {
     "word": "مشتق",
@@ -125,7 +140,8 @@
     "pattern": "مفعل",
     "pos": "اسم مفعول",
     "source": "اشتقاق",
-    "math_region": "DERIVATIVE"
+    "math_region": "DERIVATIVE",
+    "en": "derivative"
   },
   {
     "word": "اشتق",
@@ -133,7 +149,8 @@
     "pattern": "افتعل",
     "pos": "فعل أمر",
     "source": "اشتقاق",
-    "math_region": "DERIVATIVE"
+    "math_region": "DERIVATIVE",
+    "en": "derive"
   },
   {
     "word": "تكامل",
@@ -141,7 +158,8 @@
     "pattern": "افتعال",
     "pos": "اسم",
     "source": "كمال",
-    "math_region": "INTEGRAL"
+    "math_region": "INTEGRAL",
+    "en": "integral"
   },
   {
     "word": "أنشئ",
@@ -149,7 +167,8 @@
     "pattern": "افعل",
     "pos": "فعل أمر",
     "source": "إنشاء",
-    "math_region": "ALLOCATE_TENSOR"
+    "math_region": "ALLOCATE_TENSOR",
+    "en": "أنشئ"
   },
   {
     "word": "إنشاء",
@@ -157,7 +176,8 @@
     "pattern": "إفعال",
     "pos": "مصدر",
     "source": "إنشاء",
-    "math_region": "ALLOCATE_TENSOR"
+    "math_region": "ALLOCATE_TENSOR",
+    "en": "إنشاء"
   },
   {
     "word": "تنشيط",
@@ -165,7 +185,8 @@
     "pattern": "تفعيل",
     "pos": "مصدر",
     "source": "تنشيط",
-    "math_region": "ACTIVATION_FUNC"
+    "math_region": "ACTIVATION_FUNC",
+    "en": "activation"
   },
   {
     "word": "نشّط",
@@ -173,7 +194,8 @@
     "pattern": "فعّل",
     "pos": "فعل أمر",
     "source": "تنشيط",
-    "math_region": "ACTIVATION_FUNC"
+    "math_region": "ACTIVATION_FUNC",
+    "en": "activate"
   },
   {
     "word": "طبقة",
@@ -181,7 +203,8 @@
     "pattern": "فعلة",
     "pos": "اسم",
     "source": "طبقة",
-    "math_region": "LAYER_DIMENSION"
+    "math_region": "LAYER_DIMENSION",
+    "en": "layer"
   },
   {
     "word": "مخفية",
@@ -189,7 +212,8 @@
     "pattern": "مفعلة",
     "pos": "صفة",
     "source": "خفاء",
-    "math_region": "HIDDEN_STATE"
+    "math_region": "HIDDEN_STATE",
+    "en": "مخفية"
   },
   {
     "word": "أوزان",
@@ -197,7 +221,8 @@
     "pattern": "أفعال",
     "pos": "اسم جمع",
     "source": "وزن",
-    "math_region": "WEIGHT_MATRIX"
+    "math_region": "WEIGHT_MATRIX",
+    "en": "weights"
   },
   {
     "word": "وزن",
@@ -205,7 +230,8 @@
     "pattern": "فعل",
     "pos": "مصدر",
     "source": "وزن",
-    "math_region": "WEIGHT_MATRIX"
+    "math_region": "WEIGHT_MATRIX",
+    "en": "weight"
   },
   {
     "word": "شبكة",
@@ -213,7 +239,8 @@
     "pattern": "فعلة",
     "pos": "اسم",
     "source": "شبكة",
-    "math_region": "GRAPH_STRUCTURE"
+    "math_region": "GRAPH_STRUCTURE",
+    "en": "network"
   },
   {
     "word": "عصبية",
@@ -221,7 +248,8 @@
     "pattern": "فعيلة",
     "pos": "صفة مشبهة",
     "source": "عصب",
-    "math_region": "NEURAL_WEIGHTS"
+    "math_region": "NEURAL_WEIGHTS",
+    "en": "neural"
   },
   {
     "word": "إدخال",
@@ -229,7 +257,8 @@
     "pattern": "إفعال",
     "pos": "مصدر",
     "source": "دخول",
-    "math_region": "INPUT_TENSOR"
+    "math_region": "INPUT_TENSOR",
+    "en": "إدخال"
   },
   {
     "word": "مخرجات",
@@ -237,7 +266,8 @@
     "pattern": "مفعولات",
     "pos": "اسم جمع",
     "source": "خروج",
-    "math_region": "OUTPUT_TENSOR"
+    "math_region": "OUTPUT_TENSOR",
+    "en": "مخرجات"
   },
   {
     "word": "خوارزمية",
@@ -245,7 +275,8 @@
     "pattern": "خوارزمية",
     "pos": "اسم",
     "source": "خوارزمية",
-    "math_region": "ALGORITHM"
+    "math_region": "ALGORITHM",
+    "en": "algorithm"
   },
   {
     "word": "نموذج",
@@ -253,7 +284,8 @@
     "pattern": "مفعل",
     "pos": "اسم",
     "source": "نمذجة",
-    "math_region": "MODEL"
+    "math_region": "MODEL",
+    "en": "model"
   },
   {
     "word": "تدريب",
@@ -261,7 +293,8 @@
     "pattern": "تفعيل",
     "pos": "مصدر",
     "source": "تدريب",
-    "math_region": "OPTIMIZATION_STEP"
+    "math_region": "OPTIMIZATION_STEP",
+    "en": "training"
   },
   {
     "word": "درب",
@@ -269,7 +302,8 @@
     "pattern": "افعل",
     "pos": "فعل أمر",
     "source": "تدريب",
-    "math_region": "OPTIMIZATION_STEP"
+    "math_region": "OPTIMIZATION_STEP",
+    "en": "train"
   },
   {
     "word": "خطأ",
@@ -277,7 +311,8 @@
     "pattern": "فعل",
     "pos": "اسم",
     "source": "خطأ",
-    "math_region": "LOSS_FUNCTION"
+    "math_region": "LOSS_FUNCTION",
+    "en": "error"
   },
   {
     "word": "تحسين",
@@ -285,7 +320,8 @@
     "pattern": "تفعيل",
     "pos": "مصدر",
     "source": "تحسين",
-    "math_region": "OPTIMIZATION"
+    "math_region": "OPTIMIZATION",
+    "en": "optimization"
   },
   {
     "word": "معامل",
@@ -293,7 +329,8 @@
     "pattern": "مفاعل",
     "pos": "اسم",
     "source": "عمل",
-    "math_region": "COEFFICIENT"
+    "math_region": "COEFFICIENT",
+    "en": "coefficient"
   },
   {
     "word": "متغير",
@@ -301,7 +338,8 @@
     "pattern": "مفعل",
     "pos": "اسم فاعل",
     "source": "تغير",
-    "math_region": "VARIABLE"
+    "math_region": "VARIABLE",
+    "en": "variable"
   },
   {
     "word": "ثابت",
@@ -309,7 +347,8 @@
     "pattern": "فاعل",
     "pos": "اسم فاعل",
     "source": "ثبات",
-    "math_region": "CONSTANT"
+    "math_region": "CONSTANT",
+    "en": "constant"
   },
   {
     "word": "مصفوفات",
@@ -317,7 +356,8 @@
     "pattern": "مفعولات",
     "pos": "اسم جمع",
     "source": "صف",
-    "math_region": "MATRIX_TENSOR"
+    "math_region": "MATRIX_TENSOR",
+    "en": "matrices"
   },
   {
     "word": "متجهات",
@@ -325,7 +365,8 @@
     "pattern": "مفعولات",
     "pos": "اسم جمع",
     "source": "وجه",
-    "math_region": "VECTOR_TENSOR"
+    "math_region": "VECTOR_TENSOR",
+    "en": "vectors"
   },
   {
     "word": "طبقات",
@@ -333,7 +374,8 @@
     "pattern": "فعيلات",
     "pos": "اسم جمع",
     "source": "طبقة",
-    "math_region": "LAYER_DIMENSION"
+    "math_region": "LAYER_DIMENSION",
+    "en": "layers"
   },
   {
     "word": "دوال",
@@ -341,7 +383,8 @@
     "pattern": "فعال",
     "pos": "اسم جمع",
     "source": "دول",
-    "math_region": "FUNCTION"
+    "math_region": "FUNCTION",
+    "en": "functions"
   },
   {
     "word": "قيم",
@@ -349,7 +392,8 @@
     "pattern": "فعيل",
     "pos": "اسم جمع",
     "source": "قوم",
-    "math_region": "SCALAR_VALUE"
+    "math_region": "SCALAR_VALUE",
+    "en": "values"
   },
   {
     "word": "ReLU",
@@ -357,7 +401,8 @@
     "pattern": "N/A",
     "pos": "اسم علم",
     "source": "N/A",
-    "math_region": "RELU_FUNC"
+    "math_region": "RELU_FUNC",
+    "en": "ReLU"
   },
   {
     "word": "Sigmoid",
@@ -365,7 +410,8 @@
     "pattern": "N/A",
     "pos": "اسم علم",
     "source": "N/A",
-    "math_region": "SIGMOID_FUNC"
+    "math_region": "SIGMOID_FUNC",
+    "en": "Sigmoid"
   },
   {
     "word": "Tanh",
@@ -373,7 +419,8 @@
     "pattern": "N/A",
     "pos": "اسم علم",
     "source": "N/A",
-    "math_region": "TANH_FUNC"
+    "math_region": "TANH_FUNC",
+    "en": "Tanh"
   },
   {
     "word": "Softmax",
@@ -381,7 +428,8 @@
     "pattern": "N/A",
     "pos": "اسم علم",
     "source": "N/A",
-    "math_region": "SOFTMAX_FUNC"
+    "math_region": "SOFTMAX_FUNC",
+    "en": "Softmax"
   },
   {
     "word": "حاسب",
@@ -389,7 +437,8 @@
     "pattern": "فاعل",
     "pos": "اسم فاعل",
     "source": "حساب",
-    "math_region": "EVALUATE"
+    "math_region": "EVALUATE",
+    "en": "computer"
   },
   {
     "word": "محسوب",
@@ -397,7 +446,8 @@
     "pattern": "مفعول",
     "pos": "اسم مفعول",
     "source": "حساب",
-    "math_region": "EVALUATE"
+    "math_region": "EVALUATE",
+    "en": "computed"
   },
   {
     "word": "حاسبة",
@@ -405,7 +455,8 @@
     "pattern": "فاعلة",
     "pos": "اسم",
     "source": "حساب",
-    "math_region": "EVALUATE"
+    "math_region": "EVALUATE",
+    "en": "calculator"
   },
   {
     "word": "حسابات",
@@ -413,7 +464,8 @@
     "pattern": "أفعال",
     "pos": "اسم جمع",
     "source": "حساب",
-    "math_region": "EVALUATE"
+    "math_region": "EVALUATE",
+    "en": "calculations"
   },
   {
     "word": "اجمع",
@@ -421,7 +473,8 @@
     "pattern": "افعل",
     "pos": "فعل أمر",
     "source": "جمع",
-    "math_region": "SUM_OPERATION"
+    "math_region": "SUM_OPERATION",
+    "en": "add"
   },
   {
     "word": "جامع",
@@ -429,7 +482,8 @@
     "pattern": "فاعل",
     "pos": "اسم فاعل",
     "source": "جمع",
-    "math_region": "SUM_OPERATION"
+    "math_region": "SUM_OPERATION",
+    "en": "union"
   },
   {
     "word": "مجاميع",
@@ -437,7 +491,8 @@
     "pattern": "أفعال",
     "pos": "اسم جمع",
     "source": "جمع",
-    "math_region": "SUM_OPERATION"
+    "math_region": "SUM_OPERATION",
+    "en": "sums"
   },
   {
     "word": "جامعة",
@@ -445,7 +500,8 @@
     "pattern": "فاعلة",
     "pos": "اسم",
     "source": "جمع",
-    "math_region": "UNION"
+    "math_region": "UNION",
+    "en": "جامعة"
   },
   {
     "word": "طرح",
@@ -453,7 +509,8 @@
     "pattern": "أساسي",
     "pos": "اسم",
     "source": "طرح",
-    "math_region": "SUB_OPERATION"
+    "math_region": "SUB_OPERATION",
+    "en": "subtraction"
   },
   {
     "word": "ضارب",
@@ -461,7 +518,8 @@
     "pattern": "فاعل",
     "pos": "اسم فاعل",
     "source": "ضرب",
-    "math_region": "MATMUL"
+    "math_region": "MATMUL",
+    "en": "multiplier"
   },
   {
     "word": "مضروب",
@@ -469,7 +527,8 @@
     "pattern": "مفعول",
     "pos": "اسم مفعول",
     "source": "ضرب",
-    "math_region": "MATMUL"
+    "math_region": "MATMUL",
+    "en": "multiplicand"
   },
   {
     "word": "ضرائب",
@@ -477,7 +536,8 @@
     "pattern": "أفعال",
     "pos": "اسم جمع",
     "source": "ضرب",
-    "math_region": "MATMUL"
+    "math_region": "MATMUL",
+    "en": "matrix multiply"
   },
   {
     "word": "اقسم",
@@ -485,7 +545,8 @@
     "pattern": "افعل",
     "pos": "فعل أمر",
     "source": "قسم",
-    "math_region": "DIV_OPERATION"
+    "math_region": "DIV_OPERATION",
+    "en": "divide"
   },
   {
     "word": "قاسم",
@@ -493,7 +554,8 @@
     "pattern": "فاعل",
     "pos": "اسم فاعل",
     "source": "قسم",
-    "math_region": "DIV_OPERATION"
+    "math_region": "DIV_OPERATION",
+    "en": "divisor"
   },
   {
     "word": "مقسوم",
@@ -501,7 +563,8 @@
     "pattern": "مفعول",
     "pos": "اسم مفعول",
     "source": "قسم",
-    "math_region": "DIV_OPERATION"
+    "math_region": "DIV_OPERATION",
+    "en": "dividend"
   },
   {
     "word": "أقسام",
@@ -509,7 +572,8 @@
     "pattern": "أفعال",
     "pos": "اسم جمع",
     "source": "قسم",
-    "math_region": "DIV_OPERATION"
+    "math_region": "DIV_OPERATION",
+    "en": "sections"
   },
   {
     "word": "صف",
@@ -517,7 +581,8 @@
     "pattern": "فعل",
     "pos": "اسم",
     "source": "صف",
-    "math_region": "MATRIX_TENSOR"
+    "math_region": "MATRIX_TENSOR",
+    "en": "row"
   },
   {
     "word": "صفوف",
@@ -525,7 +590,8 @@
     "pattern": "أفعال",
     "pos": "اسم جمع",
     "source": "صف",
-    "math_region": "MATRIX_TENSOR"
+    "math_region": "MATRIX_TENSOR",
+    "en": "rows"
   },
   {
     "word": "وجه",
@@ -533,7 +599,8 @@
     "pattern": "فعل",
     "pos": "اسم",
     "source": "وجه",
-    "math_region": "VECTOR_TENSOR"
+    "math_region": "VECTOR_TENSOR",
+    "en": "face"
   },
   {
     "word": "أوجه",
@@ -541,7 +608,8 @@
     "pattern": "أفعال",
     "pos": "اسم جمع",
     "source": "وجه",
-    "math_region": "VECTOR_TENSOR"
+    "math_region": "VECTOR_TENSOR",
+    "en": "faces"
   },
   {
     "word": "محدد",
@@ -549,7 +617,8 @@
     "pattern": "أساسي",
     "pos": "اسم",
     "source": "محدد",
-    "math_region": "DETERMINANT"
+    "math_region": "DETERMINANT",
+    "en": "determinant"
   },
   {
     "word": "معكوس",
@@ -557,7 +626,8 @@
     "pattern": "أساسي",
     "pos": "اسم",
     "source": "معكوس",
-    "math_region": "INVERSE"
+    "math_region": "INVERSE",
+    "en": "inverse"
   },
   {
     "word": "منقول",
@@ -565,7 +635,8 @@
     "pattern": "أساسي",
     "pos": "اسم",
     "source": "منقول",
-    "math_region": "TRANSPOSE"
+    "math_region": "TRANSPOSE",
+    "en": "transpose"
   },
   {
     "word": "تحويل",
@@ -573,7 +644,8 @@
     "pattern": "أساسي",
     "pos": "اسم",
     "source": "تحويل",
-    "math_region": "TRANSFORM"
+    "math_region": "TRANSFORM",
+    "en": "transform"
   },
   {
     "word": "حوّل",
@@ -581,7 +653,8 @@
     "pattern": "فعّل",
     "pos": "فعل أمر",
     "source": "تحويل",
-    "math_region": "TRANSFORM"
+    "math_region": "TRANSFORM",
+    "en": "transform"
   },
   {
     "word": "محول",
@@ -589,7 +662,8 @@
     "pattern": "مفعل",
     "pos": "اسم",
     "source": "تحويل",
-    "math_region": "TRANSFORM"
+    "math_region": "TRANSFORM",
+    "en": "converter"
   },
   {
     "word": "تحويلات",
@@ -597,7 +671,8 @@
     "pattern": "أفعال",
     "pos": "اسم جمع",
     "source": "تحويل",
-    "math_region": "TRANSFORM"
+    "math_region": "TRANSFORM",
+    "en": "transforms"
   },
   {
     "word": "كامل",
@@ -605,7 +680,8 @@
     "pattern": "فاعل",
     "pos": "صفة",
     "source": "كمال",
-    "math_region": "INTEGRAL"
+    "math_region": "INTEGRAL",
+    "en": "complete"
   },
   {
     "word": "اشتقاق",
@@ -613,7 +689,8 @@
     "pattern": "أساسي",
     "pos": "اسم",
     "source": "اشتقاق",
-    "math_region": "DERIVATIVE"
+    "math_region": "DERIVATIVE",
+    "en": "derivation"
   },
   {
     "word": "شبكات",
@@ -621,7 +698,8 @@
     "pattern": "أفعال",
     "pos": "اسم جمع",
     "source": "شبكة",
-    "math_region": "NEURAL_NETWORK"
+    "math_region": "NEURAL_NETWORK",
+    "en": "networks"
   },
   {
     "word": "شبكة عصبية",
@@ -629,7 +707,8 @@
     "pattern": "اسم + صفة",
     "pos": "اسم مركب",
     "source": "شبكة عصبية",
-    "math_region": "NEURAL_NETWORK"
+    "math_region": "NEURAL_NETWORK",
+    "en": "neural network"
   },
   {
     "word": "طبقة مخفية",
@@ -637,7 +716,8 @@
     "pattern": "اسم + صفة",
     "pos": "اسم مركب",
     "source": "طبقة مخفية",
-    "math_region": "HIDDEN_LAYER"
+    "math_region": "HIDDEN_LAYER",
+    "en": "hidden layer"
   },
   {
     "word": "نشط",
@@ -645,7 +725,8 @@
     "pattern": "فعل",
     "pos": "مصدر",
     "source": "نشاط",
-    "math_region": "ACTIVATION_FUNC"
+    "math_region": "ACTIVATION_FUNC",
+    "en": "active"
   },
   {
     "word": "نشاط",
@@ -653,7 +734,8 @@
     "pattern": "فعال",
     "pos": "مصدر",
     "source": "نشاط",
-    "math_region": "ACTIVATION_FUNC"
+    "math_region": "ACTIVATION_FUNC",
+    "en": "activity"
   },
   {
     "word": "حصول",
@@ -661,7 +743,8 @@
     "pattern": "فعل",
     "pos": "مصدر",
     "source": "حصول",
-    "math_region": "RESULT_TENSOR"
+    "math_region": "RESULT_TENSOR",
+    "en": "obtaining"
   },
   {
     "word": "تقييم",
@@ -669,7 +752,8 @@
     "pattern": "تفعيل",
     "pos": "مصدر",
     "source": "تقييم",
-    "math_region": "SCALAR_VALUE"
+    "math_region": "SCALAR_VALUE",
+    "en": "evaluation"
   },
   {
     "word": "افرق",
@@ -677,7 +761,8 @@
     "pattern": "افعل",
     "pos": "فعل أمر",
     "source": "فرق",
-    "math_region": "SUB_OPERATION"
+    "math_region": "SUB_OPERATION",
+    "en": "differentiate"
   },
   {
     "word": "فروق",
@@ -685,7 +770,8 @@
     "pattern": "أفعال",
     "pos": "اسم جمع",
     "source": "فرق",
-    "math_region": "SUB_OPERATION"
+    "math_region": "SUB_OPERATION",
+    "en": "differences"
   },
   {
     "word": "نسبة",
@@ -693,7 +779,8 @@
     "pattern": "أساسي",
     "pos": "اسم",
     "source": "نسبة",
-    "math_region": "RATIO"
+    "math_region": "RATIO",
+    "en": "ratio"
   },
   {
     "word": "نسب",
@@ -701,7 +788,8 @@
     "pattern": "أفعال",
     "pos": "اسم جمع",
     "source": "نسبة",
-    "math_region": "RATIO"
+    "math_region": "RATIO",
+    "en": "ratios"
   },
   {
     "word": "نسبي",
@@ -709,7 +797,8 @@
     "pattern": "فعلي",
     "pos": "صفة",
     "source": "نسبة",
-    "math_region": "RATIO"
+    "math_region": "RATIO",
+    "en": "relative"
   },
   {
     "word": "مئوية",
@@ -717,7 +806,8 @@
     "pattern": "أساسي",
     "pos": "اسم",
     "source": "مئوية",
-    "math_region": "PERCENTAGE"
+    "math_region": "PERCENTAGE",
+    "en": "percentage"
   },
   {
     "word": "مدرب",
@@ -725,7 +815,8 @@
     "pattern": "مفعل",
     "pos": "اسم",
     "source": "تدريب",
-    "math_region": "OPTIMIZATION_STEP"
+    "math_region": "OPTIMIZATION_STEP",
+    "en": "trainer"
   },
   {
     "word": "تدريبات",
@@ -733,7 +824,8 @@
     "pattern": "أفعال",
     "pos": "اسم جمع",
     "source": "تدريب",
-    "math_region": "OPTIMIZATION_STEP"
+    "math_region": "OPTIMIZATION_STEP",
+    "en": "trainings"
   },
   {
     "word": "حسن",
@@ -741,7 +833,8 @@
     "pattern": "فعل",
     "pos": "مصدر",
     "source": "حسن",
-    "math_region": "OPTIMIZATION"
+    "math_region": "OPTIMIZATION",
+    "en": "improve"
   },
   {
     "word": "محسن",
@@ -749,7 +842,8 @@
     "pattern": "مفعل",
     "pos": "اسم",
     "source": "تحسين",
-    "math_region": "OPTIMIZATION"
+    "math_region": "OPTIMIZATION",
+    "en": "optimizer"
   },
   {
     "word": "أخطاء",
@@ -757,7 +851,8 @@
     "pattern": "أفعال",
     "pos": "اسم جمع",
     "source": "خطأ",
-    "math_region": "LOSS_FUNCTION"
+    "math_region": "LOSS_FUNCTION",
+    "en": "errors"
   },
   {
     "word": "دالة خطأ",
@@ -765,7 +860,8 @@
     "pattern": "اسم + اسم",
     "pos": "اسم مركب",
     "source": "دالة خطأ",
-    "math_region": "LOSS_FUNCTION"
+    "math_region": "LOSS_FUNCTION",
+    "en": "loss function"
   },
   {
     "word": "تعلم",
@@ -773,7 +869,8 @@
     "pattern": "أساسي",
     "pos": "اسم",
     "source": "تعلم",
-    "math_region": "LEARNING"
+    "math_region": "LEARNING",
+    "en": "learning"
   },
   {
     "word": "فضاء",
@@ -781,7 +878,8 @@
     "pattern": "أساسي",
     "pos": "اسم",
     "source": "فضاء",
-    "math_region": "VECTOR_SPACE"
+    "math_region": "VECTOR_SPACE",
+    "en": "space"
   },
   {
     "word": "فضاءات",
@@ -789,7 +887,8 @@
     "pattern": "أفعال",
     "pos": "اسم جمع",
     "source": "فضاء",
-    "math_region": "VECTOR_SPACE"
+    "math_region": "VECTOR_SPACE",
+    "en": "spaces"
   },
   {
     "word": "فضاء متجهي",
@@ -797,7 +896,8 @@
     "pattern": "اسم + صفة",
     "pos": "اسم مركب",
     "source": "فضاء متجهي",
-    "math_region": "VECTOR_SPACE"
+    "math_region": "VECTOR_SPACE",
+    "en": "vector space"
   },
   {
     "word": "أس",
@@ -805,7 +905,8 @@
     "pattern": "أساسي",
     "pos": "اسم",
     "source": "أس",
-    "math_region": "EXPONENT"
+    "math_region": "EXPONENT",
+    "en": "exponent"
   },
   {
     "word": "أساس",
@@ -813,7 +914,8 @@
     "pattern": "فعل",
     "pos": "اسم",
     "source": "أساس",
-    "math_region": "EXPONENT"
+    "math_region": "EXPONENT",
+    "en": "basis"
   },
   {
     "word": "أسس",
@@ -821,7 +923,8 @@
     "pattern": "أفعال",
     "pos": "اسم جمع",
     "source": "أساس",
-    "math_region": "EXPONENT"
+    "math_region": "EXPONENT",
+    "en": "bases"
   },
   {
     "word": "أساسي",
@@ -829,7 +932,8 @@
     "pattern": "فعالي",
     "pos": "صفة",
     "source": "أساس",
-    "math_region": "EXPONENT"
+    "math_region": "EXPONENT",
+    "en": "fundamental"
   },
   {
     "word": "بُعد",
@@ -837,7 +941,8 @@
     "pattern": "أساسي",
     "pos": "اسم",
     "source": "بُعد",
-    "math_region": "DIMENSION"
+    "math_region": "DIMENSION",
+    "en": "dimension"
   },
   {
     "word": "أبعاد",
@@ -845,7 +950,8 @@
     "pattern": "أفعال",
     "pos": "اسم جمع",
     "source": "بُعد",
-    "math_region": "DIMENSION"
+    "math_region": "DIMENSION",
+    "en": "dimensions"
   },
   {
     "word": "بعدي",
@@ -853,7 +959,8 @@
     "pattern": "فعلي",
     "pos": "صفة",
     "source": "بُعد",
-    "math_region": "DIMENSION"
+    "math_region": "DIMENSION",
+    "en": "dimensional"
   },
   {
     "word": "رتبة",
@@ -861,7 +968,8 @@
     "pattern": "أساسي",
     "pos": "اسم",
     "source": "رتبة",
-    "math_region": "RANK"
+    "math_region": "RANK",
+    "en": "rank"
   },
   {
     "word": "رتب",
@@ -869,7 +977,8 @@
     "pattern": "أفعال",
     "pos": "اسم جمع",
     "source": "رتبة",
-    "math_region": "RANK"
+    "math_region": "RANK",
+    "en": "ranks"
   },
   {
     "word": "ترتيب",
@@ -877,7 +986,8 @@
     "pattern": "تفعيل",
     "pos": "مصدر",
     "source": "ترتيب",
-    "math_region": "RANK"
+    "math_region": "RANK",
+    "en": "order"
   },
   {
     "word": "نواة",
@@ -885,7 +995,8 @@
     "pattern": "أساسي",
     "pos": "اسم",
     "source": "نواة",
-    "math_region": "KERNEL"
+    "math_region": "KERNEL",
+    "en": "kernel"
   },
   {
     "word": "أنوية",
@@ -893,7 +1004,8 @@
     "pattern": "أفعال",
     "pos": "اسم جمع",
     "source": "نواة",
-    "math_region": "KERNEL"
+    "math_region": "KERNEL",
+    "en": "kernels"
   },
   {
     "word": "نوي",
@@ -901,7 +1013,8 @@
     "pattern": "فعلي",
     "pos": "صفة",
     "source": "نواة",
-    "math_region": "KERNEL"
+    "math_region": "KERNEL",
+    "en": "nuclear"
   },
   {
     "word": "نقطة",
@@ -909,7 +1022,8 @@
     "pattern": "أساسي",
     "pos": "اسم",
     "source": "نقطة",
-    "math_region": "POINT"
+    "math_region": "POINT",
+    "en": "point"
   },
   {
     "word": "خط",
@@ -917,7 +1031,8 @@
     "pattern": "أساسي",
     "pos": "اسم",
     "source": "خط",
-    "math_region": "LINE"
+    "math_region": "LINE",
+    "en": "line"
   },
   {
     "word": "سطح",
@@ -925,7 +1040,8 @@
     "pattern": "أساسي",
     "pos": "اسم",
     "source": "سطح",
-    "math_region": "SURFACE"
+    "math_region": "SURFACE",
+    "en": "surface"
   },
   {
     "word": "زاوية",
@@ -933,7 +1049,8 @@
     "pattern": "أساسي",
     "pos": "اسم",
     "source": "زاوية",
-    "math_region": "ANGLE"
+    "math_region": "ANGLE",
+    "en": "angle"
   },
   {
     "word": "دائرة",
@@ -941,7 +1058,8 @@
     "pattern": "أساسي",
     "pos": "اسم",
     "source": "دائرة",
-    "math_region": "CIRCLE"
+    "math_region": "CIRCLE",
+    "en": "circle"
   },
   {
     "word": "عدد",
@@ -949,7 +1067,8 @@
     "pattern": "أساسي",
     "pos": "اسم",
     "source": "عدد",
-    "math_region": "NUMBER"
+    "math_region": "NUMBER",
+    "en": "number"
   },
   {
     "word": "صحيح",
@@ -957,7 +1076,8 @@
     "pattern": "أساسي",
     "pos": "اسم",
     "source": "صحيح",
-    "math_region": "INTEGER"
+    "math_region": "INTEGER",
+    "en": "integer"
   },
   {
     "word": "كسر",
@@ -965,7 +1085,8 @@
     "pattern": "أساسي",
     "pos": "اسم",
     "source": "كسر",
-    "math_region": "FRACTION"
+    "math_region": "FRACTION",
+    "en": "fraction"
   },
   {
     "word": "جذر",
@@ -973,7 +1094,8 @@
     "pattern": "أساسي",
     "pos": "اسم",
     "source": "جذر",
-    "math_region": "ROOT"
+    "math_region": "ROOT",
+    "en": "root"
   },
   {
     "word": "طاقة",
@@ -981,7 +1103,8 @@
     "pattern": "أساسي",
     "pos": "اسم",
     "source": "طاقة",
-    "math_region": "ENERGY"
+    "math_region": "ENERGY",
+    "en": "energy"
   },
   {
     "word": "قوة",
@@ -989,7 +1112,8 @@
     "pattern": "أساسي",
     "pos": "اسم",
     "source": "قوة",
-    "math_region": "FORCE"
+    "math_region": "FORCE",
+    "en": "force"
   },
   {
     "word": "كتلة",
@@ -997,7 +1121,8 @@
     "pattern": "أساسي",
     "pos": "اسم",
     "source": "كتلة",
-    "math_region": "MASS"
+    "math_region": "MASS",
+    "en": "mass"
   },
   {
     "word": "سرعة",
@@ -1005,7 +1130,8 @@
     "pattern": "أساسي",
     "pos": "اسم",
     "source": "سرعة",
-    "math_region": "VELOCITY"
+    "math_region": "VELOCITY",
+    "en": "velocity"
   },
   {
     "word": "تردد",
@@ -1013,7 +1139,8 @@
     "pattern": "أساسي",
     "pos": "اسم",
     "source": "تردد",
-    "math_region": "FREQUENCY"
+    "math_region": "FREQUENCY",
+    "en": "frequency"
   },
   {
     "word": "ذرة",
@@ -1021,7 +1148,8 @@
     "pattern": "أساسي",
     "pos": "اسم",
     "source": "ذرة",
-    "math_region": "ATOM"
+    "math_region": "ATOM",
+    "en": "atom"
   },
   {
     "word": "جزيء",
@@ -1029,7 +1157,8 @@
     "pattern": "أساسي",
     "pos": "اسم",
     "source": "جزيء",
-    "math_region": "MOLECULE"
+    "math_region": "MOLECULE",
+    "en": "molecule"
   },
   {
     "word": "تكافؤ",
@@ -1037,7 +1166,8 @@
     "pattern": "أساسي",
     "pos": "اسم",
     "source": "تكافؤ",
-    "math_region": "EQUIVALENCE"
+    "math_region": "EQUIVALENCE",
+    "en": "equivalence"
   },
   {
     "word": "بيانات",
@@ -1045,7 +1175,8 @@
     "pattern": "أساسي",
     "pos": "اسم",
     "source": "بيانات",
-    "math_region": "DATA"
+    "math_region": "DATA",
+    "en": "data"
   },
   {
     "word": "احتمال",
@@ -1053,7 +1184,8 @@
     "pattern": "أساسي",
     "pos": "اسم",
     "source": "احتمال",
-    "math_region": "PROBABILITY"
+    "math_region": "PROBABILITY",
+    "en": "probability"
   },
   {
     "word": "توزيع",
@@ -1061,7 +1193,8 @@
     "pattern": "أساسي",
     "pos": "اسم",
     "source": "توزيع",
-    "math_region": "DISTRIBUTION"
+    "math_region": "DISTRIBUTION",
+    "en": "distribution"
   },
   {
     "word": "متوسط",
@@ -1069,7 +1202,8 @@
     "pattern": "أساسي",
     "pos": "اسم",
     "source": "متوسط",
-    "math_region": "MEAN"
+    "math_region": "MEAN",
+    "en": "mean"
   },
   {
     "word": "تباين",
@@ -1077,7 +1211,8 @@
     "pattern": "أساسي",
     "pos": "اسم",
     "source": "تباين",
-    "math_region": "VARIANCE"
+    "math_region": "VARIANCE",
+    "en": "variance"
   },
   {
     "word": "عينة",
@@ -1085,7 +1220,8 @@
     "pattern": "أساسي",
     "pos": "اسم",
     "source": "عينة",
-    "math_region": "SAMPLE"
+    "math_region": "SAMPLE",
+    "en": "sample"
   },
   {
     "word": "نهاية",
@@ -1093,7 +1229,8 @@
     "pattern": "أساسي",
     "pos": "اسم",
     "source": "نهاية",
-    "math_region": "LIMIT"
+    "math_region": "LIMIT",
+    "en": "limit"
   },
   {
     "word": "متسلسلة",
@@ -1101,7 +1238,8 @@
     "pattern": "أساسي",
     "pos": "اسم",
     "source": "متسلسلة",
-    "math_region": "SERIES"
+    "math_region": "SERIES",
+    "en": "series"
   },
   {
     "word": "تقارب",
@@ -1109,7 +1247,8 @@
     "pattern": "أساسي",
     "pos": "اسم",
     "source": "تقارب",
-    "math_region": "CONVERGENCE"
+    "math_region": "CONVERGENCE",
+    "en": "convergence"
   },
   {
     "word": "لوغاريتم",
@@ -1117,7 +1256,8 @@
     "pattern": "أساسي",
     "pos": "اسم",
     "source": "لوغاريتم",
-    "math_region": "LOGARITHM"
+    "math_region": "LOGARITHM",
+    "en": "logarithm"
   },
   {
     "word": "PCA",
@@ -1125,7 +1265,8 @@
     "pattern": "اسم علم",
     "pos": "اختصار",
     "source": "PCA",
-    "math_region": "PCA"
+    "math_region": "PCA",
+    "en": "PCA"
   },
   {
     "word": "SVD",
@@ -1133,7 +1274,8 @@
     "pattern": "اسم علم",
     "pos": "اختصار",
     "source": "SVD",
-    "math_region": "SVD"
+    "math_region": "SVD",
+    "en": "SVD"
   },
   {
     "word": "CNN",
@@ -1141,7 +1283,8 @@
     "pattern": "اسم علم",
     "pos": "اختصار",
     "source": "CNN",
-    "math_region": "CNN"
+    "math_region": "CNN",
+    "en": "CNN"
   },
   {
     "word": "RNN",
@@ -1149,7 +1292,8 @@
     "pattern": "اسم علم",
     "pos": "اختصار",
     "source": "RNN",
-    "math_region": "RNN"
+    "math_region": "RNN",
+    "en": "RNN"
   },
   {
     "word": "GAN",
@@ -1157,7 +1301,8 @@
     "pattern": "اسم علم",
     "pos": "اختصار",
     "source": "GAN",
-    "math_region": "GAN"
+    "math_region": "GAN",
+    "en": "GAN"
   },
   {
     "word": "LSTM",
@@ -1165,7 +1310,8 @@
     "pattern": "اسم علم",
     "pos": "اختصار",
     "source": "LSTM",
-    "math_region": "LSTM"
+    "math_region": "LSTM",
+    "en": "LSTM"
   },
   {
     "word": "BERT",
@@ -1173,7 +1319,8 @@
     "pattern": "اسم علم",
     "pos": "اسم علم",
     "source": "BERT",
-    "math_region": "BERT"
+    "math_region": "BERT",
+    "en": "BERT"
   },
   {
     "word": "GPT",
@@ -1181,7 +1328,8 @@
     "pattern": "اسم علم",
     "pos": "اسم علم",
     "source": "GPT",
-    "math_region": "GPT"
+    "math_region": "GPT",
+    "en": "GPT"
   },
   {
     "word": "Adam",
@@ -1189,7 +1337,8 @@
     "pattern": "اسم علم",
     "pos": "اسم علم",
     "source": "Adam",
-    "math_region": "ADAM_OPTIMIZER"
+    "math_region": "ADAM_OPTIMIZER",
+    "en": "Adam"
   },
   {
     "word": "SGD",
@@ -1197,7 +1346,8 @@
     "pattern": "اسم علم",
     "pos": "اختصار",
     "source": "SGD",
-    "math_region": "SGD"
+    "math_region": "SGD",
+    "en": "SGD"
   },
   {
     "word": "MSE",
@@ -1205,7 +1355,8 @@
     "pattern": "اسم علم",
     "pos": "اختصار",
     "source": "MSE",
-    "math_region": "MSE"
+    "math_region": "MSE",
+    "en": "MSE"
   },
   {
     "word": "MAE",
@@ -1213,7 +1364,8 @@
     "pattern": "اسم علم",
     "pos": "اختصار",
     "source": "MAE",
-    "math_region": "MAE"
+    "math_region": "MAE",
+    "en": "MAE"
   },
   {
     "word": "NLP",
@@ -1221,7 +1373,8 @@
     "pattern": "اسم علم",
     "pos": "اختصار",
     "source": "NLP",
-    "math_region": "NLP"
+    "math_region": "NLP",
+    "en": "NLP"
   },
   {
     "word": "API",
@@ -1229,7 +1382,8 @@
     "pattern": "اسم علم",
     "pos": "اختصار",
     "source": "API",
-    "math_region": "API"
+    "math_region": "API",
+    "en": "API"
   },
   {
     "word": "GPU",
@@ -1237,7 +1391,8 @@
     "pattern": "اسم علم",
     "pos": "اختصار",
     "source": "GPU",
-    "math_region": "GPU"
+    "math_region": "GPU",
+    "en": "GPU"
   },
   {
     "word": "CPU",
@@ -1245,7 +1400,8 @@
     "pattern": "اسم علم",
     "pos": "اختصار",
     "source": "CPU",
-    "math_region": "CPU"
+    "math_region": "CPU",
+    "en": "CPU"
   },
   {
     "word": "RAM",
@@ -1253,7 +1409,8 @@
     "pattern": "اسم علم",
     "pos": "اختصار",
     "source": "RAM",
-    "math_region": "RAM"
+    "math_region": "RAM",
+    "en": "RAM"
   },
   {
     "word": "SSD",
@@ -1261,7 +1418,8 @@
     "pattern": "اسم علم",
     "pos": "اختصار",
     "source": "SSD",
-    "math_region": "SSD"
+    "math_region": "SSD",
+    "en": "SSD"
   },
   {
     "word": "HTTP",
@@ -1269,7 +1427,8 @@
     "pattern": "اسم علم",
     "pos": "اختصار",
     "source": "HTTP",
-    "math_region": "HTTP"
+    "math_region": "HTTP",
+    "en": "HTTP"
   },
   {
     "word": "JSON",
@@ -1277,7 +1436,8 @@
     "pattern": "اسم علم",
     "pos": "اختصار",
     "source": "JSON",
-    "math_region": "JSON"
+    "math_region": "JSON",
+    "en": "JSON"
   },
   {
     "word": "XML",
@@ -1285,7 +1445,8 @@
     "pattern": "اسم علم",
     "pos": "اختصار",
     "source": "XML",
-    "math_region": "XML"
+    "math_region": "XML",
+    "en": "XML"
   },
   {
     "word": "SQL",
@@ -1293,7 +1454,8 @@
     "pattern": "اسم علم",
     "pos": "اختصار",
     "source": "SQL",
-    "math_region": "SQL"
+    "math_region": "SQL",
+    "en": "SQL"
   },
   {
     "word": "NoSQL",
@@ -1301,7 +1463,8 @@
     "pattern": "اسم علم",
     "pos": "اسم علم",
     "source": "NoSQL",
-    "math_region": "NOSQL"
+    "math_region": "NOSQL",
+    "en": "NoSQL"
   },
   {
     "word": "REST",
@@ -1309,7 +1472,8 @@
     "pattern": "اسم علم",
     "pos": "اسم علم",
     "source": "REST",
-    "math_region": "REST"
+    "math_region": "REST",
+    "en": "REST"
   },
   {
     "word": "GraphQL",
@@ -1317,7 +1481,8 @@
     "pattern": "اسم علم",
     "pos": "اسم علم",
     "source": "GraphQL",
-    "math_region": "GRAPHQL"
+    "math_region": "GRAPHQL",
+    "en": "GraphQL"
   },
   {
     "word": "Docker",
@@ -1325,7 +1490,8 @@
     "pattern": "اسم علم",
     "pos": "اسم علم",
     "source": "Docker",
-    "math_region": "DOCKER"
+    "math_region": "DOCKER",
+    "en": "Docker"
   },
   {
     "word": "Kubernetes",
@@ -1333,7 +1499,8 @@
     "pattern": "اسم علم",
     "pos": "اسم علم",
     "source": "Kubernetes",
-    "math_region": "KUBERNETES"
+    "math_region": "KUBERNETES",
+    "en": "Kubernetes"
   },
   {
     "word": "Linux",
@@ -1341,7 +1508,8 @@
     "pattern": "اسم علم",
     "pos": "اسم علم",
     "source": "Linux",
-    "math_region": "LINUX"
+    "math_region": "LINUX",
+    "en": "Linux"
   },
   {
     "word": "Windows",
@@ -1349,7 +1517,8 @@
     "pattern": "اسم علم",
     "pos": "اسم علم",
     "source": "Windows",
-    "math_region": "WINDOWS"
+    "math_region": "WINDOWS",
+    "en": "Windows"
   },
   {
     "word": "macOS",
@@ -1357,7 +1526,8 @@
     "pattern": "اسم علم",
     "pos": "اسم علم",
     "source": "macOS",
-    "math_region": "MACOS"
+    "math_region": "MACOS",
+    "en": "macOS"
   },
   {
     "word": "Python",
@@ -1365,7 +1535,8 @@
     "pattern": "اسم علم",
     "pos": "اسم علم",
     "source": "Python",
-    "math_region": "PYTHON"
+    "math_region": "PYTHON",
+    "en": "Python"
   },
   {
     "word": "Rust",
@@ -1373,7 +1544,8 @@
     "pattern": "اسم علم",
     "pos": "اسم علم",
     "source": "Rust",
-    "math_region": "RUST"
+    "math_region": "RUST",
+    "en": "Rust"
   },
   {
     "word": "C++",
@@ -1381,7 +1553,8 @@
     "pattern": "اسم علم",
     "pos": "اسم علم",
     "source": "C++",
-    "math_region": "CPP"
+    "math_region": "CPP",
+    "en": "C++"
   },
   {
     "word": "Java",
@@ -1389,7 +1562,8 @@
     "pattern": "اسم علم",
     "pos": "اسم علم",
     "source": "Java",
-    "math_region": "JAVA"
+    "math_region": "JAVA",
+    "en": "Java"
   },
   {
     "word": "JavaScript",
@@ -1397,7 +1571,8 @@
     "pattern": "اسم علم",
     "pos": "اسم علم",
     "source": "JavaScript",
-    "math_region": "JAVASCRIPT"
+    "math_region": "JAVASCRIPT",
+    "en": "JavaScript"
   },
   {
     "word": "TypeScript",
@@ -1405,7 +1580,8 @@
     "pattern": "اسم علم",
     "pos": "اسم علم",
     "source": "TypeScript",
-    "math_region": "TYPESCRIPT"
+    "math_region": "TYPESCRIPT",
+    "en": "TypeScript"
   },
   {
     "word": "Go",
@@ -1413,7 +1589,8 @@
     "pattern": "اسم علم",
     "pos": "اسم علم",
     "source": "Go",
-    "math_region": "GO"
+    "math_region": "GO",
+    "en": "Go"
   },
   {
     "word": "Swift",
@@ -1421,7 +1598,8 @@
     "pattern": "اسم علم",
     "pos": "اسم علم",
     "source": "Swift",
-    "math_region": "SWIFT"
+    "math_region": "SWIFT",
+    "en": "Swift"
   },
   {
     "word": "Kotlin",
@@ -1429,7 +1607,8 @@
     "pattern": "اسم علم",
     "pos": "اسم علم",
     "source": "Kotlin",
-    "math_region": "KOTLIN"
+    "math_region": "KOTLIN",
+    "en": "Kotlin"
   },
   {
     "word": "Ruby",
@@ -1437,7 +1616,8 @@
     "pattern": "اسم علم",
     "pos": "اسم علم",
     "source": "Ruby",
-    "math_region": "RUBY"
+    "math_region": "RUBY",
+    "en": "Ruby"
   },
   {
     "word": "PHP",
@@ -1445,7 +1625,8 @@
     "pattern": "اسم علم",
     "pos": "اسم علم",
     "source": "PHP",
-    "math_region": "PHP"
+    "math_region": "PHP",
+    "en": "PHP"
   },
   {
     "word": "Scala",
@@ -1453,7 +1634,8 @@
     "pattern": "اسم علم",
     "pos": "اسم علم",
     "source": "Scala",
-    "math_region": "SCALA"
+    "math_region": "SCALA",
+    "en": "Scala"
   },
   {
     "word": "Haskell",
@@ -1461,7 +1643,8 @@
     "pattern": "اسم علم",
     "pos": "اسم علم",
     "source": "Haskell",
-    "math_region": "HASKELL"
+    "math_region": "HASKELL",
+    "en": "Haskell"
   },
   {
     "word": "Elixir",
@@ -1469,7 +1652,8 @@
     "pattern": "اسم علم",
     "pos": "اسم علم",
     "source": "Elixir",
-    "math_region": "ELIXIR"
+    "math_region": "ELIXIR",
+    "en": "Elixir"
   },
   {
     "word": "Erlang",
@@ -1477,7 +1661,8 @@
     "pattern": "اسم علم",
     "pos": "اسم علم",
     "source": "Erlang",
-    "math_region": "ERLANG"
+    "math_region": "ERLANG",
+    "en": "Erlang"
   },
   {
     "word": "Julia",
@@ -1485,7 +1670,8 @@
     "pattern": "اسم علم",
     "pos": "اسم علم",
     "source": "Julia",
-    "math_region": "JULIA"
+    "math_region": "JULIA",
+    "en": "Julia"
   },
   {
     "word": "MATLAB",
@@ -1493,7 +1679,8 @@
     "pattern": "اسم علم",
     "pos": "اسم علم",
     "source": "MATLAB",
-    "math_region": "MATLAB"
+    "math_region": "MATLAB",
+    "en": "MATLAB"
   },
   {
     "word": "R",
@@ -1501,6 +1688,7 @@
     "pattern": "اسم علم",
     "pos": "اسم علم",
     "source": "R",
-    "math_region": "R_LANG"
+    "math_region": "R_LANG",
+    "en": "R"
   }
 ]
