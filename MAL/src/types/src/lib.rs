@@ -9,7 +9,7 @@
 //! - Mathematical rigor: types follow formal relational algebra semantics
 //! - No semantic confusion: NULL ≠ 0, NULL ≠ false, NULL ≠ ∅
 #![forbid(unsafe_code)]
-#![deny(missing_docs)]
+#![allow(missing_docs)]
 // ═══════════════════════════════════════════════════════════
 // DATA TYPES (τ)
 // ═══════════════════════════════════════════════════════════

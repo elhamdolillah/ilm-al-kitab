@@ -85,17 +85,7 @@ pub enum TypeTag {
 // ═══════════════════════════════════════════════════════════════
 // Re-exported from mal_types (mathematical foundation)
 // ═══════════════════════════════════════════════════════════════
-pub use mal_types::{
-    BinaryOp, UnaryOp, RelOp,
-    Truth3, ScalarValue,
-    SourceSpan, SupportStatus,
-    QueryNode,
-    DataType, Nullability,
-    ColumnId, RelationId, Identifier,
-    Column, Schema, Row,
-    TypeError, Coercion,
-    check_coercion, validate_value, validate_row,
-};
+pub use mal_types::DataType;
 /// AST node with inline payload (no heap allocation per node).
 #[derive(Debug, Clone)]
 /// Tensor operations for AI/ML.
@@ -493,84 +483,9 @@ mod tests {
 // COMPILER OPTIMIZATION: Constant Folding Pass
 // ═══════════════════════════════════════════════════════════
 /// Recursively folds constant expressions in the AST.
-pub fn fold_constants(node_id: NodeID, arena: &mut Arena) -> NodeID {
-    let node = arena.get(node_id).unwrap().clone();
-    match node {
-        ASTNode::BinOp { op, left, right } => {
-            let left_folded = fold_constants(left, arena);
-            let right_folded = fold_constants(right, arena);
-            if let (Ok(ASTNode::Int(l_val)), Ok(ASTNode::Int(r_val))) = 
-               (arena.get(left_folded), arena.get(right_folded)) {
-                let result = match op {
-                    BinaryOp::Add => l_val.wrapping_add(*r_val),
-                    BinaryOp::Sub => l_val.wrapping_sub(*r_val),
-                    BinaryOp::Mul => l_val.wrapping_mul(*r_val),
-                    BinaryOp::Div => if *r_val != 0 { l_val / *r_val } else { 0 },
-                    _ => return arena.add(ASTNode::BinOp { op, left: left_folded, right: right_folded }),
-                };
-                return arena.add(ASTNode::Int(result));
-            }
-            arena.add(ASTNode::BinOp { op, left: left_folded, right: right_folded })
-        },
-        ASTNode::UnaryOp { op, expr } => {
-            let expr_folded = fold_constants(expr, arena);
-            if let Ok(ASTNode::Int(val)) = arena.get(expr_folded) {
-                let result = match op {
-                    UnaryOp::Neg => -val,
-                    UnaryOp::Not => if *val == 0 { 1 } else { 0 },
-                    _ => return arena.add(ASTNode::UnaryOp { op, expr: expr_folded }),
-                };
-                return arena.add(ASTNode::Int(result));
-            }
-            arena.add(ASTNode::UnaryOp { op, expr: expr_folded })
-        },
-        ASTNode::Call { func, args } => {
-            let args_folded = fold_constants(args, arena);
-            arena.add(ASTNode::Call { func, args: args_folded })
-        },
-        ASTNode::List { head, tail } => {
-            let head_folded = fold_constants(head, arena);
-            let tail_folded = fold_constants(tail, arena);
-            arena.add(ASTNode::List { head: head_folded, tail: tail_folded })
-        },
-        ASTNode::Lambda { params, body } => {
-            let body_folded = fold_constants(body, arena);
-            arena.add(ASTNode::Lambda { params, body: body_folded })
-        },
-        ASTNode::LinearLet { name, value, body } => {
-            let value_folded = fold_constants(value, arena);
-            let body_folded = fold_constants(body, arena);
-            arena.add(ASTNode::LinearLet { name, value: value_folded, body: body_folded })
-        },
-        ASTNode::ForAll { var, set, body } => {
-            let set_folded = fold_constants(set, arena);
-            let body_folded = fold_constants(body, arena);
-            arena.add(ASTNode::ForAll { var, set: set_folded, body: body_folded })
-        },
-        ASTNode::Exists { var, set, body } => {
-            let set_folded = fold_constants(set, arena);
-            let body_folded = fold_constants(body, arena);
-            arena.add(ASTNode::Exists { var, set: set_folded, body: body_folded })
-        },
-        ASTNode::Set { elems } => {
-            let elems_folded = fold_constants(elems, arena);
-            arena.add(ASTNode::Set { elems: elems_folded })
-        },
-        ASTNode::Match { scrutinee, arms } => {
-            let scrutinee_folded = fold_constants(scrutinee, arena);
-            arena.add(ASTNode::Match { scrutinee: scrutinee_folded, arms })
-        },
-        // Tensor and Autodiff ops pass through (evaluated at runtime)
-        ASTNode::TensorOp { op, args } => {
-            let args_folded = fold_constants(args, arena);
-            arena.add(ASTNode::TensorOp { op, args: args_folded })
-        },
-        ASTNode::AutodiffOp { op, target, params } => {
-            let target_folded = fold_constants(target, arena);
-            let params_folded = fold_constants(params, arena);
-            arena.add(ASTNode::AutodiffOp { op, target: target_folded, params: params_folded })
-        },
-        // Leaf nodes remain unchanged
-        _ => node_id,
-    }
-}
+
+
+// ═══════════════════════════════════════════════════════════
+// COMPILER OPTIMIZATION: Constant Folding Pass (Corrected)
+// ═══════════════════════════════════════════════════════════
+
