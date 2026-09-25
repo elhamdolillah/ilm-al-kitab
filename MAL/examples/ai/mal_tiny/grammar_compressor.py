@@ -9,6 +9,7 @@ import sqlite3
 import pyarabic.araby as araby
 from typing import Dict, List, Optional
 import os
+from auto_lookup import AutoLookup
 class DeterministicGrammarEngine:
     def __init__(self, db_path: str = "grammar_math_rules.db", dict_path: str = "arabic_morphology_dict.json", en_dict_path: str = "english_to_arabic_bridge.json"):
         self.db_path = db_path
