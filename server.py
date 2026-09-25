@@ -1,3 +1,4 @@
+import re
 #!/usr/bin/env python3
 import os
 import sys
@@ -26,6 +27,12 @@ def generate_and_run():
         generator = MALCodeGeneratorV4()
         mal_code = generator.generate(user_text, save_to_file=False)
         os.chdir(original_cwd)
+        # إصلاح ذكي: إذا كان الكود المولد دالة eval_expr وليس main، نحوله إلى main
+        if "fn main()" not in mal_code and "fn eval_expr_" in mal_code:
+            mal_code = re.sub(r'fn eval_expr_\w+\(\) -> i32', 'fn main() -> i32', mal_code)
+            mal_code = mal_code.replace('return result;', 'printf("النتيجة: %d\\n", result);\n    return result;')
+        elif "fn main()" not in mal_code:
+            mal_code = "fn main() -> i32 {\n" + mal_code + "\n    return 0;\n}"
         with open(TEMP_MAL_FILE, "w", encoding="utf-8") as f:
             f.write(mal_code)
         malc_bin = os.path.join(PROJECT_DIR, "MAL/src/cli/target/release/malc")
