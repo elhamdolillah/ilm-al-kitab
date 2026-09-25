@@ -14,7 +14,7 @@
     "id": 2,
     "original_word": "قيمة",
     "root": "ق ي م",
-    "morph_pattern": "فعل",
+    "morph_pattern": "فعلة",
     "pos": "اسم",
     "source": "قوم",
     "math_region": "SCALAR_VALUE",
@@ -45,6 +45,17 @@
   },
   {
     "id": 5,
+    "original_word": "اضرب",
+    "root": "ض ر ب",
+    "morph_pattern": "افعل",
+    "pos": "فعل أمر",
+    "source": "ضرب",
+    "math_region": "MATMUL",
+    "compression_token": "MATMUL",
+    "certainty_score": 1.0
+  },
+  {
+    "id": 6,
     "original_word": "مصفوفة",
     "root": "ص ف ف",
     "morph_pattern": "مفعولة",
@@ -55,7 +66,18 @@
     "certainty_score": 1.0
   },
   {
-    "id": 6,
+    "id": 7,
+    "original_word": "اشتق",
+    "root": "ش ت ق",
+    "morph_pattern": "افتعل",
+    "pos": "فعل أمر",
+    "source": "اشتقاق",
+    "math_region": "DERIVATIVE",
+    "compression_token": "DERIVATIVE",
+    "certainty_score": 1.0
+  },
+  {
+    "id": 8,
     "original_word": "دالة",
     "root": "د و ل",
     "morph_pattern": "فالة",
@@ -64,5 +86,60 @@
     "math_region": "FUNCTION",
     "compression_token": "FUNCTION",
     "certainty_score": 1.0
+  },
+  {
+    "id": 9,
+    "original_word": "تنشيط",
+    "root": "ن ش ط",
+    "morph_pattern": "تفعيل",
+    "pos": "مصدر",
+    "source": "تنشيط",
+    "math_region": "ACTIVATION_FUNC",
+    "compression_token": "ACTIVATION_FUNC",
+    "certainty_score": 1.0
+  },
+  {
+    "id": 10,
+    "original_word": "ReLU",
+    "root": "N/A",
+    "morph_pattern": "N/A",
+    "pos": "اسم علم",
+    "source": "N/A",
+    "math_region": "RELU_FUNC",
+    "compression_token": "RELU_FUNC",
+    "certainty_score": 1.0
+  },
+  {
+    "id": 11,
+    "original_word": "قسمة",
+    "root": "ق س م",
+    "morph_pattern": "فعلة",
+    "pos": "اسم",
+    "source": "قسم",
+    "math_region": "DIV_OPERATION",
+    "compression_token": "DIV_OPERATION",
+    "certainty_score": 1.0
+  },
+  {
+    "id": 12,
+    "original_word": "الفرق",
+    "root": "ف ر ق",
+    "morph_pattern": "مشتق من فعل",
+    "pos": "مشتق",
+    "source": "فروق",
+    "math_region": "SUB_OPERATION",
+    "compression_token": "SUB_OPERATION",
+    "certainty_score": 0.95
+  },
+  {
+    "id": 13,
+    "original_word": "القيم",
+    "root": "ق ي م",
+    "morph_pattern": "مشتق من فعيل",
+    "pos": "مشتق",
+    "source": "قوم",
+    "math_region": "SCALAR_VALUE",
+    "compression_token": "SCALAR_VALUE",
+    "certainty_score": 0.95
   }
 ]
