@@ -1,0 +1,15 @@
+[
+  {"word": "احسب", "root": "ح س ب", "pattern": "افعل", "pos": "فعل أمر", "source": "حساب", "math_region": "EVALUATE"},
+  {"word": "قيمة", "root": "ق ي م", "pattern": "فعل", "pos": "اسم", "source": "قوم", "math_region": "SCALAR_VALUE"},
+  {"word": "مجموع", "root": "ج م ع", "pattern": "مفعول", "pos": "اسم مفعول", "source": "جمع", "math_region": "SUM_OPERATION"},
+  {"word": "فرق", "root": "ف ر ق", "pattern": "فعل", "pos": "اسم", "source": "فروق", "math_region": "SUB_OPERATION"},
+  {"word": "حاصل", "root": "ح ص ل", "pattern": "فاعل", "pos": "اسم فاعل", "source": "حصول", "math_region": "RESULT_TENSOR"},
+  {"word": "ضرب", "root": "ض ر ب", "pattern": "فعل", "pos": "مصدر", "source": "ضرب", "math_region": "MATMUL"},
+  {"word": "قسمة", "root": "ق س م", "pattern": "فعلة", "pos": "اسم", "source": "قسم", "math_region": "DIV_OPERATION"},
+  {"word": "مصفوفة", "root": "ص ف ف", "pattern": "مفعولة", "pos": "اسم", "source": "صف", "math_region": "MATRIX_TENSOR"},
+  {"word": "متجه", "root": "و ج ه", "pattern": "مفعل", "pos": "اسم", "source": "وجه", "math_region": "VECTOR_TENSOR"},
+  {"word": "انحياز", "root": "ن ح ي ز", "pattern": "انفعال", "pos": "اسم", "source": "نحاز", "math_region": "BIAS_VECTOR"},
+  {"word": "دالة", "root": "د و ل", "pattern": "فالة", "pos": "اسم", "source": "دول", "math_region": "FUNCTION"},
+  {"word": "مشتق", "root": "ش ت ق", "pattern": "مفعل", "pos": "اسم مفعول", "source": "اشتقاق", "math_region": "DERIVATIVE"},
+  {"word": "تكامل", "root": "ك م ل", "pattern": "افتعال", "pos": "اسم", "source": "كمال", "math_region": "INTEGRAL"}
+]

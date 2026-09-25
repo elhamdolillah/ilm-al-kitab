@@ -1,0 +1,92 @@
+[
+  {
+    "id": 1,
+    "original_word": "شبكة",
+    "root": "ش ب ك",
+    "source": "شبكة",
+    "pos": "اسم",
+    "math_region": "GRAPH_STRUCTURE",
+    "compression_token": "GRAPH_STRUCTURE",
+    "certainty_score": 1.0
+  },
+  {
+    "id": 2,
+    "original_word": "عصبية",
+    "root": "ع ص ب",
+    "source": "عصب",
+    "pos": "صفة مشبهة",
+    "math_region": "NEURAL_WEIGHTS",
+    "compression_token": "NEURAL_WEIGHTS",
+    "certainty_score": 1.0
+  },
+  {
+    "id": 3,
+    "original_word": "طبقة",
+    "root": "ط ب ق",
+    "source": "طبقة",
+    "pos": "اسم",
+    "math_region": "LAYER_DIMENSION",
+    "compression_token": "LAYER_DIMENSION",
+    "certainty_score": 1.0
+  },
+  {
+    "id": 4,
+    "original_word": "مخفية",
+    "root": "خ ف ي",
+    "source": "خفاء",
+    "pos": "صفة",
+    "math_region": "HIDDEN_STATE",
+    "compression_token": "HIDDEN_STATE",
+    "certainty_score": 1.0
+  },
+  {
+    "id": 5,
+    "original_word": "8",
+    "root": "N/A",
+    "source": "N/A",
+    "pos": "رقم",
+    "math_region": "SCALAR_VALUE",
+    "compression_token": "DIM:8",
+    "certainty_score": 1.0
+  },
+  {
+    "id": 6,
+    "original_word": "اضرب",
+    "root": "ض ر ب",
+    "source": "ضرب",
+    "pos": "فعل أمر",
+    "math_region": "MATMUL",
+    "compression_token": "MATMUL",
+    "certainty_score": 1.0
+  },
+  {
+    "id": 7,
+    "original_word": "مصفوفة",
+    "root": "ص ف ف",
+    "source": "مصفوفة",
+    "pos": "اسم",
+    "math_region": "MATRIX_TENSOR",
+    "compression_token": "MATRIX_TENSOR",
+    "certainty_score": 1.0
+  },
+  {
+    "id": 8,
+    "original_word": "ReLU",
+    "root": "N/A",
+    "source": "N/A",
+    "pos": "اسم علم",
+    "math_region": "RELU_FUNC",
+    "compression_token": "RELU_FUNC",
+    "certainty_score": 1.0
+  },
+  {
+    "id": 9,
+    "original_word": "درب",
+    "root": "د ر ب",
+    "source": "تدريب",
+    "pos": "فعل أمر",
+    "math_region": "OPTIMIZATION_STEP",
+    "compression_token": "OPTIMIZATION_STEP",
+    "certainty_score": 1.0
+  }
+]
