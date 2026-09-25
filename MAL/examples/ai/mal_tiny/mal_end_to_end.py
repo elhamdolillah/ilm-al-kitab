@@ -33,9 +33,17 @@ class MALEndToEndEngine:
         if os.path.exists(binary_file): os.unlink(binary_file)
         return {"success": True, "output": output}
 if __name__ == "__main__":
+    # 🔑 الإصلاح الحاسم: تنظيف قواعد البيانات في البداية تماماً قبل أي تهيئة
+    for db in ["user_specialization.db", "grammar_math_rules.db", "advanced_intelligence_cache.db"]:
+        if os.path.exists(db): 
+            os.remove(db)
+            print(f"🧹 تم تنظيف: {db}")
     engine = MALEndToEndEngine(user_id="demo_user")
-    for db in ["user_specialization.db", "grammar_math_rules.db", "mal_deterministic_cache.db"]:
-        if os.path.exists(db): os.remove(db)
-    for query in ["احسب قيمة 15 + 25", "ما هو مفهوم الاجتهاد في الفقه؟", "مجموع المصفوفة"]:
+    test_queries = [
+        "احسب قيمة 15 + 25",
+        "ما هو مفهوم الاجتهاد في الفقه؟",
+        "مجموع 10 و 20"
+    ]
+    for query in test_queries:
         engine.process_and_execute(query)
-    print("\n🎉 تم الربط الفعلي بنجاح!")
+    print("\n🎉 تم الربط الفعلي بنجاح مع تطبيق تقنيات زيادة الذكاء!")
