@@ -34,15 +34,25 @@ def generate_and_run():
         # 2. حفظ الكود في ملف مؤقت
         with open(TEMP_MAL_FILE, "w", encoding="utf-8") as f:
             f.write(mal_code)
-        # 3. تنفيذ الكود عبر malc (نستخدم cargo run لضمان وجود البيئة)
-        # ملاحظة: في بيئة الإنتاج، يُفضل استخدام الملف الثنائي المبنى مباشرة
+        # 3. تنفيذ الكود عبر malc
         cli_dir = os.path.join(PROJECT_DIR, "MAL/src/cli")
+        malc_bin = os.path.join(cli_dir, "target/release/malc")
+        # إعداد البيئة لضمان العثور على cargo
+        env = os.environ.copy()
+        env["PATH"] = "/root/.cargo/bin:" + env.get("PATH", "")
+        if os.path.exists(malc_bin):
+            # استخدام الملف الثنائي المبنى مباشرة (أسرع بكثير)
+            cmd = [malc_bin, "run", TEMP_MAL_FILE]
+        else:
+            # الرجوع لـ cargo run إذا لم يكن المبنى موجوداً
+            cmd = ["/root/.cargo/bin/cargo", "run", "--release", "--bin", "malc", "--", "run", TEMP_MAL_FILE]
         result = subprocess.run(
-            ["cargo", "run", "--release", "--bin", "malc", "--", "run", TEMP_MAL_FILE],
+            cmd,
             cwd=cli_dir,
             capture_output=True,
             text=True,
-            timeout=15 # منع التعليق في حال وجود حلقة لا نهائية
+            env=env,
+            timeout=60 # زيادة المهلة للسماح بوقت التجميع إذا لزم الأمر
         )
         if result.returncode == 0:
             output = result.stdout.strip()
