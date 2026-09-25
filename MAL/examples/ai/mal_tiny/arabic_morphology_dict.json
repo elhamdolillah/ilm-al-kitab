@@ -1690,5 +1690,16 @@
     "source": "R",
     "math_region": "R_LANG",
     "en": "R"
+  },
+  {
+    "word": "المصفوفة",
+    "root": "ص ف ف",
+    "pattern": "مشتق",
+    "pos": "اسم",
+    "source": "auto",
+    "math_region": "MATRIX_TENSOR",
+    "domain": "رياضي",
+    "meaning": "",
+    "auto_generated": true
   }
 ]
