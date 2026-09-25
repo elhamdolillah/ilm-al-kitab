@@ -14,47 +14,30 @@
 #![deny(missing_docs)]
 
 /// Typed node identifier. Newtype around u32 prevents accidental arithmetic.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub struct NodeID(pub u32);
 
-impl NodeID {
-    /// Sentinel value representing an invalid/uninitialized node.
-    pub const INVALID: NodeID = NodeID(u32::MAX);
-}
+// ═══════════════════════════════════════════════════════════════
+// Re-exported from mal_types (mathematical foundation)
+// ═══════════════════════════════════════════════════════════════
+pub use mal_types::DataType;
 
-/// Constitutional failure modes.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum ArenaError {
-    /// Arena capacity exceeded — fail-closed.
-    CapacityExceeded,
-    /// NodeID out of range or not yet allocated.
-    InvalidNodeID,
-    /// Type tag mismatch when reading.
-    TypeMismatch,
-}
-
-/// Type tag for runtime type checking.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-/// Tensor operations for AI/ML.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum TensorOpKind { MatMul, Add, Sub, Mul, Relu, Sigmoid, Transpose, Reshape }
-/// Automatic differentiation operations.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum AutodiffOpKind { Backward, Grad, ZeroGrad }
 pub enum ASTNode {
-    Empty, Int(i64), FixedPoint(i64), Str(u32), Ident(u32),
+    Empty,
+    Int(i64),
+    FixedPoint(i64),
+    Str(u32),
+    Ident(u32),
+    BoolLit(bool),
     BinOp { op: BinaryOp, left: NodeID, right: NodeID },
+    UnaryOp { op: UnaryOp, expr: NodeID },
     Call { func: NodeID, args: NodeID },
     List { head: NodeID, tail: NodeID },
     Lambda { params: NodeID, body: NodeID },
     LinearLet { name: NodeID, value: NodeID, body: NodeID },
     ForAll { var: NodeID, set: NodeID, body: NodeID },
-    SetMembership { elem: NodeID, set: NodeID },
-    Mu { var: NodeID, body: NodeID },
     Exists { var: NodeID, set: NodeID, body: NodeID },
     Set { elems: NodeID },
-    BoolLit(bool),
-    UnaryOp { op: UnaryOp, expr: NodeID },
+    SetMembership { elem: NodeID, set: NodeID },
+    Mu { var: NodeID, body: NodeID },
     Match { scrutinee: NodeID, arms: NodeID },
     MatchArm { pattern: Pattern, body: NodeID },
     /// Tensor operation node.
@@ -62,57 +45,7 @@ pub enum ASTNode {
     /// Automatic differentiation node.
     AutodiffOp { op: AutodiffOpKind, target: NodeID, params: NodeID },
 }
-pub enum TypeTag {
-    /// Empty slot (uninitialized).
-    Empty,
-    /// Integer (i64).
-    Int,
-    /// Fixed-point Q32.32.
-    FixedPoint,
-    /// String reference (index into string table).
-    Str,
-    /// Identifier (index into string table).
-    Ident,
-    /// Binary operation.
-    BinOp,
-    /// Function call.
-    Call,
-    /// Linked list node.
-    List,
-    /// Lambda: λ(params). body.
-    Lambda,
-    /// Linear let: x ⊸ expr.
-    LinearLet,
-    /// Universal quantification: ∀x ∈ S : body.
-    ForAll,
-    /// Set membership: x ∈ S.
-    SetMembership,
-    /// Mu: μx. body (least fixed-point).
-    Mu,
-    /// Existential quantification: ∃x ∈ S : body.
-    Exists,
-    /// Set literal: ⟨...⟩.
-    Set,
-    /// Boolean value (true/false).
-    Bool,
-    /// Unary operation (- or ¬).
-    UnaryOp,
-    /// Pattern match expression (Phase 43).
-    Match,
-    /// Pattern match arm (Phase 43).
-    MatchArm,
 
-
-    /// Tensor operation.
-    TensorOp,
-    /// Automatic differentiation operation.
-    AutodiffOp,
-}
-
-// ═══════════════════════════════════════════════════════════════
-// Re-exported from mal_types (mathematical foundation)
-// ═══════════════════════════════════════════════════════════════
-pub use mal_types::DataType;
 /// AST node with inline payload (no heap allocation per node).
 #[derive(Debug, Clone)]
 /// Tensor operations for AI/ML.
@@ -130,6 +63,15 @@ pub enum Pattern {
     Binding(u32),
 }
 
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum TypeTag {
+    Empty, Int, FixedPoint, Str, Ident, Bool,
+    BinOp, UnaryOp, Call, List, Lambda, LinearLet,
+    ForAll, Exists, Set, SetMembership, Mu, Match, MatchArm,
+    TensorOp,
+    AutodiffOp,
+}
 
 impl ASTNode {
     /// Returns the type tag of this node.
