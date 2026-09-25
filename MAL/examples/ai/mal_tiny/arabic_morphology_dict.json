@@ -1701,5 +1701,27 @@
     "domain": "رياضي",
     "meaning": "",
     "auto_generated": true
+  },
+  {
+    "word": "هذا",
+    "root": "ه ذ ا",
+    "pattern": "مشتق",
+    "pos": "اسم",
+    "source": "auto",
+    "math_region": "GENERAL",
+    "domain": "عام",
+    "meaning": "",
+    "auto_generated": true
+  },
+  {
+    "word": "اجتهاد",
+    "root": "ج ه د",
+    "pattern": "مشتق",
+    "pos": "اسم",
+    "source": "auto",
+    "math_region": "GENERAL",
+    "domain": "عام",
+    "meaning": "",
+    "auto_generated": true
   }
 ]
