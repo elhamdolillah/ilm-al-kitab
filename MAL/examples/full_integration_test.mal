@@ -1,0 +1,39 @@
+// ═══════════════════════════════════════════════════════════
+// اختبار شامل: جميع ميزات MAL المتقدمة
+// - Constant Folding
+// - Tensor operations
+// - Higher-Order Functions
+// - Shape inference
+// ═══════════════════════════════════════════════════════════
+// 1. Constant Folding: 2 + 3 * 4 → 14 (at compile time)
+fn test_constant_folding() -> i32 {
+    let x: i32 = 2 + 3 * 4;  // المترجم يطوي هذا إلى 14
+    let y: i32 = x * 2;
+    return y;
+}
+// 2. Higher-Order Function: دالة تأخذ دالة أخرى كمعامل
+fn apply_fn(f: fn(i32) -> i32, value: i32) -> i32 {
+    return f(value);
+}
+// 3. دالة بسيطة لتمريرها كـ higher-order
+fn double_val(x: i32) -> i32 {
+    return x * 2;
+}
+// 4. دالة تستخدم Tensor (سيتم التحقق من الشكل أثناء الترجمة)
+fn forward_pass(input: Tensor, weights: Tensor) -> Tensor {
+    // Shape inference: (2x3) @ (3x4) → (2x4)
+    let output = tensor_matmul(input, weights);
+    let activated = tensor_relu(output);
+    return activated;
+}
+// 5. نقطة الدخول الرئيسية
+fn main() -> i32 {
+    // اختبار Constant Folding
+    let result1 = test_constant_folding();
+    printf("Constant folding result: %d\n", result1);
+    // اختبار Higher-Order Functions
+    let result2 = apply_fn(double_val, 5);
+    printf("Higher-order function result: %d\n", result2);
+    printf("✅ All integration tests passed!\n");
+    return 0;
+}

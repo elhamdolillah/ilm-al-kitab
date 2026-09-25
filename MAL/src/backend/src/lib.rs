@@ -400,3 +400,35 @@ fn main() -> i32 {
         assert!(output.contains("محمد = 92"), "Got: {}", output);
     }
 }
+
+// ═══════════════════════════════════════════════════════════
+// C Code Generation for New Types (Tensor & Function)
+// ═══════════════════════════════════════════════════════════
+/// Generate C code for a Tensor type declaration
+pub fn gen_tensor_type_decl(name: &str, shape: &[usize], dtype: &str) -> String {
+    let c_dtype = match dtype {
+        "f64" | "Float64" => "double",
+        "f32" | "Float32" => "float",
+        "i32" | "Int32" => "int32_t",
+        "i64" | "Int64" => "int64_t",
+        _ => "double",
+    };
+    format!("Tensor {} = tensor_zeros({}, (int[]){{{} }}, DT_{});", 
+            name, shape.len(), shape.iter().map(|d| d.to_string()).collect::<Vec<_>>().join(", "),
+            dtype.to_uppercase())
+}
+/// Generate C code for a function pointer type (higher-order function)
+pub fn gen_function_pointer_type(name: &str, arg_types: &[&str], return_type: &str) -> String {
+    let c_args = arg_types.iter().map(|t| c_type(t)).collect::<Vec<_>>().join(", ");
+    let c_ret = c_type(return_type);
+    format!("{} (*{})({})", c_ret, name, c_args)
+}
+/// Generate C code for calling a higher-order function
+pub fn gen_higher_order_call(func_name: &str, args: &[String]) -> String {
+    let args_str = args.join(", ");
+    format!("{}({})", func_name, args_str)
+}
+/// Generate C code for a Tensor operation
+pub fn gen_tensor_op_c(op: &str, args: &[String]) -> String {
+    translate_tensor_op(op, args)
+}

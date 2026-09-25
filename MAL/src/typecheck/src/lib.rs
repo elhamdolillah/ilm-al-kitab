@@ -259,3 +259,89 @@ pub fn infer_broadcast_shape(shape1: &Shape, shape2: &Shape) -> Result<Shape, Ty
         .collect();
     Ok(Shape::new(result_dims))
 }
+
+// ═══════════════════════════════════════════════════════════
+// Type Checking for New Types (Tensor & Function)
+// ═══════════════════════════════════════════════════════════
+/// Check if two DataTypes are compatible for assignment
+pub fn check_type_compatible(expected: &DataType, actual: &DataType) -> Result<(), TypeError> {
+    match (expected, actual) {
+        (DataType::Int64, DataType::Int64) => Ok(()),
+        (DataType::Float64, DataType::Float64) => Ok(()),
+        (DataType::Bool, DataType::Bool) => Ok(()),
+        (DataType::Text, DataType::Text) => Ok(()),
+        // Tensor compatibility: check shape and dtype
+        (DataType::Tensor { dtype: d1, shape: s1 }, DataType::Tensor { dtype: d2, shape: s2 }) => {
+            if d1 != d2 {
+                return Err(TypeError::TypeMismatch {
+                    expected: expected.clone(),
+                    actual: actual.clone(),
+                });
+            }
+            // Check broadcasting compatibility
+            if !s1.can_broadcast(s2) {
+                return Err(TypeError::BroadcastIncompatible {
+                    shape1: s1.clone(),
+                    shape2: s2.clone(),
+                });
+            }
+            Ok(())
+        }
+        // Function type compatibility: check arg types and return type
+        (DataType::Function { arg_types: a1, return_type: r1 }, 
+         DataType::Function { arg_types: a2, return_type: r2 }) => {
+            if a1.len() != a2.len() {
+                return Err(TypeError::TypeMismatch {
+                    expected: expected.clone(),
+                    actual: actual.clone(),
+                });
+            }
+            for (t1, t2) in a1.iter().zip(a2.iter()) {
+                check_type_compatible(t1, t2)?;
+            }
+            check_type_compatible(r1, r2)?;
+            Ok(())
+        }
+        _ => Err(TypeError::TypeMismatch {
+            expected: expected.clone(),
+            actual: actual.clone(),
+        }),
+    }
+}
+/// Infer type for a Tensor creation expression
+pub fn infer_tensor_type(shape: &Shape, dtype: &TensorDtype) -> DataType {
+    DataType::Tensor {
+        dtype: *dtype,
+        shape: shape.clone(),
+    }
+}
+/// Infer type for a Function expression (higher-order function)
+pub fn infer_function_type(arg_types: Vec<DataType>, return_type: DataType) -> DataType {
+    DataType::Function {
+        arg_types,
+        return_type: Box::new(return_type),
+    }
+}
+/// Validate a function call with higher-order function arguments
+pub fn check_function_call(
+    func_type: &DataType,
+    arg_types: &[DataType],
+) -> Result<DataType, TypeError> {
+    match func_type {
+        DataType::Function { arg_types: expected_args, return_type } => {
+            if expected_args.len() != arg_types.len() {
+                return Err(TypeError::TypeMismatch {
+                    expected: func_type.clone(),
+                    actual: DataType::Text, // Placeholder
+                });
+            }
+            for (expected, actual) in expected_args.iter().zip(arg_types.iter()) {
+                check_type_compatible(expected, actual)?;
+            }
+            Ok(*return_type.clone())
+        }
+        _ => Err(TypeError::NotATensor {
+            expected: func_type.clone(),
+        }),
+    }
+}
