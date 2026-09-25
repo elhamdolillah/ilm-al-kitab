@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """
-محرك التخصيص الديناميكي v3 - القاعدة الذهبية الصحيحة
-الوسيط (Median) + blacklist يدوي
+محرك التخصيص الديناميكي v4 - مع دعم المصطلحات المشتركة العالمية (Universal Shared Terms)
 """
 import os
 import sqlite3
@@ -13,6 +12,9 @@ class DynamicSpecializationEngine:
         self.db_path = db_path
         self.user_id = user_id
         self.user_blacklist: Set[str] = set()
+        # 🔑 المصطلحات المشتركة العالمية (حصانة مطلقة من التجميد)
+        # هذه هي البنية التحتية اللغوية التي تربط كل المجالات ببعضها
+        self.shared_domains = {'مشترك', 'لغوي_أساسي', 'عام_أساسي'}
         self._init_db()
     def _init_db(self):
         conn = sqlite3.connect(self.db_path)
@@ -46,28 +48,27 @@ class DynamicSpecializationEngine:
             return
         cursor.execute('SELECT domain, COUNT(*) FROM interaction_log WHERE user_id = ? GROUP BY domain', (self.user_id,))
         domains_data = cursor.fetchall()
-        # حساب النسب
         domain_percentages = {}
         for domain, count in domains_data:
             domain_percentages[domain] = (count / total) * 100
-        # 🔑 القاعدة الذهبية الصحيحة: الوسيط (Median) وليس المتوسط
-        non_blacklisted = {d: p for d, p in domain_percentages.items() if d not in self.user_blacklist}
-        if non_blacklisted:
-            median_threshold = median(list(non_blacklisted.values()))
-        else:
-            median_threshold = 50.0
+        # حساب الوسيط للمجالات غير المشتركة فقط
+        non_shared = {d: p for d, p in domain_percentages.items() if d not in self.shared_domains}
+        median_threshold = median(list(non_shared.values())) if non_shared else 50.0
         print(f"\n📐 العتبة (الوسيط Median): {median_threshold:.1f}%")
-        print(f"   (المتوسط الحسابي كان سيعطي: {sum(non_blacklisted.values())/len(non_blacklisted):.1f}%)")
         for domain, percentage in domain_percentages.items():
-            # القاعدة 1: blacklist = مجمد دائماً
-            if domain in self.user_blacklist:
+            # 🔑 القاعدة الذهبية 1: المصطلحات المشتركة لها حصانة مطلقة
+            if domain in self.shared_domains:
+                status, priority, location = 'ACTIVE', 1.0, 'RAM'
+                reason = "حصانة مشتركة عالمية (دائم النشاط في RAM)"
+            # القاعدة 2: القائمة السوداء
+            elif domain in self.user_blacklist:
                 status, priority, location = 'FROZEN', 0.0, 'DISK'
                 reason = "blacklist يدوي"
-            # القاعدة 2: >= الوسيط = نشط
+            # القاعدة 3: فوق الوسيط
             elif percentage >= median_threshold:
                 status, priority, location = 'ACTIVE', 1.0, 'RAM'
                 reason = f">= الوسيط ({median_threshold:.1f}%)"
-            # القاعدة 3: < الوسيط = مجمد
+            # القاعدة 4: تحت الوسيط
             else:
                 status, priority, location = 'FROZEN', 0.0, 'DISK'
                 reason = f"< الوسيط ({median_threshold:.1f}%)"
@@ -94,41 +95,42 @@ class DynamicSpecializationEngine:
         return filtered
     def simulate_user_journey(self):
         print("="*80)
-        print("👤 محاكاة: مستخدم يهتم بالفقه والبرمجة، ولا يهتم بالموسيقى")
+        print("👤 محاكاة: مستخدم يهتم بالفقه، ولا يهتم بالموسيقى، ويستخدم الكثير من حروف الجر")
         print("="*80)
         self.set_blacklist(["موسيقى"])
+        # ملاحظة: الكلمات مثل "في"، "من"، "إلى"، "على" يتم تصنيفها تلقائياً كـ "مشترك"
         interactions = [
-            ("شرعي", "سؤال_فقهي"), ("حاسوبي", "كود_برمجي"),
-            ("موسيقى", "استفسار_عام"), ("شرعي", "فتوى"),
-            ("حاسوبي", "تصحيح_خطأ"), ("موسيقى", "أغنية"),
-            ("شرعي", "حديث"), ("حاسوبي", "خوارزمية"),
-            ("موسيقى", "نوتة"), ("شرعي", "أصول_فقه")
+            ("مشترك", "حرف_جر_في"), ("شرعي", "سؤال_فقهي"),
+            ("موسيقى", "استفسار_عام"), ("مشترك", "ضمير_هو"),
+            ("شرعي", "فتوى"), ("مشترك", "حرف_جر_من"),
+            ("موسيقى", "أغنية"), ("مشترك", "اسم_إشارة_هذا"),
+            ("شرعي", "حديث"), ("مشترك", "فعل_ربط_كان")
         ]
         for d, t in interactions:
             self.log_interaction(d, t)
             print(f"   📝 [{d}] - {t}")
-        print("\n⚙️ تطبيق القاعدة الذهبية (وسيط + blacklist)...")
+        print("\n⚙️ تطبيق القاعدة الذهبية (مع حصانة المشترك)...")
         self.recalculate_and_enforce_rules()
         # لوحة التحكم
         conn = sqlite3.connect(self.db_path)
         c = conn.cursor()
         c.execute('SELECT domain, usage_percentage, status, training_priority FROM domain_stats ORDER BY usage_percentage DESC')
-        print(f"\n{'المجال':<12} | {'النسبة':<8} | {'الحالة':<10} | {'التدريب':<8} | {'الموقع'}")
-        print("-"*65)
+        print(f"\n{'المجال':<15} | {'النسبة':<8} | {'الحالة':<10} | {'التدريب':<8} | {'الموقع'}")
+        print("-"*70)
         for d, p, s, pr in c.fetchall():
             c2 = conn.execute('SELECT current_location FROM weight_registry WHERE domain=?', (d,))
             loc = c2.fetchone()[0]
             icon = "🔥 نشط" if s == 'ACTIVE' else "🧊 مجمد"
-            print(f"{d:<12} | {p:>5.1f}%  | {icon:<10} | {pr:>5.1f}    | {loc}")
-        print("-"*65)
+            print(f"{d:<15} | {p:>5.1f}%  | {icon:<10} | {pr:>5.1f}    | {loc}")
+        print("-"*70)
         conn.close()
         # اختبار التصفية
         print("\n🧠 تصفية بيانات التدريب:")
         raw = [
             {"text": "ما حكم كذا؟", "domain": "شرعي"},
             {"text": "من هو ملحن هذه الموسيقى؟", "domain": "موسيقى"},
-            {"text": "كيف أكتب دالة؟", "domain": "حاسوبي"},
-            {"text": "ما هي الآلات الموسيقية؟", "domain": "موسيقى"}
+            {"text": "في هذا الكتاب", "domain": "مشترك"},
+            {"text": "إلى الله المشتكى", "domain": "مشترك"}
         ]
         batch = self.get_training_batch(raw)
         print(f"✅ تم قبول {len(batch)} عينة للتدريب:")
@@ -139,7 +141,7 @@ if __name__ == "__main__":
         os.remove("user_specialization.db")
     engine = DynamicSpecializationEngine(user_id="user_fiqh_dev")
     engine.simulate_user_journey()
-    print("\n🎉 القاعدة الذهبية v3 تعمل بنجاح!")
-    print("  ✅ شرعي (40%) >= الوسيط (30%) -> نشط 🔥")
-    print("  ✅ حاسوبي (30%) >= الوسيط (30%) -> نشط 🔥")
-    print("  ✅ موسيقى (30%) في blacklist -> مجمد 🧊")
+    print("\n🎉 القاعدة الذهبية v4 تعمل بنجاح!")
+    print("  ✅ 'مشترك' (50%) -> نشط دائماً 🔥 (حصانة مطلقة في RAM)")
+    print("  ✅ 'شرعي' (30%) -> نشط 🔥 (فوق الوسيط)")
+    print("  ✅ 'موسيقى' (20%) -> مجمد 🧊 (blacklist يدوي)")
