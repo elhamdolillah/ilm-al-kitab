@@ -16,6 +16,7 @@
 #![deny(missing_docs)]
 
 use mal_arena::{Arena, NodeID, ASTNode, ArenaError, BinaryOp, UnaryOp, Pattern};
+use mal_types::DataType;
 use mal_lexer::{Lexer, Token, TokenKind, LexerError};
 
 /// Parser failure modes (fail-closed).

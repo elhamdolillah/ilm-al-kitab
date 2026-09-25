@@ -105,6 +105,8 @@ pub enum TokenKind {
     EqEq,
     /// `=>`
     FatArrow,
+    /// `->`
+    RightArrow,
     /// `|`
     Pipe,
     /// `match` keyword
@@ -273,7 +275,15 @@ fn symbol_kind(c: char) -> Option<TokenKind> {
         '≔' => TokenKind::Assign,
         '≡' => TokenKind::Define,
         '+' => TokenKind::Plus,
-        '-' => TokenKind::Minus,
+        '
+' => {
+                        if self.peek_char() == Some(\'>\') {
+                            self.bump_char();
+                            TokenKind::RightArrow
+                        } else {
+                            TokenKind::Minus
+                        }
+                    }
         '·' | '*' | '×' => TokenKind::Mul,
         '⊕' => TokenKind::Concat,
         '(' => TokenKind::LParen,
