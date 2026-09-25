@@ -35,6 +35,33 @@ pub enum ArenaError {
 
 /// Type tag for runtime type checking.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+/// Tensor operations for AI/ML.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum TensorOpKind { MatMul, Add, Sub, Mul, Relu, Sigmoid, Transpose, Reshape }
+/// Automatic differentiation operations.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum AutodiffOpKind { Backward, Grad, ZeroGrad }
+pub enum ASTNode {
+    Empty, Int(i64), FixedPoint(i64), Str(u32), Ident(u32),
+    BinOp { op: BinaryOp, left: NodeID, right: NodeID },
+    Call { func: NodeID, args: NodeID },
+    List { head: NodeID, tail: NodeID },
+    Lambda { params: NodeID, body: NodeID },
+    LinearLet { name: NodeID, value: NodeID, body: NodeID },
+    ForAll { var: NodeID, set: NodeID, body: NodeID },
+    SetMembership { elem: NodeID, set: NodeID },
+    Mu { var: NodeID, body: NodeID },
+    Exists { var: NodeID, set: NodeID, body: NodeID },
+    Set { elems: NodeID },
+    BoolLit(bool),
+    UnaryOp { op: UnaryOp, expr: NodeID },
+    Match { scrutinee: NodeID, arms: NodeID },
+    MatchArm { pattern: Pattern, body: NodeID },
+    /// Tensor operation node.
+    TensorOp { op: TensorOpKind, args: NodeID },
+    /// Automatic differentiation node.
+    AutodiffOp { op: AutodiffOpKind, target: NodeID, params: NodeID },
+}
 pub enum TypeTag {
     /// Empty slot (uninitialized).
     Empty,
