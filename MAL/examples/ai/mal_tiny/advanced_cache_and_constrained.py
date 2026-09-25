@@ -9,11 +9,12 @@ class AdvancedIntelligenceEngine:
     def _init_system(self):
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
+        # 🔑 تحسين 1: تفعيل WAL Mode و Timeout لمنع قفل قاعدة البيانات
+        cursor.execute('PRAGMA journal_mode=WAL;')
+        cursor.execute('PRAGMA busy_timeout=5000;')
         cursor.execute('''CREATE TABLE IF NOT EXISTS semantic_cache (
             query_pattern TEXT PRIMARY KEY, mal_code TEXT, region TEXT, domain TEXT, hit_count INTEGER DEFAULT 0
         )''')
-        # 🔑 الإصلاح الجذري 1: [^\d]* تمنع الجشع وتلتقط الأرقام الكاملة فقط (15 و 25)
-        # 🔑 الإصلاح الجذري 2: {{ }} تُستخدم فقط في القوالب الديناميكية، و {} في الثابتة
         templates = [
             (r"احسب[^\d]*(\d+)[^\d]*\+[^\d]*(\d+)", "EVALUATE", "رياضي", 
              "fn main() -> i32 {{\n    let a: i32 = {0};\n    let b: i32 = {1};\n    let result: i32 = a + b;\n    printf(\"النتيجة: %d\\n\", result);\n    return 0;\n}}"),
@@ -31,19 +32,18 @@ class AdvancedIntelligenceEngine:
                 (pattern, code, region, domain))
         conn.commit()
         conn.close()
-        print(f"✅ تم تهيئة النظام بـ {len(templates)} قالب مصحح جذرياً")
     def try_semantic_cache(self, text: str) -> Optional[Dict]:
         conn = sqlite3.connect(self.db_path)
+        conn.execute('PRAGMA busy_timeout=5000;')
         cursor = conn.cursor()
         cursor.execute('SELECT query_pattern, mal_code, region, domain FROM semantic_cache')
         for pattern, code_template, region, domain in cursor.fetchall():
             match = re.search(pattern, text, re.IGNORECASE)
             if match:
                 args = match.groups()
-                # 🔑 الإصلاح الجذري: format() يحول {{ إلى { دائماً، حتى لو كانت args فارغة
                 try:
                     mal_code = code_template.format(*args)
-                except:
+                except (IndexError, KeyError):
                     mal_code = code_template
                 cursor.execute('UPDATE semantic_cache SET hit_count = hit_count + 1 WHERE query_pattern = ?', (pattern,))
                 conn.commit()
@@ -51,3 +51,11 @@ class AdvancedIntelligenceEngine:
                 return {'mal_code': mal_code, 'region': region, 'domain': domain, 'certainty': 1.0, 'is_deterministic': True, 'from_cache': True}
         conn.close()
         return None
+    def generate_constrained_code(self, text: str, region: str, domain: str) -> str:
+        # قوالب آمنة للـ Fallback
+        if region in ["EVALUATE", "SUM_OPERATION", "MATMUL"]:
+            return f"fn main() -> i32 {{\n    printf(\"جاري المعالجة الرياضية...\\n\");\n    return 0;\n}}"
+        elif region == "ISLAMIC_JURISPRUDENCE":
+            return f"fn main() -> i32 {{\n    printf(\"تحليل فقهي: {text}\\n\");\n    return 0;\n}}"
+        else:
+            return f"fn main() -> i32 {{\n    printf(\"تم تحليل الاستعلام بنجاح في مجال: {domain}\\n\");\n    return 0;\n}}"
