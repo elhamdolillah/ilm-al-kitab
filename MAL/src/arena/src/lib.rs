@@ -14,12 +14,21 @@
 #![deny(missing_docs)]
 
 /// Typed node identifier. Newtype around u32 prevents accidental arithmetic.
-
 // ═══════════════════════════════════════════════════════════════
 // Re-exported from mal_types (mathematical foundation)
 // ═══════════════════════════════════════════════════════════════
 pub use mal_types::DataType;
 
+/// Errors that can occur when working with the Arena.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum ArenaError {
+    /// The Arena has reached its maximum capacity.
+    CapacityExceeded,
+    /// An invalid NodeID was provided.
+    InvalidNodeID,
+    /// A type mismatch occurred during an operation.
+    TypeMismatch,
+}
 pub enum ASTNode {
     Empty,
     Int(i64),
@@ -27,30 +36,78 @@ pub enum ASTNode {
     Str(u32),
     Ident(u32),
     BoolLit(bool),
-    BinOp { op: BinaryOp, left: NodeID, right: NodeID },
-    UnaryOp { op: UnaryOp, expr: NodeID },
-    Call { func: NodeID, args: NodeID },
-    List { head: NodeID, tail: NodeID },
-    Lambda { params: NodeID, body: NodeID },
-    LinearLet { name: NodeID, value: NodeID, body: NodeID },
-    ForAll { var: NodeID, set: NodeID, body: NodeID },
-    Exists { var: NodeID, set: NodeID, body: NodeID },
-    Set { elems: NodeID },
-    SetMembership { elem: NodeID, set: NodeID },
-    Mu { var: NodeID, body: NodeID },
-    Match { scrutinee: NodeID, arms: NodeID },
-    MatchArm { pattern: Pattern, body: NodeID },
+    BinOp {
+        op: BinaryOp,
+        left: NodeID,
+        right: NodeID,
+    },
+    UnaryOp {
+        op: UnaryOp,
+        expr: NodeID,
+    },
+    Call {
+        func: NodeID,
+        args: NodeID,
+    },
+    List {
+        head: NodeID,
+        tail: NodeID,
+    },
+    Lambda {
+        params: NodeID,
+        body: NodeID,
+    },
+    LinearLet {
+        name: NodeID,
+        value: NodeID,
+        body: NodeID,
+    },
+    ForAll {
+        var: NodeID,
+        set: NodeID,
+        body: NodeID,
+    },
+    Exists {
+        var: NodeID,
+        set: NodeID,
+        body: NodeID,
+    },
+    Set {
+        elems: NodeID,
+    },
+    SetMembership {
+        elem: NodeID,
+        set: NodeID,
+    },
+    Mu {
+        var: NodeID,
+        body: NodeID,
+    },
+    Match {
+        scrutinee: NodeID,
+        arms: NodeID,
+    },
+    MatchArm {
+        pattern: Pattern,
+        body: NodeID,
+    },
     /// Tensor operation node.
-    TensorOp { op: TensorOpKind, args: NodeID },
+    TensorOp {
+        op: TensorOpKind,
+        args: NodeID,
+    },
     /// Automatic differentiation node.
-    AutodiffOp { op: AutodiffOpKind, target: NodeID, params: NodeID },
+    AutodiffOp {
+        op: AutodiffOpKind,
+        target: NodeID,
+        params: NodeID,
+    },
 }
 
 /// AST node with inline payload (no heap allocation per node).
 #[derive(Debug, Clone)]
 /// Tensor operations for AI/ML.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-
 
 /// Pattern for match expressions (Phase 43).
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -63,12 +120,27 @@ pub enum Pattern {
     Binding(u32),
 }
 
-
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum TypeTag {
-    Empty, Int, FixedPoint, Str, Ident, Bool,
-    BinOp, UnaryOp, Call, List, Lambda, LinearLet,
-    ForAll, Exists, Set, SetMembership, Mu, Match, MatchArm,
+    Empty,
+    Int,
+    FixedPoint,
+    Str,
+    Ident,
+    Bool,
+    BinOp,
+    UnaryOp,
+    Call,
+    List,
+    Lambda,
+    LinearLet,
+    ForAll,
+    Exists,
+    Set,
+    SetMembership,
+    Mu,
+    Match,
+    MatchArm,
     TensorOp,
     AutodiffOp,
 }
@@ -190,8 +262,14 @@ mod tests {
         let arena = Arena::new(10);
         // Out of range: rejected
         assert_eq!(arena.get(NodeID(0)).unwrap_err(), ArenaError::InvalidNodeID);
-        assert_eq!(arena.get(NodeID(999)).unwrap_err(), ArenaError::InvalidNodeID);
-        assert_eq!(arena.get(NodeID::INVALID).unwrap_err(), ArenaError::InvalidNodeID);
+        assert_eq!(
+            arena.get(NodeID(999)).unwrap_err(),
+            ArenaError::InvalidNodeID
+        );
+        assert_eq!(
+            arena.get(NodeID::INVALID).unwrap_err(),
+            ArenaError::InvalidNodeID
+        );
     }
 
     #[test]
@@ -271,10 +349,12 @@ mod tests {
         let mut arena = Arena::new(10);
         let param = arena.allocate(ASTNode::Ident(0)).unwrap();
         let body = arena.allocate(ASTNode::Int(42)).unwrap();
-        let lambda = arena.allocate(ASTNode::Lambda {
-            params: param,
-            body,
-        }).unwrap();
+        let lambda = arena
+            .allocate(ASTNode::Lambda {
+                params: param,
+                body,
+            })
+            .unwrap();
         assert!(matches!(arena.get(lambda).unwrap(), ASTNode::Lambda { .. }));
         assert_eq!(arena.get(lambda).unwrap().type_tag(), TypeTag::Lambda);
     }
@@ -308,8 +388,6 @@ mod tests {
 // COMPILER OPTIMIZATION: Constant Folding Pass
 // ═══════════════════════════════════════════════════════════
 
-
 // ═══════════════════════════════════════════════════════════
 // COMPILER OPTIMIZATION: Constant Folding Pass (Corrected)
 // ═══════════════════════════════════════════════════════════
-
