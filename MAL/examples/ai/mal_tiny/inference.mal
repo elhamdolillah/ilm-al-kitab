@@ -1,0 +1,64 @@
+// ==========================================
+// محرك استدلال نموذج MHLJ Fusion Head بلغة MAL
+// ==========================================
+fn matmul_vec(W: [f32], Input: [f32], out_h: i32, out_w: i32) -> [f32] {
+    let mut Output: [f32] = array_init(out_h, 0.0);
+    let mut i: i32 = 0;
+    while i < out_h {
+        let mut sum: f32 = 0.0;
+        let mut j: i32 = 0;
+        while j < out_w {
+            let weight_idx: i32 = (i * out_w) + j;
+            sum = sum + (W[weight_idx] * Input[j]);
+            j = j + 1;
+        }
+        Output[i] = sum;
+        i = i + 1;
+    }
+    return Output;
+}
+fn add_bias(Output: [f32], Bias: [f32], size: i32) -> [f32] {
+    let mut Result: [f32] = array_init(size, 0.0);
+    let mut i: i32 = 0;
+    while i < size {
+        Result[i] = Output[i] + Bias[i];
+        i = i + 1;
+    }
+    return Result;
+}
+fn relu(Output: [f32], size: i32) -> [f32] {
+    let mut Result: [f32] = array_init(size, 0.0);
+    let mut i: i32 = 0;
+    while i < size {
+        if Output[i] > 0.0 {
+            Result[i] = Output[i];
+        } else {
+            Result[i] = 0.0;
+        }
+        i = i + 1;
+    }
+    return Result;
+}
+fn main() -> i32 {
+    printf("🚀 بدء استدلال MHLJ Fusion Head بلغة MAL (10,000 تكرار)\n");
+    let input_size: i32 = 64;
+    let mut input_vec: [f32] = array_init(input_size, 0.5);
+    let w_size: i32 = 192 * 64;
+    let mut W: [f32] = array_init(w_size, 0.1);
+    let mut B: [f32] = array_init(192, 0.01);
+    printf("⚙️ جاري تنفيذ 10,000 دورة من الضرب والانحياز و ReLU...\n");
+    let start_time: i64 = get_time_ms();
+    let mut iter: i32 = 0;
+    while iter < 10000 {
+        let mut out1: [f32] = matmul_vec(W, input_vec, 192, 64);
+        let mut out2: [f32] = add_bias(out1, B, 192);
+        let _final_out: [f32] = relu(out2, 192);
+        iter = iter + 1;
+    }
+    let end_time: i64 = get_time_ms();
+    let duration: i64 = end_time - start_time;
+    printf("✅ اكتمل الاستدلال بنجاح!\n");
+    printf("⏱️ الوقت الإجمالي لـ 10,000 تكرار: %d ميلي ثانية\n", duration);
+    printf("⚡ متوسط الوقت للتكرار الواحد: %d ميكرو ثانية\n", (duration * 1000) / 10000);
+    return 0;
+}
